@@ -1,0 +1,97 @@
+<Window x:Class="OrbitDrop.UI.Onboarding.OnboardingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="How to use OrbitDrop" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
+        Icon="pack://application:,,,/OrbitDrop.UI;component/Assets/orbitdrop.ico"
+        Background="{DynamicResource Orbit.SurfaceBase}"
+        FontFamily="{StaticResource Orbit.Font.Text}">
+    <Grid x:Name="Root" Margin="40,28,40,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Demo stage (animated scenes) or the practice area on the last step -->
+        <Grid Grid.Row="0" Width="600" Height="320">
+            <ContentControl x:Name="StageHost" />
+
+            <Border x:Name="Practice" CornerRadius="12" Visibility="Collapsed"
+                    Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}" BorderThickness="1">
+                <Grid Margin="28,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="230" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- The real file to drag -->
+                    <Border x:Name="PracticeTile" Width="190" Padding="14" CornerRadius="12" Cursor="Hand" VerticalAlignment="Center"
+                            Background="{DynamicResource Orbit.SubtleFill}" BorderBrush="{DynamicResource Orbit.StrokeStrong}" BorderThickness="1"
+                            MouseLeftButtonDown="OnPracticeDown" MouseMove="OnPracticeMove" ToolTip="Drag me">
+                        <Border.RenderTransform><TranslateTransform x:Name="PracticeBob" /></Border.RenderTransform>
+                        <StackPanel>
+                            <Border Width="132" Height="132" CornerRadius="8" HorizontalAlignment="Center">
+                                <Border.Background><ImageBrush x:Name="PracticeThumb" Stretch="UniformToFill" /></Border.Background>
+                            </Border>
+                            <TextBlock x:Name="PracticeName" Text="Try me.png" Style="{StaticResource Orbit.Text.BodyStrong}" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                            <TextBlock Text="Drag me" Style="{StaticResource Orbit.Text.Caption}" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Live checklist -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="12,0,0,0">
+                        <DockPanel Margin="0,0,0,16">
+                            <Border x:Name="Check1" Width="26" Height="26" CornerRadius="13" Margin="0,0,14,0" BorderThickness="1.5">
+                                <TextBlock x:Name="Check1Text" Text="1" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <StackPanel>
+                                <TextBlock Text="Start dragging the photo" Style="{StaticResource Orbit.Text.BodyStrong}" />
+                                <TextBlock Text="Keep the mouse button down." Style="{StaticResource Orbit.Text.Caption}" />
+                            </StackPanel>
+                        </DockPanel>
+                        <DockPanel Margin="0,0,0,16">
+                            <Border x:Name="Check2" Width="26" Height="26" CornerRadius="13" Margin="0,0,14,0" BorderThickness="1.5">
+                                <TextBlock x:Name="Check2Text" Text="2" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <StackPanel>
+                                <TextBlock x:Name="Step2Title" Text="Tap Shift" Style="{StaticResource Orbit.Text.BodyStrong}" />
+                                <TextBlock Text="The wheel opens around your pointer." Style="{StaticResource Orbit.Text.Caption}" />
+                            </StackPanel>
+                        </DockPanel>
+                        <DockPanel>
+                            <Border x:Name="Check3" Width="26" Height="26" CornerRadius="13" Margin="0,0,14,0" BorderThickness="1.5">
+                                <TextBlock x:Name="Check3Text" Text="3" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <StackPanel>
+                                <TextBlock Text="Let go on JPG" Style="{StaticResource Orbit.Text.BodyStrong}" />
+                                <TextBlock x:Name="Check3Hint" Text="A JPG copy appears next to the photo." Style="{StaticResource Orbit.Text.Caption}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DockPanel>
+                        <Button x:Name="ShowResultButton" Content="Show the new file" Style="{StaticResource Orbit.Button.Standard}"
+                                HorizontalAlignment="Left" Margin="40,18,0,0" Visibility="Collapsed" Click="OnShowResult" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Text -->
+        <!-- Fixed height: steps have different amounts of text, and the window must not resize between them. -->
+        <StackPanel Grid.Row="1" Margin="4,22,4,0" Height="152" ClipToBounds="True">
+            <TextBlock x:Name="StepLabel" Style="{StaticResource Orbit.Text.Caption}" FontWeight="SemiBold" />
+            <TextBlock x:Name="Heading" Style="{StaticResource Orbit.Text.Title}" FontSize="24" LineHeight="32" Margin="0,4,0,0" TextWrapping="Wrap" />
+            <TextBlock x:Name="Body" Style="{StaticResource Orbit.Text.Body}" FontSize="14" LineHeight="21" Margin="0,8,0,0" TextWrapping="Wrap"
+                       Foreground="{DynamicResource Orbit.TextSecondary}" />
+        </StackPanel>
+
+        <!-- Navigation -->
+        <DockPanel Grid.Row="2" Margin="0,18,0,0">
+            <Button x:Name="SkipButton" DockPanel.Dock="Left" Content="Skip" Style="{StaticResource Orbit.Button.Link}" Click="OnSkip" VerticalAlignment="Center" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button x:Name="BackButton" Content="Back" Style="{StaticResource Orbit.Button.Standard}" MinWidth="88" Margin="0,0,8,0" Click="OnBack" />
+                <Button x:Name="NextButton" Content="Next" Style="{StaticResource Orbit.Button.Accent}" MinWidth="104" Click="OnNext" IsDefault="True" />
+            </StackPanel>
+            <StackPanel x:Name="Dots" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </DockPanel>
+    </Grid>
+</Window>

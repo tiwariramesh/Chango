@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="Assets\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../OrbitDrop.Core/OrbitDrop.Core.csproj" />
+    <ProjectReference Include="../OrbitDrop.Infrastructure/OrbitDrop.Infrastructure.csproj" />
+    <ProjectReference Include="../OrbitDrop.Jobs/OrbitDrop.Jobs.csproj" />
+    <ProjectReference Include="../OrbitDrop.Windows/OrbitDrop.Windows.csproj" />
+  </ItemGroup>
+</Project>

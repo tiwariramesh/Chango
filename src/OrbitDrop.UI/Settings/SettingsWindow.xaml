@@ -1,0 +1,501 @@
+<Window x:Class="OrbitDrop.UI.Settings.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:OrbitDrop.UI.Settings"
+        Title="OrbitDrop Settings" Width="880" Height="620" MinWidth="720" MinHeight="480"
+        WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
+        Icon="pack://application:,,,/OrbitDrop.UI;component/Assets/orbitdrop.ico"
+        FontFamily="{StaticResource Orbit.Font.Text}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <!-- A setting row: glyph · title + description · control. Content goes in Tag (control). -->
+        <Style x:Key="RowTitle" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Body}" />
+        <Style x:Key="RowHint" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Caption}">
+            <Setter Property="Margin" Value="0,2,24,0" />
+        </Style>
+        <Style x:Key="RowGlyph" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Glyph}">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Margin" Value="0,0,16,0" />
+            <Setter Property="Width" Value="20" />
+        </Style>
+        <Style x:Key="Page" TargetType="StackPanel">
+            <Setter Property="Margin" Value="32,24,32,32" />
+            <Setter Property="MaxWidth" Value="760" />
+            <Setter Property="Visibility" Value="Collapsed" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="232" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ===== Navigation ===== -->
+        <DockPanel Margin="12,16,8,16">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,0,0,20">
+                <Image Source="pack://application:,,,/OrbitDrop.UI;component/Assets/orbitdrop-64.png" Width="28" Height="28" />
+                <TextBlock Text="OrbitDrop" Style="{StaticResource Orbit.Text.BodyStrong}" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+            <ListBox x:Name="Nav" BorderThickness="0" Background="Transparent" SelectionChanged="OnNavChanged"
+                     ItemContainerStyle="{StaticResource Orbit.NavItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBoxItem Tag="General"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE713;" Margin="0,0,14,0" /><TextBlock Text="General" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Appearance"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE790;" Margin="0,0,14,0" /><TextBlock Text="Appearance" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Shortcuts"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE765;" Margin="0,0,14,0" /><TextBlock Text="Shortcuts" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Wheel"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE7F4;" Margin="0,0,14,0" /><TextBlock Text="Wheel" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Conversions"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE8AB;" Margin="0,0,14,0" /><TextBlock Text="Conversions" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Advanced"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE90F;" Margin="0,0,14,0" /><TextBlock Text="Advanced" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="About"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE946;" Margin="0,0,14,0" /><TextBlock Text="About" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+            </ListBox>
+        </DockPanel>
+
+        <!-- ===== Pages ===== -->
+        <ScrollViewer x:Name="PageScroller" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid x:Name="Pages">
+
+                <!-- General -->
+                <StackPanel x:Name="General" Style="{StaticResource Page}">
+                    <TextBlock Text="General" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE7E8;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding LaunchAtStartup}" AutomationProperties.Name="Launch at Windows sign-in" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Launch at Windows sign-in" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="OrbitDrop starts quietly in the notification area, ready when you drag a file." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xEA8F;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ShowCompletionNotifications}" AutomationProperties.Name="Show completion notifications" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Show completion notifications" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Keep the result card on screen for a few seconds when a task finishes. Problems are always shown." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE838;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding RevealWhenDone}" AutomationProperties.Name="Show new files in File Explorer" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Show new files in File Explorer" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Open the folder and select the result after each conversion." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE7A7;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding OfferUndo}" AutomationProperties.Name="Undo button" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Undo button" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Every finished conversion offers Undo for a few seconds: it moves what was just made to the Recycle Bin." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <TextBlock Text="Help" Style="{StaticResource Orbit.SectionHeader}" />
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE897;" />
+                            <Button DockPanel.Dock="Right" Content="Open guide" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding ShowOnboardingCommand}" VerticalAlignment="Center" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="How to use OrbitDrop" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="An animated walkthrough of every gesture, with a practice run on a sample photo." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE734;" />
+                            <Button DockPanel.Dock="Right" Content="{Binding RateButtonText}" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding RateCommand}" VerticalAlignment="Center" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Enjoying OrbitDrop?" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="{Binding RateHint}" Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Appearance -->
+                <StackPanel x:Name="Appearance" Style="{StaticResource Page}">
+                    <TextBlock Text="Appearance" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <Border Style="{StaticResource Orbit.Card}" Padding="16,14,16,16">
+                        <StackPanel>
+                            <TextBlock Text="Theme" Style="{StaticResource RowTitle}" />
+                            <TextBlock Text="Changes apply instantly to every OrbitDrop surface." Style="{StaticResource RowHint}" Margin="0,2,0,14" />
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Style="{StaticResource Orbit.ThemeCard}" Tag="System" GroupName="Theme" IsChecked="{Binding ThemeSystem}" AutomationProperties.Name="System theme">
+                                    <Grid Height="72">
+                                        <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition /></Grid.ColumnDefinitions>
+                                        <Border Background="#F3F3F6" CornerRadius="5,0,0,5"><Ellipse Width="34" Height="34" Fill="#FFFFFF" Stroke="#E4E4EB" HorizontalAlignment="Right" Margin="0,0,-17,0" /></Border>
+                                        <Border Grid.Column="1" Background="#1C1C21" CornerRadius="0,5,5,0" Panel.ZIndex="-1" />
+                                    </Grid>
+                                </RadioButton>
+                                <RadioButton Style="{StaticResource Orbit.ThemeCard}" Tag="Light" GroupName="Theme" IsChecked="{Binding ThemeLight}" AutomationProperties.Name="Light theme">
+                                    <Border Height="72" Background="#F3F3F6" CornerRadius="5">
+                                        <Grid Width="40" Height="40">
+                                            <Ellipse Fill="#FFFFFF" Stroke="#E4E4EB" />
+                                            <Path Data="M20,20 L20,2 A18,18 0 0 1 37.1,14.4 Z" Fill="#111114" />
+                                            <Ellipse Width="16" Height="16" Fill="#FFFFFF" />
+                                        </Grid>
+                                    </Border>
+                                </RadioButton>
+                                <RadioButton Style="{StaticResource Orbit.ThemeCard}" Tag="Dark" GroupName="Theme" IsChecked="{Binding ThemeDark}" AutomationProperties.Name="Dark theme">
+                                    <Border Height="72" Background="#1C1C21" CornerRadius="5">
+                                        <Grid Width="40" Height="40">
+                                            <Ellipse Fill="#2F2F38" Stroke="#3A3A45" />
+                                            <Path Data="M20,20 L20,2 A18,18 0 0 1 37.1,14.4 Z" Fill="#F4F4F6" />
+                                            <Ellipse Width="16" Height="16" Fill="#2A2A32" />
+                                        </Grid>
+                                    </Border>
+                                </RadioButton>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE771;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding UseWindowsAccent}" AutomationProperties.Name="Use Windows accent colour" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Use Windows accent colour" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Highlight wheel options with your system accent instead of black and white." Style="{StaticResource RowHint}" />
+                                <TextBlock Text="Your accent colour is too close to the wheel's surface to read clearly, so OrbitDrop's black and white is used instead."
+                                           Style="{StaticResource RowHint}" Foreground="{DynamicResource Orbit.Warning}"
+                                           Visibility="{Binding AccentFallbackVisible, Converter={StaticResource BoolToVis}}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE740;" />
+                            <Border DockPanel.Dock="Right" Style="{StaticResource Orbit.SegmentHost}">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Size" Content="Compact" IsChecked="{Binding SizeCompact}" />
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Size" Content="Standard" IsChecked="{Binding SizeStandard}" />
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Size" Content="Large" IsChecked="{Binding SizeLarge}" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Wheel size" Style="{StaticResource RowTitle}" />
+                                <Button Content="Preview the wheel" Style="{StaticResource Orbit.Button.Link}" HorizontalAlignment="Left" Margin="-4,2,0,0" Command="{Binding PreviewWheelCommand}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE945;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ReduceMotion}" AutomationProperties.Name="Reduce motion" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Reduce motion" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Replace blooms and slides with quick fades. Also follows Windows' 'Animation effects' setting." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Shortcuts -->
+                <StackPanel x:Name="Shortcuts" Style="{StaticResource Page}">
+                    <TextBlock Text="Shortcuts" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE765;" />
+                            <Border DockPanel.Dock="Right" Style="{StaticResource Orbit.SegmentHost}">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Trigger" Content="Shift" IsChecked="{Binding TriggerShift}" />
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Trigger" Content="Ctrl" IsChecked="{Binding TriggerCtrl}" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Wheel key" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Tap it while dragging files to open the wheel; tap again to switch mode." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B0;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding KeepOpenOnCentre}" AutomationProperties.Name="Click instead of holding" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Click instead of holding" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Let go of the files in the centre of the wheel and it stays open: click what you want, or click outside to close." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE92E;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding KeyboardShortcut}" AutomationProperties.Name="Keyboard shortcut" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Ctrl + Alt + Space" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="{Binding KeyboardShortcutHint}" Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE77F;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding UseClipboard}" IsEnabled="{Binding KeyboardShortcut}" AutomationProperties.Name="Use the clipboard" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Use the clipboard" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="{Binding UseClipboardHint}" Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8A7;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ContextMenu}" AutomationProperties.Name="Right-click menu" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Right-click menu" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="{Binding ContextMenuHint}" Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <TextBlock Text="How it works" Style="{StaticResource Orbit.SectionHeader}" />
+                    <Border Style="{StaticResource Orbit.Card}" Padding="16,14">
+                        <Grid>
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="170" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Style="{StaticResource Orbit.Text.BodyStrong}" Margin="0,4"><Run Text="Drag + tap " /><Run Text="{Binding TriggerName, Mode=OneWay}" /></TextBlock>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource Orbit.Text.Body}" Margin="0,4" Text="Open the wheel around the pointer" />
+                            <TextBlock Grid.Row="1" Style="{StaticResource Orbit.Text.BodyStrong}" Margin="0,4"><Run Text="Tap " /><Run Text="{Binding TriggerName, Mode=OneWay}" /><Run Text=" again" /></TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource Orbit.Text.Body}" Margin="0,4" Text="Switch Convert → Tools → Actions" />
+                            <TextBlock Grid.Row="2" Style="{StaticResource Orbit.Text.BodyStrong}" Margin="0,4" Text="Release on an option" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource Orbit.Text.Body}" Margin="0,4" Text="Run it; the result appears next to the original" />
+                            <TextBlock Grid.Row="3" Style="{StaticResource Orbit.Text.BodyStrong}" Margin="0,4" Text="Release on the centre" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource Orbit.Text.Body}" Margin="0,4" Text="{Binding CentreReleaseHint}" />
+                            <TextBlock Grid.Row="4" Style="{StaticResource Orbit.Text.BodyStrong}" Margin="0,4" Text="Esc" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource Orbit.Text.Body}" Margin="0,4" Text="Cancel the drag and close the wheel" />
+                            <TextBlock Grid.Row="5" Style="{StaticResource Orbit.Text.BodyStrong}" Margin="0,4" Text="Ctrl + Alt + Space" />
+                            <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource Orbit.Text.Body}" Margin="0,4" Text="Open the wheel for selected files; click the centre for Tools and Actions" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <!-- Wheel: an editable copy of the wheel -->
+                <StackPanel x:Name="Wheel" Style="{StaticResource Page}">
+                    <TextBlock Text="Wheel" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,4" />
+                    <TextBlock Style="{StaticResource Orbit.Text.Caption}" Margin="2,0,0,16" TextWrapping="Wrap"
+                               Text="Click a slice to hide it (click again to bring it back). Drag a slice to move it. Then press Save." />
+                    <Border Style="{StaticResource Orbit.Card}" Padding="20,18,20,14">
+                        <StackPanel>
+                            <Border Style="{StaticResource Orbit.SegmentHost}" HorizontalAlignment="Center">
+                                <StackPanel x:Name="KindPicker" Orientation="Horizontal" />
+                            </Border>
+                            <Border Style="{StaticResource Orbit.SegmentHost}" HorizontalAlignment="Center" Margin="0,8,0,0">
+                                <StackPanel x:Name="ModePicker" Orientation="Horizontal" />
+                            </Border>
+                            <local:WheelEditor x:Name="Editor" Width="340" Height="340" Margin="0,18,0,6" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                    <DockPanel Margin="0,10,0,0">
+                        <Button DockPanel.Dock="Left" Content="Reset" Style="{StaticResource Orbit.Button.Standard}" Click="OnShowAll" ToolTip="Show every slice, in the default order" />
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock x:Name="UnsavedText" Text="Unsaved changes" Style="{StaticResource Orbit.Text.Caption}" VerticalAlignment="Center"
+                                       Margin="0,0,12,0" Visibility="Collapsed" />
+                            <Button x:Name="UndoWheelButton" Content="Undo changes" Style="{StaticResource Orbit.Button.Standard}" Margin="0,0,8,0" Click="OnUndoWheel" />
+                            <Button x:Name="SaveWheelButton" Content="Save" Style="{StaticResource Orbit.Button.Accent}" MinWidth="96" Click="OnSaveWheel" />
+                        </StackPanel>
+                    </DockPanel>
+                    <TextBlock Text="Extras" Style="{StaticResource Orbit.SectionHeader}" />
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE81C;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding LastUsedFirst}" AutomationProperties.Name="Put my last choice first" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Put my last choice first" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="The option you used last for a kind of file moves to the top of its wheel. Off: the wheel always keeps the order above." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE9D2;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ShowSizeEstimates}" AutomationProperties.Name="Show estimated size" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Show estimated size" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Rest on a format, Compress or Resize to see roughly how big the result will be, like “≈ 640 KB · −73%”." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Conversions -->
+                <StackPanel x:Name="Conversions" Style="{StaticResource Page}">
+                    <TextBlock Text="Conversions" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <Border Style="{StaticResource Orbit.Card}" Padding="16,14">
+                        <StackPanel>
+                            <DockPanel>
+                                <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B7;" />
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="Where new files are saved" Style="{StaticResource RowTitle}" />
+                                    <TextBlock Text="Originals are never changed or overwritten; name clashes get a number, like 'photo (2).png'." Style="{StaticResource RowHint}" />
+                                </StackPanel>
+                            </DockPanel>
+                            <StackPanel Margin="36,12,0,0">
+                                <RadioButton GroupName="Output" IsChecked="{Binding OutputBeside}" Margin="0,0,0,8">
+                                    <TextBlock Text="Next to the original file" Style="{StaticResource Orbit.Text.Body}" />
+                                </RadioButton>
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" Content="Choose folder…" Style="{StaticResource Orbit.Button.Standard}" Click="OnChooseFolder" />
+                                    <RadioButton GroupName="Output" IsChecked="{Binding OutputToFolder}" IsEnabled="{Binding HasOutputFolder}" VerticalAlignment="Center">
+                                        <StackPanel>
+                                            <TextBlock Text="In one folder" Style="{StaticResource Orbit.Text.Body}" />
+                                            <TextBlock Text="{Binding OutputFolderText}" Style="{StaticResource Orbit.Text.Caption}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" MaxWidth="380" />
+                                        </StackPanel>
+                                    </RadioButton>
+                                </DockPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xEB9F;" />
+                            <Border DockPanel.Dock="Right" Style="{StaticResource Orbit.SegmentHost}">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Quality" Content="Smaller" IsChecked="{Binding Quality75}" ToolTip="Quality 75" />
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Quality" Content="Balanced" IsChecked="{Binding Quality85}" ToolTip="Quality 85" />
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Quality" Content="High" IsChecked="{Binding Quality92}" ToolTip="Quality 92" />
+                                    <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Quality" Content="Maximum" IsChecked="{Binding Quality100}" ToolTip="Quality 100" />
+                                </StackPanel>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="JPG quality" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Used whenever a JPG is created." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <TextBlock Text="Available in this version" Style="{StaticResource Orbit.SectionHeader}" />
+                    <Border Style="{StaticResource Orbit.Card}" Padding="16,10">
+                        <ItemsControl ItemsSource="{Binding Capabilities}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,6">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="140" /><ColumnDefinition /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Category}" Style="{StaticResource Orbit.Text.BodyStrong}" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Detail}" Style="{StaticResource Orbit.Text.Body}" Foreground="{DynamicResource Orbit.TextSecondary}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </StackPanel>
+
+                <!-- Advanced -->
+                <StackPanel x:Name="Advanced" Style="{StaticResource Page}">
+                    <TextBlock Text="Advanced" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE962;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ExtendedDragDetection}" AutomationProperties.Name="Extended drag detection" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Extended drag detection" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Also recognise file drags from apps that don't use the Windows drag image. Watches mouse buttons system-wide while on; never keys or content." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE9F9;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding DetailedLogging}" AutomationProperties.Name="Detailed logging" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Detailed logging" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Include file names in the local log to help diagnose problems. Logs never leave this PC." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B7;" />
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="Logs" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding OpenLogsCommand}" Margin="0,0,8,0" />
+                                <Button Content="Settings file" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding OpenSettingsFileCommand}" />
+                            </StackPanel>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Open data folders" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="{Binding LogsPath}" Style="{StaticResource RowHint}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE777;" />
+                            <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource Orbit.Button.Standard}" Click="OnReset" VerticalAlignment="Center" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Reset all settings" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Restore defaults. Your files are not affected." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- About -->
+                <StackPanel x:Name="About" Style="{StaticResource Page}">
+                    <Border Style="{StaticResource Orbit.Card}" Padding="24,22">
+                        <DockPanel>
+                            <Image DockPanel.Dock="Left" Source="pack://application:,,,/OrbitDrop.UI;component/Assets/orbitdrop-256.png" Width="72" Height="72" Margin="0,0,20,0" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="OrbitDrop" Style="{StaticResource Orbit.Text.Title}" />
+                                <TextBlock Text="Your files. Your flow." Style="{StaticResource Orbit.Text.Body}" Foreground="{DynamicResource Orbit.TextSecondary}" />
+                                <TextBlock Text="{Binding VersionText}" Style="{StaticResource Orbit.Text.Caption}" Margin="0,6,0,0" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE895;" />
+                            <Button DockPanel.Dock="Right" Content="{Binding UpdateButtonText}" Style="{StaticResource Orbit.Button.Standard}"
+                                    Command="{Binding UpdateCommand}" IsEnabled="{Binding UpdateButtonEnabled}" VerticalAlignment="Center" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Updates" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="{Binding UpdateStatusText}" Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}" Visibility="{Binding UpdateSwitchesVisibility}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE823;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding CheckForUpdates}" AutomationProperties.Name="Check for updates automatically" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Check for updates automatically" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Every few hours, OrbitDrop asks GitHub whether a newer version exists. Nothing about you or your files is sent." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}" Visibility="{Binding UpdateSwitchesVisibility}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE896;" />
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding AutoInstallUpdates}" AutomationProperties.Name="Install updates automatically" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Install updates automatically" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Updates download quietly, are checked against their published checksum, and install the next time you're not using OrbitDrop. It restarts in a few seconds with your settings. Turn off to be asked first." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE72E;" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Private by design" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Everything runs on this PC. OrbitDrop never uploads files, needs no account, and collects no telemetry. The only network request is the update check above." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Orbit.Card}">
+                        <DockPanel>
+                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8A5;" />
+                            <Button DockPanel.Dock="Right" Content="View licence" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding OpenLicenseCommand}" VerticalAlignment="Center" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Open source · MIT License" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Built on .NET (MIT) and components included with Windows. Third-party notices ship with the app." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

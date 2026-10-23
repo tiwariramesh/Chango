@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../OrbitDrop.Core/OrbitDrop.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Pinned: 6.2.4 is the last MIT release. PDFsharp 6.5+ is AGPL-3.0, which OrbitDrop must not take. -->
+    <PackageReference Include="PDFsharp" Version="6.2.4" />
+    <PackageReference Include="SkiaSharp" Version="3.119.2" />
+    <PackageReference Include="Svg.Skia" Version="4.9.1" />
+  </ItemGroup>
+</Project>

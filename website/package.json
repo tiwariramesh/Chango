@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "description": "orbitdrop.essam.biz: a static site plus one serverless function (api/feedback.js). No dependencies, no build step."
+}

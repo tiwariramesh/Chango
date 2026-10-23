@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Ensure Inno Setup 6
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) { choco install innosetup --no-progress -y }
+
+      - name: Package
+        shell: pwsh
+        run: ./build/package.ps1 -Version ("${{ github.ref_name }}".TrimStart('v'))
+
+      # Published straight away so the README's download links work. Tags with a "-" (e.g. v0.1.0-alpha)
+      # are marked as pre-releases, so nothing unfinished is ever presented as a stable release.
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: OrbitDrop ${{ github.ref_name }}
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          body_path: build/release-notes.md
+          files: |
+            artifacts/OrbitDrop-Setup.exe
+            artifacts/OrbitDrop-Portable.zip
+            artifacts/SHA256SUMS.txt

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>OrbitDrop</AssemblyName>
+    <RootNamespace>OrbitDrop.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\OrbitDrop.UI\Assets\orbitdrop.ico</ApplicationIcon>
+    <Description>OrbitDrop: convert, edit and manage files without opening an app.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../OrbitDrop.Core/OrbitDrop.Core.csproj" />
+    <ProjectReference Include="../OrbitDrop.Infrastructure/OrbitDrop.Infrastructure.csproj" />
+    <ProjectReference Include="../OrbitDrop.Jobs/OrbitDrop.Jobs.csproj" />
+    <ProjectReference Include="../OrbitDrop.Conversion/OrbitDrop.Conversion.csproj" />
+    <ProjectReference Include="../OrbitDrop.Tools/OrbitDrop.Tools.csproj" />
+    <ProjectReference Include="../OrbitDrop.Windows/OrbitDrop.Windows.csproj" />
+    <ProjectReference Include="../OrbitDrop.UI/OrbitDrop.UI.csproj" />
+  </ItemGroup>
+  <!-- SkiaSharp and HarfBuzzSharp ship native debug symbols (~100 MB) next to their DLLs; users never need them. -->
+  <Target Name="DropNativeDebugSymbols" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb'" />
+    </ItemGroup>
+  </Target>
+</Project>

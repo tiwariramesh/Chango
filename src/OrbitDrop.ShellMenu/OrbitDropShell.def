@@ -1,0 +1,4 @@
+LIBRARY OrbitDropShell
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

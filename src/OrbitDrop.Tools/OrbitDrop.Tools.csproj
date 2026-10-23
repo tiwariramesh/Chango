@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../OrbitDrop.Core/OrbitDrop.Core.csproj" />
+    <ProjectReference Include="../OrbitDrop.Conversion/OrbitDrop.Conversion.csproj" />
+  </ItemGroup>
+</Project>
