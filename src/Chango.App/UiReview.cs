@@ -156,6 +156,11 @@ internal static class UiReview
             RenderElement((FrameworkElement)shelf.Content, 268, double.NaN, bg, dir, $"shelf-{t}", ref count);
             shelf.Close();
 
+            // --- launch animation (its last frame)
+            var splash = new SplashWindow();
+            RenderElement(splash.ShowStill(), 340, double.NaN, Brushes.Transparent, dir, $"splash-{t}", ref count);
+            splash.Close();
+
             // --- tray flyout
             var flyout = new TrayFlyout(new PreviewTray());
             RenderElement(flyout.ContentRoot, 300, double.NaN, bg, dir, $"tray-{t}", ref count);

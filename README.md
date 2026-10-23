@@ -62,9 +62,10 @@ Tests that need Word, Excel, PowerPoint or FFmpeg skip themselves when those are
 | | |
 |---|---|
 | Name | Chango |
-| Accent | Chango Teal `#0EA5A4` (fill in light and dark themes), ink on it `#011F1E` (5.7:1) |
+| Palette | Logo colours deep blue `#115469`, teal `#20B4A6`, mint `#94EAE3`; UI accent Chango Teal `#0EA5A4` with ink `#011F1E` (5.7:1) |
+| Look | Frosted glass panels over a soft wash of the logo colours; teal only for small accents |
 | Teal text | `#0A7C7B` on light surfaces, `#2DD4CF` on dark |
-| Icon | A file card flipping over another, on a teal tile (`tools/IconGen`, output in `assets/brand`) |
+| Logo | Eight segments around a refresh-arrow "C" (`assets/brand/new-logo`: SVG on charcoal, transparent SVG, Lottie intro). `tools/IconGen` builds the icon set from them |
 | Where it lives | Colours: `src/Chango.UI/Themes/Tokens.*.xaml` · name, release repo: `src/Chango.Infrastructure/Brand.cs` |
 
 ## Repository map

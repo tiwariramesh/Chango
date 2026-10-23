@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Chango.UI.Settings"
         xmlns:brand="clr-namespace:Chango.Infrastructure;assembly=Chango.Infrastructure"
+        xmlns:ui="clr-namespace:Chango.UI"
         Title="Chango Settings" Width="880" Height="620" MinWidth="720" MinHeight="480"
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
         Icon="pack://application:,,,/Chango.UI;component/Assets/chango.ico"
@@ -11,7 +12,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <!-- About: Chango's promises as teal chips -->
         <Style x:Key="Promise" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource Chango.AccentSubtle}" />
+            <Setter Property="Background" Value="{DynamicResource Chango.Badge}" />
             <Setter Property="CornerRadius" Value="14" />
             <Setter Property="Padding" Value="12,5" />
             <Setter Property="Margin" Value="0,0,8,8" />
@@ -36,15 +37,15 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{DynamicResource Chango.Ambient}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="232" />
+            <ColumnDefinition Width="240" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- ===== Navigation: Chango's teal rail ===== -->
-        <Border Background="{DynamicResource Chango.AccentSubtle}" CornerRadius="0,16,16,0" />
-        <DockPanel Margin="14,20,14,16">
+        <!-- ===== Navigation: a frosted glass rail over the colour wash ===== -->
+        <Border Style="{StaticResource Chango.GlassPanel}" Margin="12" />
+        <DockPanel Margin="22,30,22,24">
             <DockPanel DockPanel.Dock="Top" Margin="6,0,0,24">
                 <Image Source="pack://application:,,,/Chango.UI;component/Assets/chango-64.png" Width="40" Height="40" />
                 <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
@@ -89,6 +90,16 @@
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Show completion notifications" Style="{StaticResource RowTitle}" />
                                 <TextBlock Text="Keep the result card on screen for a few seconds when a task finishes. Problems are always shown." Style="{StaticResource RowHint}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border Style="{StaticResource Chango.Card}">
+                        <DockPanel>
+                            <Border Style="{StaticResource Chango.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE768;" /></Border>
+                            <CheckBox DockPanel.Dock="Right" Style="{StaticResource Chango.ToggleSwitch}" IsChecked="{Binding ShowStartupAnimation}" AutomationProperties.Name="Startup animation" />
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Startup animation" Style="{StaticResource RowTitle}" />
+                                <TextBlock Text="Play the Chango logo animation when you open Chango. It never plays when Windows starts Chango at sign-in." Style="{StaticResource RowHint}" />
                             </StackPanel>
                         </DockPanel>
                     </Border>
@@ -457,7 +468,9 @@
                 <StackPanel x:Name="About" Style="{StaticResource Page}">
                     <Border Style="{StaticResource Chango.Card}" Padding="24,22">
                         <DockPanel>
-                            <Image DockPanel.Dock="Left" Source="pack://application:,,,/Chango.UI;component/Assets/chango-256.png" Width="72" Height="72" Margin="0,0,20,0" />
+                            <ui:LottieView x:Name="AboutLogo" DockPanel.Dock="Left" PlayOnLoad="False" Width="84" Height="84" Margin="-6,-6,14,-6"
+                                           AnimationSource="pack://application:,,,/Chango.UI;component/Assets/chango-intro.json"
+                                           FallbackSource="pack://application:,,,/Chango.UI;component/Assets/chango-256.png" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="{x:Static brand:Brand.Name}" Style="{StaticResource Chango.Text.Title}" />
                                 <TextBlock Text="{x:Static brand:Brand.Tagline}" Style="{StaticResource Chango.Text.Body}" Foreground="{DynamicResource Chango.AccentText}" FontWeight="SemiBold" />

@@ -14,11 +14,11 @@
     <Color x:Key="Chango.C.OnAccent">#011F1E</Color>
 
     <!-- Neutrals -->
-    <Color x:Key="Chango.C.SurfaceBase">#1C1C21</Color>
+    <Color x:Key="Chango.C.SurfaceBase">#14171A</Color>
     <Color x:Key="Chango.C.Surface">#26262D</Color>
     <Color x:Key="Chango.C.SurfaceAlt">#2D2D35</Color>
-    <Color x:Key="Chango.C.Card">#B32B2B33</Color>
-    <Color x:Key="Chango.C.CardHover">#E6303039</Color>
+    <Color x:Key="Chango.C.Card">#8C232A2F</Color>
+    <Color x:Key="Chango.C.CardHover">#B32A3238</Color>
     <Color x:Key="Chango.C.Stroke">#3A3A45</Color>
     <Color x:Key="Chango.C.StrokeStrong">#4C4C58</Color>
     <Color x:Key="Chango.C.TextPrimary">#F3F3F7</Color>
@@ -44,6 +44,18 @@
     <sys:Double x:Key="Chango.WheelShadowOpacity">0.50</sys:Double>
     <sys:Double x:Key="Chango.ToastShadowOpacity">0.40</sys:Double>
 
+    <!-- Logo palette: deep blue, teal (the accent's family) and mint. -->
+    <Color x:Key="Chango.C.Deep">#115469</Color>
+    <Color x:Key="Chango.C.Mint">#94EAE3</Color>
+
+    <!-- Glass: frosted panels with a bright top edge, over a soft wash of the logo's colours (Chango.Ambient). -->
+    <Color x:Key="Chango.C.Glass">#8C1F262B</Color>
+    <Color x:Key="Chango.C.GlassStrong">#CC2A3238</Color>
+    <Color x:Key="Chango.C.GlassEdge">#38FFFFFF</Color>
+    <Color x:Key="Chango.C.GlassEdgeLow">#0AFFFFFF</Color>
+    <Color x:Key="Chango.C.StageTint">#1B2329</Color>
+    <Color x:Key="Chango.C.Badge">#22303A</Color>
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="Chango.Accent" Color="{StaticResource Chango.C.Accent}" />
     <SolidColorBrush x:Key="Chango.AccentHover" Color="{StaticResource Chango.C.AccentHover}" />
@@ -66,4 +78,53 @@
     <SolidColorBrush x:Key="Chango.Success" Color="{StaticResource Chango.C.Success}" />
     <SolidColorBrush x:Key="Chango.Warning" Color="{StaticResource Chango.C.Warning}" />
     <SolidColorBrush x:Key="Chango.Danger" Color="{StaticResource Chango.C.Danger}" />
+    <SolidColorBrush x:Key="Chango.Deep" Color="{StaticResource Chango.C.Deep}" />
+    <SolidColorBrush x:Key="Chango.Mint" Color="{StaticResource Chango.C.Mint}" />
+    <SolidColorBrush x:Key="Chango.Glass" Color="{StaticResource Chango.C.Glass}" />
+    <SolidColorBrush x:Key="Chango.GlassStrong" Color="{StaticResource Chango.C.GlassStrong}" />
+    <SolidColorBrush x:Key="Chango.StageTint" Color="{StaticResource Chango.C.StageTint}" />
+    <SolidColorBrush x:Key="Chango.Badge" Color="{StaticResource Chango.C.Badge}" />
+    <LinearGradientBrush x:Key="Chango.GlassStroke" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Chango.C.GlassEdge}" Offset="0" />
+        <GradientStop Color="{StaticResource Chango.C.GlassEdgeLow}" Offset="1" />
+    </LinearGradientBrush>
+    <!-- Page titles: a short bar running from the logo's deep blue into teal. -->
+    <LinearGradientBrush x:Key="Chango.BrandBar" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="{StaticResource Chango.C.Deep}" Offset="0" />
+        <GradientStop Color="{StaticResource Chango.C.Accent}" Offset="1" />
+    </LinearGradientBrush>
+    <!-- The window background behind glass: the base colour with soft, blurred washes of the logo palette. -->
+    <DrawingBrush x:Key="Chango.Ambient" Stretch="Fill" ViewboxUnits="Absolute" Viewbox="0,0,100,100">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource Chango.SurfaceBase}">
+                    <GeometryDrawing.Geometry><RectangleGeometry Rect="0,0,100,100" /></GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush><GradientStop Color="#2E20B4A6" Offset="0" /><GradientStop Color="#0020B4A6" Offset="1" /></RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="8,10" RadiusX="50" RadiusY="44" /></GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush><GradientStop Color="#80115469" Offset="0" /><GradientStop Color="#00115469" Offset="1" /></RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="96,90" RadiusX="60" RadiusY="54" /></GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush><GradientStop Color="#1494EAE3" Offset="0" /><GradientStop Color="#0094EAE3" Offset="1" /></RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="88,6" RadiusX="40" RadiusY="34" /></GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Brush>
+                        <RadialGradientBrush><GradientStop Color="#59115469" Offset="0" /><GradientStop Color="#00115469" Offset="1" /></RadialGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Geometry><EllipseGeometry Center="10,96" RadiusX="40" RadiusY="34" /></GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
 </ResourceDictionary>

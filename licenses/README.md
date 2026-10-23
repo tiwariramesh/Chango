@@ -10,7 +10,7 @@ Full licence texts for the third-party components Chango ships with. `build/pack
 | `PDFsharp-MIT.txt` | PDFsharp 6.2.4 | MIT |
 | `PdfPig-Apache-2.0.txt` | PdfPig | Apache-2.0 |
 | `Markdig-BSD-2-Clause.txt` | Markdig | BSD-2-Clause |
-| `SkiaSharp-MIT.txt` | SkiaSharp, HarfBuzzSharp | MIT |
+| `SkiaSharp-MIT.txt` | SkiaSharp, SkiaSharp.Skottie (Lottie player), HarfBuzzSharp | MIT |
 | `Svg.Skia-MIT.txt` | Svg.Skia, Svg.Model, Svg.SceneGraph, Svg.Animation, ShimSkiaSharp | MIT |
 | `SVG.NET-MS-PL.txt` | Svg.Custom (SVG.NET) | Microsoft Public License |
 | `ExCSS-MIT.txt` | ExCSS | MIT |

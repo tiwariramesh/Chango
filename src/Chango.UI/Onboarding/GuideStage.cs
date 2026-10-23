@@ -65,7 +65,7 @@ public sealed class GuideStage : Canvas
             Width = W, Height = H, CornerRadius = new CornerRadius(12),
             Background = flatBackground
                 ? new SolidColorBrush(ThemeManager.Token("SurfaceAlt"))
-                : new LinearGradientBrush(ThemeManager.Token("SurfaceAlt"), ThemeManager.Token("AccentSubtle"), 30),
+                : new LinearGradientBrush(ThemeManager.Token("SurfaceAlt"), ThemeManager.Token("StageTint"), 30),
         };
         Children.Add(bg);
         Children.Add(_content);

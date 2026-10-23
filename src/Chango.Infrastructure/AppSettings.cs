@@ -20,6 +20,8 @@ public sealed class AppSettings
 
     // General
     public bool ShowCompletionNotifications { get; set; } = true;
+    /// <summary>The logo animation when Chango is opened (never when Windows starts it at sign-in).</summary>
+    public bool ShowStartupAnimation { get; set; } = true;
     public bool RevealWhenDone { get; set; }
     public bool OnboardingCompleted { get; set; }
 

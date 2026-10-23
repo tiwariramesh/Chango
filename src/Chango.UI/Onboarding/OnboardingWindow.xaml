@@ -1,39 +1,31 @@
 <Window x:Class="Chango.UI.Onboarding.OnboardingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Chango.UI"
         Title="Welcome to Chango" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
         Icon="pack://application:,,,/Chango.UI;component/Assets/chango.ico"
         Background="{DynamicResource Chango.SurfaceBase}"
         FontFamily="{StaticResource Chango.Font.Text}">
-    <Window.Resources>
-        <!-- Ink for text on the teal panel: the same dark teal Chango uses on every teal surface (5.7:1 or better). -->
-        <SolidColorBrush x:Key="PanelInk" Color="#011F1E" />
-    </Window.Resources>
-    <Grid x:Name="Root">
+    <Grid x:Name="Root" Background="{DynamicResource Chango.Ambient}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="236" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!-- ===== Brand panel: logo, tagline, chapters ===== -->
-        <Border CornerRadius="0,20,20,0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0.4,1">
-                    <GradientStop Color="#2DD4CF" Offset="0" />
-                    <GradientStop Color="#0EA5A4" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
-        <DockPanel Margin="24,28,20,24">
-            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,28">
-                <Image Source="pack://application:,,,/Chango.UI;component/Assets/chango-256.png" Width="56" Height="56" HorizontalAlignment="Left" />
-                <TextBlock Text="Chango" Style="{StaticResource Chango.Text.Title}" Foreground="{StaticResource PanelInk}" Margin="0,12,0,0" />
-                <TextBlock Text="Drag. Tap. Chango." Style="{StaticResource Chango.Text.Body}" Foreground="{StaticResource PanelInk}" FontWeight="SemiBold" Opacity="0.8" />
+        <!-- ===== Brand panel: frosted glass with the logo, tagline and chapters ===== -->
+        <Border Style="{StaticResource Chango.GlassPanel}" Margin="12" CornerRadius="20" />
+        <DockPanel Margin="32,36,28,30">
+            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,26">
+                <local:LottieView x:Name="Logo" AnimationSource="pack://application:,,,/Chango.UI;component/Assets/chango-intro.json"
+                                  FallbackSource="pack://application:,,,/Chango.UI;component/Assets/chango-mark-256.png"
+                                  Width="72" Height="72" HorizontalAlignment="Left" Margin="-6,0,0,0" />
+                <TextBlock Text="Chango" Style="{StaticResource Chango.Text.Title}" Margin="0,8,0,0" />
+                <TextBlock Text="Drag. Tap. Chango." Style="{StaticResource Chango.Text.Body}" Foreground="{DynamicResource Chango.AccentText}" FontWeight="SemiBold" />
             </StackPanel>
             <Button x:Name="SkipButton" DockPanel.Dock="Bottom" HorizontalAlignment="Left" Content="Skip the tour" Click="OnSkip"
-                    Style="{StaticResource Chango.Button.Link}" Foreground="{StaticResource PanelInk}" />
-            <!-- Chapters, filled in code: the current one is a white pill, finished ones are ticked. -->
+                    Style="{StaticResource Chango.Button.Link}" Foreground="{DynamicResource Chango.TextSecondary}" />
+            <!-- Chapters, filled in code: the current one is a frosted pill, finished ones are ticked. -->
             <StackPanel x:Name="Dots" />
         </DockPanel>
 
@@ -50,7 +42,7 @@
                 <ContentControl x:Name="StageHost" />
 
                 <Border x:Name="Practice" CornerRadius="16" Visibility="Collapsed"
-                        Background="{DynamicResource Chango.Surface}" BorderBrush="{DynamicResource Chango.Stroke}" BorderThickness="1">
+                        Background="{DynamicResource Chango.Glass}" BorderBrush="{DynamicResource Chango.GlassStroke}" BorderThickness="1">
                     <Grid Margin="28,24">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="230" />
@@ -59,7 +51,7 @@
 
                         <!-- The real file to drag -->
                         <Border x:Name="PracticeTile" Width="190" Padding="14" CornerRadius="16" Cursor="Hand" VerticalAlignment="Center"
-                                Background="{DynamicResource Chango.AccentSubtle}" BorderBrush="{DynamicResource Chango.Accent}" BorderThickness="1.5"
+                                Background="{DynamicResource Chango.GlassStrong}" BorderBrush="{DynamicResource Chango.Accent}" BorderThickness="1.5"
                                 MouseLeftButtonDown="OnPracticeDown" MouseMove="OnPracticeMove" ToolTip="Drag me">
                             <Border.RenderTransform><TranslateTransform x:Name="PracticeBob" /></Border.RenderTransform>
                             <StackPanel>

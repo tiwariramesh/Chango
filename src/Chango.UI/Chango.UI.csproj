@@ -12,4 +12,8 @@
     <ProjectReference Include="../Chango.Jobs/Chango.Jobs.csproj" />
     <ProjectReference Include="../Chango.Windows/Chango.Windows.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="3.119.2" />
+    <PackageReference Include="SkiaSharp.Skottie" Version="3.119.2" />
+  </ItemGroup>
 </Project>

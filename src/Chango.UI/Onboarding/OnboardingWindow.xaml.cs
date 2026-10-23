@@ -20,11 +20,6 @@ public partial class OnboardingWindow : Window
 {
     private sealed record Step(GuideScene? Scene, string Chapter, string Label, string Heading, string Body);
 
-    private static readonly Brush PanelInk = Frozen(new SolidColorBrush(Color.FromRgb(0x01, 0x1F, 0x1E)));
-    private static readonly Brush PanelPill = Frozen(new SolidColorBrush(Color.FromArgb(0xF2, 0xFF, 0xFF, 0xFF)));
-
-    private static Brush Frozen(Brush b) { b.Freeze(); return b; }
-
     private readonly Step[] _steps;
     private readonly GuideStage? _stage;
     private readonly string _triggerKey;
@@ -124,12 +119,14 @@ public partial class OnboardingWindow : Window
     private Border ChapterRow(string chapter)
     {
         int index = Dots.Children.Count;
-        var marker = new TextBlock { Width = 22, FontSize = 12, FontWeight = FontWeights.SemiBold, TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-        var label = new TextBlock { Text = chapter, FontSize = 14, Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
+        var marker = new TextBlock { FontSize = 11, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+        var badge = new Border { Width = 22, Height = 22, CornerRadius = new CornerRadius(11), Child = marker };
+        var label = new TextBlock { Text = chapter, FontSize = 14, Margin = new Thickness(10, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
         var row = new DockPanel();
-        row.Children.Add(marker);
+        row.Children.Add(badge);
         row.Children.Add(label);
-        var pill = new Border { Height = 34, CornerRadius = new CornerRadius(17), Padding = new Thickness(8, 0, 12, 0), Margin = new Thickness(-8, 1, 0, 1), Child = row, Cursor = Cursors.Hand };
+        var pill = new Border { Height = 36, CornerRadius = new CornerRadius(18), Padding = new Thickness(7, 0, 12, 0), Margin = new Thickness(-8, 1, 0, 1),
+            BorderThickness = new Thickness(1), Child = row, Cursor = Cursors.Hand };
         pill.MouseLeftButtonUp += (_, _) => ShowStep(index);
         return pill;
     }
@@ -137,15 +134,26 @@ public partial class OnboardingWindow : Window
     private void PaintChapter(Border pill, int index)
     {
         var row = (DockPanel)pill.Child;
-        var marker = (TextBlock)row.Children[0];
+        var badge = (Border)row.Children[0];
+        var marker = (TextBlock)badge.Child;
         var label = (TextBlock)row.Children[1];
         bool current = index == _step, done = index < _step;
-        pill.Background = current ? PanelPill : Brushes.Transparent;
-        marker.Foreground = label.Foreground = PanelInk;
+        // Current: a frosted pill with a teal number badge. Done: a teal tick. Still to come: quiet grey.
+        Res(pill, Border.BackgroundProperty, current ? "Chango.GlassStrong" : null);
+        Res(pill, Border.BorderBrushProperty, current ? "Chango.GlassStroke" : null);
+        Res(badge, Border.BackgroundProperty, current ? "Chango.Accent" : null);
+        Res(marker, TextBlock.ForegroundProperty, current ? "Chango.OnAccent" : done ? "Chango.AccentText" : "Chango.TextTertiary");
+        Res(label, TextBlock.ForegroundProperty, current || done ? "Chango.TextPrimary" : "Chango.TextSecondary");
         label.FontWeight = current ? FontWeights.SemiBold : FontWeights.Normal;
-        pill.Opacity = current || done ? 1 : 0.7;
         marker.FontFamily = done ? (FontFamily)FindResource("Chango.Font.Icons") : (FontFamily)FindResource("Chango.Font.Text");
         marker.Text = done ? "" : (index + 1).ToString(); // a tick for chapters already seen
+    }
+
+    /// <summary>Points <paramref name="property"/> at a theme brush (follows light/dark), or clears it to transparent.</summary>
+    private static void Res(FrameworkElement e, DependencyProperty property, string? key)
+    {
+        if (key is null) e.SetValue(property, Brushes.Transparent);
+        else e.SetResourceReference(property, key);
     }
 
     /// <summary>Design review (--render-ui): a step with its scene frozen on a representative frame.</summary>

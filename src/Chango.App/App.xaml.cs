@@ -136,6 +136,10 @@ public partial class App : Application, ISettingsHost, ITrayCommands
 
         ThemeManager.Current.Apply(_settings.Theme, _settings.UseWindowsAccent, _settings.ReduceMotion);
 
+        // The launch animation plays while Chango gets ready; never when Windows starts it quietly at sign-in.
+        bool quietStart = args.Contains("--background") || args.Contains("--updated") || AppPackage.LaunchedAtSignIn;
+        if (_settings.ShowStartupAnimation && !quietStart) new SplashWindow().Show();
+
         ClipboardCaptures.Folder = Path.Combine(_paths.LocalDirectory, "Clipboard");
         _registry = BuildRegistry(new FileActionsProvider(() => _settings.RecentFolders, RememberFolder));
         _jobs = new JobQueue(_registry, maxConcurrentJobs: 2);

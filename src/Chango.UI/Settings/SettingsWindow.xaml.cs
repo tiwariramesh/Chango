@@ -50,6 +50,7 @@ public partial class SettingsWindow : Window
         foreach (UIElement child in Pages.Children)
             child.Visibility = child is FrameworkElement fe && fe.Name == page ? Visibility.Visible : Visibility.Collapsed;
         PageScroller.ScrollToTop();
+        if (page == "About" && IsLoaded) AboutLogo.Play(); // the logo assembles itself each time About opens
     }
 
     // ------------------------------------------------------------------ Wheel page

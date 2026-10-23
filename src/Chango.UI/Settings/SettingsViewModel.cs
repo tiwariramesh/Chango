@@ -67,6 +67,7 @@ public sealed class SettingsViewModel : ObservableObject
 
     // ---- General
     public bool LaunchAtStartup { get => _host.LaunchAtStartup; set { _host.LaunchAtStartup = value; Raise(); } }
+    public bool ShowStartupAnimation { get => S.ShowStartupAnimation; set => Set(s => s.ShowStartupAnimation = value, nameof(ShowStartupAnimation)); }
     public bool ShowCompletionNotifications { get => S.ShowCompletionNotifications; set => Set(s => s.ShowCompletionNotifications = value, nameof(ShowCompletionNotifications)); }
     public bool RevealWhenDone { get => S.RevealWhenDone; set => Set(s => s.RevealWhenDone = value, nameof(RevealWhenDone)); }
 

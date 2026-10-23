@@ -308,7 +308,7 @@
     <!-- ===== Cards & navigation ===== -->
     <Style x:Key="Chango.Card" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource Chango.CardFill}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Chango.Stroke}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Chango.GlassStroke}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16,12" />
@@ -320,7 +320,7 @@
         <Setter Property="Margin" Value="2,20,0,8" />
     </Style>
 
-    <!-- Navigation: the selected page is a solid Chango Teal pill; labels and icons inherit the item's ink. -->
+    <!-- Navigation: the selected page is a frosted pill with teal text and a teal dot; labels and icons inherit its ink. -->
     <Style x:Key="Chango.NavItem" TargetType="ListBoxItem">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource Chango.FocusVisual}" />
@@ -329,16 +329,21 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
                     <Grid Margin="0,2">
-                        <Border x:Name="Bg" CornerRadius="19" Background="Transparent" Height="38" />
-                        <ContentPresenter Margin="16,0" VerticalAlignment="Center" />
+                        <Border x:Name="Bg" CornerRadius="19" Background="Transparent" BorderThickness="1" BorderBrush="Transparent" Height="38" />
+                        <ContentPresenter x:Name="Content" Margin="16,0" VerticalAlignment="Center" />
+                        <Ellipse x:Name="Dot" Width="6" Height="6" HorizontalAlignment="Right" Margin="0,0,16,0"
+                                 Fill="{DynamicResource Chango.Accent}" Visibility="Collapsed" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Chango.SubtleFillPressed}" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Chango.SubtleFill}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Chango.Accent}" />
-                            <Setter Property="Foreground" Value="{DynamicResource Chango.OnAccent}" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Chango.GlassStrong}" />
+                            <Setter TargetName="Bg" Property="BorderBrush" Value="{DynamicResource Chango.GlassStroke}" />
+                            <Setter TargetName="Dot" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Content" Property="TextElement.FontWeight" Value="SemiBold" />
+                            <Setter Property="Foreground" Value="{DynamicResource Chango.AccentText}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -358,26 +363,34 @@
         <Setter Property="Margin" Value="0,0,14,0" />
     </Style>
 
-    <!-- Page title with Chango's teal underline. -->
+    <!-- A frosted glass panel (navigation rail, tour panel). -->
+    <Style x:Key="Chango.GlassPanel" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Chango.Glass}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Chango.GlassStroke}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="18" />
+    </Style>
+
+    <!-- Page title with Chango's underline. -->
     <Style x:Key="Chango.PageTitle" TargetType="TextBlock" BasedOn="{StaticResource Chango.Text.Title}">
         <Setter Property="FontSize" Value="26" />
         <Setter Property="Margin" Value="2,0,0,0" />
     </Style>
     <Style x:Key="Chango.TitleBar" TargetType="Border">
-        <Setter Property="Width" Value="32" />
+        <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="4" />
         <Setter Property="CornerRadius" Value="2" />
         <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Background" Value="{DynamicResource Chango.Accent}" />
+        <Setter Property="Background" Value="{DynamicResource Chango.BrandBar}" />
         <Setter Property="Margin" Value="3,6,0,18" />
     </Style>
 
-    <!-- A setting's icon sits in a round, teal-tinted badge. -->
+    <!-- A setting's icon sits in a round, neutral badge; the icon itself is teal. -->
     <Style x:Key="Chango.IconBadge" TargetType="Border">
         <Setter Property="Width" Value="36" />
         <Setter Property="Height" Value="36" />
         <Setter Property="CornerRadius" Value="18" />
-        <Setter Property="Background" Value="{DynamicResource Chango.AccentSubtle}" />
+        <Setter Property="Background" Value="{DynamicResource Chango.Badge}" />
         <Setter Property="Margin" Value="0,0,14,0" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>

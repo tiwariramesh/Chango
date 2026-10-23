@@ -13,7 +13,7 @@
         <Border CornerRadius="14" Background="{DynamicResource Chango.Surface}" BorderBrush="{DynamicResource Chango.Stroke}" BorderThickness="1" Padding="0,6,0,6">
             <StackPanel>
                 <!-- Header: Chango on its teal band -->
-                <Border Background="{DynamicResource Chango.AccentSubtle}" CornerRadius="10" Margin="6,0,6,6" Padding="10,10">
+                <Border Background="{DynamicResource Chango.Badge}" CornerRadius="10" Margin="6,0,6,6" Padding="10,10">
                 <DockPanel>
                     <Image Source="pack://application:,,,/Chango.UI;component/Assets/chango-64.png" Width="36" Height="36" Margin="0,0,12,0" />
                     <StackPanel VerticalAlignment="Center">
