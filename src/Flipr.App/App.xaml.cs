@@ -6,6 +6,7 @@ using Flipr.Conversion.Documents;
 using Flipr.Conversion.Imaging;
 using Flipr.Conversion.Media;
 using Flipr.Conversion.Pdf;
+using Flipr.Conversion.Subtitles;
 using Flipr.Core;
 using Flipr.Infrastructure;
 using Flipr.Jobs;
@@ -188,7 +189,8 @@ public partial class App : Application, ISettingsHost, ITrayCommands
     }
 
     private static OperationRegistry BuildRegistry(FileActionsProvider? actions = null) =>
-        new([new ImageConversionProvider(), new PdfProvider(), new PdfToolsProvider(), new DocumentProvider(), new MediaFoundationProvider(), new MediaEditingProvider(),
+        new([new ImageConversionProvider(), new PdfProvider(), new PdfToolsProvider(), new PdfContentProvider(), new DocumentProvider(),
+             new MediaFoundationProvider(), new MediaEditingProvider(), new FfmpegProvider(), new SubtitleProvider(),
              new ImageToolsProvider(), new ImageTextProvider(), new ArchiveProvider(), new MetadataProvider(), actions ?? new FileActionsProvider()]);
 
     private OperationContext CreateContext() => new()

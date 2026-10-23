@@ -1,17 +1,19 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Microsoft.Win32;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Flipr.Conversion.Documents;
 
-public enum DocumentKind { Text, Sheet, Slides, Drawing, Pdf }
+public enum DocumentKind { Text, Sheet, Slides, Drawing, Pdf, Markup }
 
 /// <summary>
 /// The apps that do the actual conversion, found on this PC: Microsoft Word, Excel and PowerPoint (driven through COM,
 /// invisibly, files opened read-only) and LibreOffice (headless, with its own private profile); Office is preferred for
-/// its own formats. CorelDRAW drawings need neither: Flipr reads them itself (<see cref="CorelDraw"/>). Results go
-/// to a private temp folder that is deleted on <see cref="Dispose"/>; the provider copies them to their place with SafeOutput.
+/// its own formats. CorelDRAW drawings need neither: Flipr reads them itself (<see cref="CorelDraw"/>). Markdown and
+/// plain text are turned into HTML first (<see cref="Markup"/>), which either app then lays out. Results go to a
+/// private temp folder that is deleted on <see cref="Dispose"/>; the provider copies them to their place with SafeOutput.
 /// </summary>
 public sealed class DocumentEngines : IDisposable
 {
@@ -20,53 +22,30 @@ public sealed class DocumentEngines : IDisposable
         [".doc"] = DocumentKind.Text, [".docx"] = DocumentKind.Text, [".docm"] = DocumentKind.Text, [".rtf"] = DocumentKind.Text,
         [".odt"] = DocumentKind.Text,
         [".xls"] = DocumentKind.Sheet, [".xlsx"] = DocumentKind.Sheet, [".xlsm"] = DocumentKind.Sheet, [".ods"] = DocumentKind.Sheet,
+        [".csv"] = DocumentKind.Sheet, [".tsv"] = DocumentKind.Sheet,
         [".ppt"] = DocumentKind.Slides, [".pptx"] = DocumentKind.Slides, [".pptm"] = DocumentKind.Slides, [".pps"] = DocumentKind.Slides,
         [".ppsx"] = DocumentKind.Slides, [".odp"] = DocumentKind.Slides,
         [".cdr"] = DocumentKind.Drawing, [".cmx"] = DocumentKind.Drawing,
         [".pdf"] = DocumentKind.Pdf, // to Word: Word (or LibreOffice) rebuilds the text and layout as an editable document
+        [".md"] = DocumentKind.Markup, [".markdown"] = DocumentKind.Markup, [".txt"] = DocumentKind.Markup,
     };
 
     /// <summary>Some password is needed so Office fails instead of asking; a file without one ignores it.</summary>
     private const string NoPassword = "flipr-no-password";
     private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(3);
+    private const int Utf8 = 65001; // msoEncodingUTF8
 
     private static readonly Lazy<bool> Word = new(() => HasProgId("Word.Application")), Excel = new(() => HasProgId("Excel.Application")),
         PowerPoint = new(() => HasProgId("PowerPoint.Application"));
-    private static readonly AppFinder LibreOffice = new(() => FindApp("soffice.exe", @"LibreOffice\program\soffice.exe", @"scoop\apps\libreoffice\current\LibreOffice\program\soffice.exe"));
-    /// <summary>
-    /// Finds an app and remembers it. While it isn't there, looks again every 15 seconds, so an app installed while
-    /// Flipr is running is picked up without a restart.
-    /// </summary>
-    private sealed class AppFinder(Func<string?> find)
-    {
-        private readonly object _gate = new();
-        private string? _path;
-        private bool _searched;
-        private long _searchedAt;
-
-        public string? Value
-        {
-            get
-            {
-                lock (_gate)
-                {
-                    long now = Environment.TickCount64;
-                    bool stale = !_searched || (_path is null ? now - _searchedAt > 15_000 : !File.Exists(_path));
-                    if (stale) { _path = find(); _searched = true; _searchedAt = now; }
-                    return _path;
-                }
-            }
-        }
-    }
+    private static readonly AppFinder LibreOffice = new(() => ExternalTools.Find("soffice.exe", @"LibreOffice\program\soffice.exe", @"scoop\apps\libreoffice\current\LibreOffice\program\soffice.exe"));
 
     public static DocumentKind? KindOf(string path) => Kinds.TryGetValue(Path.GetExtension(path), out var k) ? k : null;
 
     public static bool CanOpen(DocumentKind kind) => kind switch
     {
-        DocumentKind.Text => Word.Value || LibreOffice.Value is not null,
+        DocumentKind.Text or DocumentKind.Pdf or DocumentKind.Markup => Word.Value || LibreOffice.Value is not null,
         DocumentKind.Sheet => Excel.Value || LibreOffice.Value is not null,
         DocumentKind.Slides => PowerPoint.Value || LibreOffice.Value is not null,
-        DocumentKind.Pdf => Word.Value || LibreOffice.Value is not null,
         DocumentKind.Drawing => CorelDraw.Available,
         _ => false,
     };
@@ -95,11 +74,20 @@ public sealed class DocumentEngines : IDisposable
     {
         var kind = KindOf(file) ?? throw new NotSupportedException(Path.GetExtension(file));
         if (!File.Exists(file)) throw new FileNotFoundException(null, file);
-        string dir = Path.Combine(_temp, (++_jobs).ToString());
-        Directory.CreateDirectory(dir);
-        string input = Path.Combine(dir, "source" + Path.GetExtension(file).ToLowerInvariant());
-        File.Copy(file, input);
-        string output = Path.Combine(dir, "source" + extension); // LibreOffice names it after the input, too
+        string dir = NewWorkFolder();
+        string sourceExt = Path.GetExtension(file).ToLowerInvariant();
+        string input = Path.Combine(dir, "source" + sourceExt);
+        if (kind == DocumentKind.Markup)
+        {
+            // Markdown and text become a styled HTML page, which Word and LibreOffice open as a regular document.
+            input = Path.Combine(dir, "source.html");
+            File.WriteAllText(input, Markup.ToHtmlPage(File.ReadAllText(file), Path.GetFileNameWithoutExtension(file), Markup.IsMarkdown(file)), Encoding.UTF8);
+            kind = DocumentKind.Text;
+        }
+        else File.Copy(file, input);
+        string outDir = Path.Combine(dir, "out"); // apart from the input, so "csv → tsv" can't collide with it
+        Directory.CreateDirectory(outDir);
+        string output = Path.Combine(outDir, "source" + extension);
 
         string? office = kind switch
         {
@@ -111,32 +99,19 @@ public sealed class DocumentEngines : IDisposable
         if (office is not null)
             await StaWorker.RunAsync(() => ConvertWithOffice(office, kind, input, output), "Flipr Office");
         else if (kind != DocumentKind.Drawing && LibreOffice.Value is { } soffice)
-        {
-            // A profile of its own: works while the user has LibreOffice open, and never touches their settings.
-            string profile = new Uri(Path.Combine(Path.GetTempPath(), "Flipr", "libreoffice-profile")).AbsoluteUri;
-            string[] import = kind == DocumentKind.Pdf ? ["--infilter=writer_pdf_import"] : []; // open a PDF in Writer, not Draw
-            await RunAsync(soffice, ["--headless", "--norestore", "--nologo", "--nodefault", "--nolockcheck", $"-env:UserInstallation={profile}",
-                .. import, "--convert-to", LibreOfficeFilter(extension), "--outdir", dir, input], ct);
-        }
+            await ConvertWithLibreOfficeAsync(soffice, input, output, ct);
         else throw new NotSupportedException("No app on this PC can open this file.");
 
         if (!File.Exists(output) || new FileInfo(output).Length == 0) throw new IOException("The conversion didn't produce a file.");
+        if (extension == ".html") InlineImages(output);
         return output;
     }
-
-    private static string LibreOfficeFilter(string extension) => extension switch
-    {
-        ".docx" => "docx:MS Word 2007 XML",
-        ".xlsx" => "xlsx:Calc MS Excel 2007 XML",
-        ".pptx" => "pptx:Impress MS PowerPoint 2007 XML",
-        _ => extension.TrimStart('.'),
-    };
 
     // ------------------------------------------------------------------ Microsoft Office (late-bound COM, on an STA thread)
 
     private static void ConvertWithOffice(string progId, DocumentKind kind, string file, string output)
     {
-        bool pdf = output.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase);
+        string ext = Path.GetExtension(output).ToLowerInvariant();
         // PowerPoint runs as one shared instance: if the user has it open, leave it running afterwards.
         bool wasRunning = kind == DocumentKind.Slides && Process.GetProcessesByName("POWERPNT").Length > 0;
         dynamic app = Activator.CreateInstance(Type.GetTypeFromProgID(progId)!)!;
@@ -149,26 +124,51 @@ public sealed class DocumentEngines : IDisposable
                     dynamic doc = app.Documents.Open(file, false, true, false, NoPassword); // ConfirmConversions, ReadOnly, AddToRecentFiles
                     try
                     {
-                        if (pdf) doc.ExportAsFixedFormat(output, 17); // wdExportFormatPDF
-                        else doc.SaveAs2(output, 16);                   // wdFormatDocumentDefault (.docx)
+                        switch (ext)
+                        {
+                            case ".pdf": doc.ExportAsFixedFormat(output, 17); break;                     // wdExportFormatPDF
+                            case ".docx": doc.SaveAs2(output, 16); break;                                // wdFormatDocumentDefault
+                            case ".txt": doc.SaveAs2(output, 2, Encoding: Utf8, LineEnding: 0); break;   // wdFormatText, CRLF
+                            case ".html": doc.SaveAs2(output, 10, Encoding: Utf8); break;                // wdFormatFilteredHTML
+                            case ".rtf": doc.SaveAs2(output, 6); break;                                  // wdFormatRTF
+                            case ".odt": doc.SaveAs2(output, 23); break;                                 // wdFormatOpenDocumentText
+                            default: throw new NotSupportedException(ext);
+                        }
                     }
                     finally { doc.Close(0); Release(doc); }
                     break;
 
                 case DocumentKind.Sheet:
                     app.DisplayAlerts = false;
-                    dynamic book = app.Workbooks.Open(file, 0, true, Missing.Value, NoPassword); // UpdateLinks: no, ReadOnly
+                    dynamic book = OpenWorkbook(app, file);
+                    string? utf16 = null;
                     try
                     {
-                        if (pdf) book.ExportAsFixedFormat(0, output); // xlTypePDF
-                        else book.SaveAs(output, 51);                  // xlOpenXMLWorkbook (.xlsx)
+                        switch (ext)
+                        {
+                            case ".pdf": book.ExportAsFixedFormat(0, output); break; // xlTypePDF
+                            case ".xlsx": book.SaveAs(output, 51); break;            // xlOpenXMLWorkbook
+                            case ".csv": book.SaveAs(output, 62); break;             // xlCSVUTF8 (the active sheet)
+                            case ".ods": book.SaveAs(output, 60); break;             // xlOpenDocumentSpreadsheet
+                            case ".tsv":
+                                utf16 = Path.ChangeExtension(output, ".txt");
+                                book.SaveAs(utf16, 42); // xlUnicodeText
+                                break;
+                            default: throw new NotSupportedException(ext);
+                        }
                     }
                     finally { book.Close(false); Release(book); }
+                    // Excel's tab-separated text is UTF-16 ("Unicode text"); everything else expects UTF-8.
+                    if (utf16 is not null) File.WriteAllText(output, CleanTsv(File.ReadAllText(utf16, Encoding.Unicode)), new UTF8Encoding(false));
                     break;
 
                 case DocumentKind.Slides:
                     dynamic deck = app.Presentations.Open(file, -1, 0, 0); // ReadOnly, not Untitled, no window
-                    try { deck.SaveAs(output, pdf ? 32 : 24); }            // ppSaveAsPDF / ppSaveAsOpenXMLPresentation
+                    try
+                    {
+                        if (ext is not (".pdf" or ".pptx")) throw new NotSupportedException(ext);
+                        deck.SaveAs(output, ext == ".pdf" ? 32 : 24); // ppSaveAsPDF / ppSaveAsOpenXMLPresentation
+                    }
                     finally { deck.Close(); Release(deck); }
                     break;
             }
@@ -186,6 +186,63 @@ public sealed class DocumentEngines : IDisposable
         }
     }
 
+    /// <summary>
+    /// Workbooks open read-only. CSV and TSV are read as UTF-8 with an explicit delimiter (Excel's own CSV opening
+    /// guesses the encoding and uses the regional list separator); OpenText only honours that for a .txt name.
+    /// </summary>
+    private static dynamic OpenWorkbook(dynamic app, string file)
+    {
+        string ext = Path.GetExtension(file).ToLowerInvariant();
+        if (ext is not (".csv" or ".tsv"))
+            return app.Workbooks.Open(file, 0, true, Missing.Value, NoPassword); // UpdateLinks: no, ReadOnly
+        string text = Path.ChangeExtension(file, ".txt");
+        File.Move(file, text);
+        bool tab = ext == ".tsv";
+        app.Workbooks.OpenText(Filename: text, Origin: Utf8, StartRow: 1, DataType: 1, TextQualifier: 1, // xlDelimited, xlTextQualifierDoubleQuote
+            ConsecutiveDelimiter: false, Tab: tab, Semicolon: false, Comma: !tab, Space: false, Other: false, Local: false);
+        return app.ActiveWorkbook;
+    }
+
+    /// <summary>
+    /// Excel quotes any field with a comma even in tab-separated text; only tabs, line breaks and quotes need it.
+    /// Re-quotes each field by that rule, so a field quoted for a real reason stays quoted.
+    /// </summary>
+    public static string CleanTsv(string text)
+    {
+        var sb = new StringBuilder(text.Length);
+        var field = new StringBuilder();
+        bool quoted = false, inQuotes = false;
+        void EndField()
+        {
+            string f = field.ToString();
+            if (f.IndexOfAny(['\t', '\n', '\r', '"']) >= 0) sb.Append('"').Append(f.Replace("\"", "\"\"")).Append('"');
+            else sb.Append(f);
+            field.Clear();
+            quoted = false;
+        }
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (inQuotes)
+            {
+                if (c == '"' && i + 1 < text.Length && text[i + 1] == '"') { field.Append('"'); i++; }
+                else if (c == '"') inQuotes = false;
+                else field.Append(c);
+            }
+            else if (c == '"' && field.Length == 0 && !quoted) inQuotes = quoted = true;
+            else if (c == '\t') { EndField(); sb.Append('\t'); }
+            else if (c is '\r' or '\n')
+            {
+                EndField();
+                if (c == '\r' && i + 1 < text.Length && text[i + 1] == '\n') i++;
+                sb.Append("\r\n");
+            }
+            else field.Append(c);
+        }
+        if (field.Length > 0 || quoted) EndField();
+        return sb.ToString();
+    }
+
     private static void Release(object o)
     {
         try { Marshal.FinalReleaseComObject(o); } catch (ArgumentException) { }
@@ -199,64 +256,64 @@ public sealed class DocumentEngines : IDisposable
 
     // ------------------------------------------------------------------ LibreOffice (command line)
 
-    /// <summary>
-    /// App Paths, Program Files, per-user installs, scoop, the Microsoft Store version (its command-line alias) and
-    /// PATH. Prefers the console launcher (.com), which waits for the result.
-    /// </summary>
-    private static string? FindApp(string exe, string programFilesPath, string homePath)
+    private static async Task ConvertWithLibreOfficeAsync(string soffice, string input, string output, CancellationToken ct)
     {
-        var candidates = new List<string?>();
-        foreach (var hive in new[] { Registry.LocalMachine, Registry.CurrentUser })
+        string inExt = Path.GetExtension(input).ToLowerInvariant(), outExt = Path.GetExtension(output).ToLowerInvariant();
+        string outDir = Path.GetDirectoryName(output)!;
+        // A profile of its own: works while the user has LibreOffice open, and never touches their settings.
+        string profile = new Uri(Path.Combine(Path.GetTempPath(), "Flipr", "libreoffice-profile")).AbsoluteUri;
+        string? inFilter = inExt switch
         {
-            try
-            {
-                using var key = hive.OpenSubKey($@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\{exe}");
-                candidates.Add(key?.GetValue(null) as string);
-            }
-            catch { /* no access */ }
-        }
-        candidates.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), programFilesPath));
-        candidates.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), programFilesPath));
-        string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        candidates.Add(Path.Combine(local, "Programs", programFilesPath));                                     // per-user installer
-        candidates.Add(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), homePath)); // scoop
-        candidates.Add(Path.Combine(local, "Microsoft", "WindowsApps", exe));                                 // Microsoft Store alias
-        foreach (var dir in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
-        {
-            try { candidates.Add(Path.Combine(dir.Trim('"'), exe)); } catch (ArgumentException) { /* a malformed PATH entry */ }
-        }
-        foreach (var c in candidates)
-        {
-            if (string.IsNullOrWhiteSpace(c)) continue;
-            string path = c.Trim('"');
-            string console = Path.ChangeExtension(path, ".com");
-            if (File.Exists(console)) return console;
-            if (File.Exists(path)) return path;
-        }
-        return null;
+            ".pdf" => "writer_pdf_import", // open a PDF in Writer, not Draw
+            ".html" => "HTML (StarWriter)", // a document, not a web page
+            ".csv" => "CSV:44,34,76",       // comma, double quote, UTF-8
+            ".tsv" => "CSV:9,34,76",
+            _ => null,
+        };
+        string[] import = inFilter is null ? [] : [$"--infilter={inFilter}"];
+        await ExternalTools.RunAsync(soffice, ["--headless", "--norestore", "--nologo", "--nodefault", "--nolockcheck", $"-env:UserInstallation={profile}",
+            .. import, "--convert-to", LibreOfficeFilter(outExt), "--outdir", outDir, input], Timeout, ct);
+        // LibreOffice names the result after the input and its filter's own extension (tab-separated text comes out as .csv).
+        string produced = Path.Combine(outDir, "source" + (outExt == ".tsv" ? ".csv" : outExt));
+        if (produced != output && File.Exists(produced)) File.Move(produced, output);
     }
 
-    private static async Task RunAsync(string exe, string[] args, CancellationToken ct)
+    private static string LibreOfficeFilter(string extension) => extension switch
     {
-        var start = new ProcessStartInfo(exe) { CreateNoWindow = true, UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true };
-        foreach (var a in args) start.ArgumentList.Add(a);
-        using var process = Process.Start(start) ?? throw new IOException($"{Path.GetFileName(exe)} didn't start.");
-        var stdout = process.StandardOutput.ReadToEndAsync(ct);
-        var stderr = process.StandardError.ReadToEndAsync(ct);
-        using var limit = CancellationTokenSource.CreateLinkedTokenSource(ct);
-        limit.CancelAfter(Timeout);
-        try { await process.WaitForExitAsync(limit.Token); }
-        catch (OperationCanceledException)
+        ".docx" => "docx:MS Word 2007 XML",
+        ".xlsx" => "xlsx:Calc MS Excel 2007 XML",
+        ".pptx" => "pptx:Impress MS PowerPoint 2007 XML",
+        ".txt" => "txt:Text (encoded):UTF8",
+        ".html" => "html:HTML (StarWriter)",
+        ".csv" => "csv:Text - txt - csv (StarCalc):44,34,76,1",
+        ".tsv" => "csv:Text - txt - csv (StarCalc):9,34,76,1",
+        _ => extension.TrimStart('.'),
+    };
+
+    // ------------------------------------------------------------------ HTML results
+
+    /// <summary>
+    /// Word and LibreOffice save a document's pictures as files beside the HTML; they're embedded instead, so the one
+    /// HTML file Flipr hands back shows them wherever it's opened.
+    /// </summary>
+    private static void InlineImages(string html)
+    {
+        string dir = Path.GetDirectoryName(html)!;
+        string text = File.ReadAllText(html);
+        string inlined = Regex.Replace(text, "(?<attr>\\bsrc=)(?<q>[\"'])(?<path>[^\"':]+?)\\k<q>", m =>
         {
-            try { process.Kill(entireProcessTree: true); } catch { }
-            if (ct.IsCancellationRequested) throw;
-            throw new TimeoutException();
-        }
-        if (process.ExitCode != 0)
-        {
-            string detail = (await stderr).Trim() is { Length: > 0 } e ? e : (await stdout).Trim();
-            throw new IOException($"{Path.GetFileNameWithoutExtension(exe)} couldn't convert it{(detail.Length > 0 ? ": " + detail.Split('\n')[0] : ".")}");
-        }
+            string path;
+            try { path = Path.GetFullPath(Path.Combine(dir, Uri.UnescapeDataString(m.Groups["path"].Value).Replace('/', '\\'))); }
+            catch { return m.Value; }
+            if (!path.StartsWith(dir, StringComparison.OrdinalIgnoreCase) || !File.Exists(path)) return m.Value;
+            string mime = Path.GetExtension(path).ToLowerInvariant() switch
+            {
+                ".png" => "image/png", ".jpg" or ".jpeg" => "image/jpeg", ".gif" => "image/gif", ".svg" => "image/svg+xml",
+                ".bmp" => "image/bmp", ".webp" => "image/webp", _ => "application/octet-stream",
+            };
+            return $"{m.Groups["attr"].Value}{m.Groups["q"].Value}data:{mime};base64,{Convert.ToBase64String(File.ReadAllBytes(path))}{m.Groups["q"].Value}";
+        }, RegexOptions.IgnoreCase);
+        if (!ReferenceEquals(inlined, text)) File.WriteAllText(html, inlined, new UTF8Encoding(false));
     }
 
     public void Dispose()

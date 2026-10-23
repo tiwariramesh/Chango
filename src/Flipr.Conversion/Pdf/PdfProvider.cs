@@ -128,14 +128,34 @@ public sealed class PdfProvider : IOperationProvider
     /// </summary>
     public static async Task<string> RenderPagesAsync(string pdf, string file, ImageFormat format, OperationContext context, CancellationToken ct)
     {
+        var pages = (await RenderPngPagesAsync(pdf, context.ReportFileFraction, ct)).Select(p => p.Png).ToList();
+        int count = pages.Count;
+        string ext = format.Extension;
+        bool png = format == WicImageCodec.Png;
+
+        // Other formats are re-encoded from the PNG render (JPEG at the user's quality, on a white page background).
+        byte[] Encode(byte[] pngBytes) => png ? pngBytes : Reencode(pngBytes, format, context.JpegQuality);
+
+        if (count == 1)
+            return SafeOutput.Write(file, context.Output, ext, null, s => s.Write(Encode(pages[0])), _ => null, ct);
+
+        string name = $"{Path.GetFileNameWithoutExtension(file)} ({ext.TrimStart('.').ToUpperInvariant()})";
+        int digits = count.ToString().Length;
+        return SafeOutput.WriteFolder(file, context.Output, name, folder =>
+        {
+            for (int i = 0; i < pages.Count; i++)
+                File.WriteAllBytes(Path.Combine(folder, $"Page {(i + 1).ToString().PadLeft(digits, '0')}{ext}"), Encode(pages[i]));
+        }, ct);
+    }
+
+    /// <summary>Every page as a PNG, with its size in points (1/72 inch), rendered by Windows' PDF engine.</summary>
+    public static async Task<List<(byte[] Png, double WidthPt, double HeightPt)>> RenderPngPagesAsync(string pdf, Action<double>? fraction, CancellationToken ct)
+    {
         var storage = await StorageFile.GetFileFromPathAsync(pdf);
         var document = await PdfDocument.LoadFromFileAsync(storage);
         if (document.IsPasswordProtected) throw new InvalidDataException("This PDF is password-protected.");
         uint count = document.PageCount;
-        string ext = format.Extension;
-        bool png = format == WicImageCodec.Png;
-
-        var pages = new List<byte[]>();
+        var pages = new List<(byte[], double, double)>();
         for (uint i = 0; i < count; i++)
         {
             ct.ThrowIfCancellationRequested();
@@ -151,23 +171,11 @@ public sealed class PdfProvider : IOperationProvider
             using var managed = stream.AsStreamForRead();
             using var copy = new MemoryStream();
             await managed.CopyToAsync(copy, ct);
-            pages.Add(copy.ToArray());
-            context.ReportFileFraction?.Invoke((i + 1.0) / count);
+            // Page sizes come in DIPs (1/96 inch).
+            pages.Add((copy.ToArray(), page.Size.Width * 72 / 96, page.Size.Height * 72 / 96));
+            fraction?.Invoke((i + 1.0) / count);
         }
-
-        // Other formats are re-encoded from the PNG render (JPEG at the user's quality, on a white page background).
-        byte[] Encode(byte[] pngBytes) => png ? pngBytes : Reencode(pngBytes, format, context.JpegQuality);
-
-        if (count == 1)
-            return SafeOutput.Write(file, context.Output, ext, null, s => s.Write(Encode(pages[0])), _ => null, ct);
-
-        string name = $"{Path.GetFileNameWithoutExtension(file)} ({ext.TrimStart('.').ToUpperInvariant()})";
-        int digits = count.ToString().Length;
-        return SafeOutput.WriteFolder(file, context.Output, name, folder =>
-        {
-            for (int i = 0; i < pages.Count; i++)
-                File.WriteAllBytes(Path.Combine(folder, $"Page {(i + 1).ToString().PadLeft(digits, '0')}{ext}"), Encode(pages[i]));
-        }, ct);
+        return pages;
     }
 
     private static byte[] Reencode(byte[] pngBytes, ImageFormat format, int quality)

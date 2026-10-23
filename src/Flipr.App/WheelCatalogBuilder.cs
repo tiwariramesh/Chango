@@ -14,12 +14,13 @@ internal static class WheelCatalogBuilder
     private static readonly Sample[] Samples =
     [
         new("Photos", "", [["photo.jpg"], ["photo-1.jpg", "photo-2.png"]]),
-        new("Video", "", [["clip.mp4"], ["clip-1.mp4", "clip-2.mp4"]]),
-        new("Audio", "", [["song.mp3"]]),
+        new("Video", "", [["clip.mp4"], ["clip-1.mp4", "clip-2.mp4"], ["clip.flv"]]),
+        new("Audio", "", [["song.mp3"], ["song.ogg"]]),
         new("PDF", "", [["document.pdf"], ["document-1.pdf", "document-2.pdf"]]),
-        new("Documents", "", [["report.docx"], ["report.doc"], ["sheet.xls"], ["slides.ppt"], ["drawing.cdr"]]),
-        new("Archives","", [["archive.zip"]]),
-        new("Any file", "", [["notes.txt"]]),
+        new("Documents", "", [["report.docx"], ["report.doc"], ["notes.md"], ["sheet.xls"], ["data.csv"], ["slides.ppt"], ["drawing.cdr"]]),
+        new("Subtitles", "", [["captions.srt"], ["captions.vtt"]]),
+        new("Archives","", [["archive.zip"], ["archive.7z"]]),
+        new("Any file", "", [["file.dat"]]),
     ];
 
     public static IReadOnlyList<WheelCategory> Build(OperationRegistry registry)

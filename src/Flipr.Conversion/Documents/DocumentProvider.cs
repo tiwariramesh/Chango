@@ -6,9 +6,11 @@ using Flipr.Core;
 namespace Flipr.Conversion.Documents;
 
 /// <summary>
-/// Documents (Word, Excel, PowerPoint, OpenDocument) to PDF, old formats to the current ones, and PDF to Word, through
-/// the Microsoft Office or LibreOffice already on this PC (see <see cref="DocumentEngines"/>). CorelDRAW drawings to
-/// SVG, PDF and images with Flipr's own reader (see <see cref="CorelDraw"/>): nothing to install for those.
+/// Documents (Word, Excel, PowerPoint, OpenDocument, Markdown, text, CSV) to PDF and to each other's formats, old
+/// formats to the current ones, slides to images, and PDF to Word, through the Microsoft Office or LibreOffice already
+/// on this PC (see <see cref="DocumentEngines"/>). Markdown to HTML and text, and Word to Markdown, need neither
+/// (<see cref="Markup"/>, <see cref="DocxToMarkdown"/>). CorelDRAW drawings to SVG, PDF and images with Flipr's own
+/// reader (see <see cref="CorelDraw"/>): nothing to install for those.
 /// </summary>
 public sealed class DocumentProvider : IOperationProvider
 {
@@ -18,11 +20,13 @@ public sealed class DocumentProvider : IOperationProvider
     private sealed record Target(string Name, string Extension);
 
     private static readonly Target Pdf = new("PDF", ".pdf"), Docx = new("DOCX", ".docx"), Xlsx = new("XLSX", ".xlsx"),
-        Pptx = new("PPTX", ".pptx"), Svg = new("SVG", ".svg"), Png = new("PNG", ".png"), Jpg = new("JPG", ".jpg"),
+        Pptx = new("PPTX", ".pptx"), Txt = new("TXT", ".txt"), Md = new("MD", ".md"), Html = new("HTML", ".html"),
+        Rtf = new("RTF", ".rtf"), Odt = new("ODT", ".odt"), Csv = new("CSV", ".csv"), Tsv = new("TSV", ".tsv"), Ods = new("ODS", ".ods"),
+        Svg = new("SVG", ".svg"), Png = new("PNG", ".png"), Jpg = new("JPG", ".jpg"),
         Webp = new("WEBP", ".webp"), Tiff = new("TIFF", ".tiff"), Bmp = new("BMP", ".bmp");
 
     /// <summary>Wheel order of every target, across kinds.</summary>
-    private static readonly Target[] All = [Pdf, Docx, Xlsx, Pptx, Svg, Png, Jpg, Webp, Tiff, Bmp];
+    private static readonly Target[] All = [Pdf, Docx, Xlsx, Pptx, Txt, Md, Html, Rtf, Odt, Csv, Tsv, Ods, Svg, Png, Jpg, Webp, Tiff, Bmp];
 
     /// <summary>Drawing targets drawn from the drawing's SVG pages (sharp at any size).</summary>
     private static readonly Dictionary<Target, ImageFormat> Rendered = new()
@@ -33,16 +37,24 @@ public sealed class DocumentProvider : IOperationProvider
     private static IEnumerable<Target> TargetsFor(string path)
     {
         string ext = Path.GetExtension(path).ToLowerInvariant();
-        if (DocumentEngines.KindOf(path) is not { } kind || !DocumentEngines.CanOpen(kind)) return [];
-        return kind switch
+        if (DocumentEngines.KindOf(path) is not { } kind) return [];
+        if (kind == DocumentKind.Markup)
         {
-            DocumentKind.Text => ext == ".docx" ? [Pdf] : [Pdf, Docx],
-            DocumentKind.Sheet => ext == ".xlsx" ? [Pdf] : [Pdf, Xlsx],
-            DocumentKind.Slides => ext == ".pptx" ? [Pdf] : [Pdf, Pptx],
+            // HTML and text are made here; PDF and DOCX need Word or LibreOffice to lay the page out.
+            Target[] own = Markup.IsMarkdown(path) ? [Html, Txt] : [Html];
+            return DocumentEngines.CanOpen(kind) ? [Pdf, Docx, .. own] : own;
+        }
+        if (!DocumentEngines.CanOpen(kind)) return [];
+        Target[] targets = kind switch
+        {
+            DocumentKind.Text => [Pdf, Docx, Txt, Md, Html, Rtf, Odt],
+            DocumentKind.Sheet => [Pdf, Xlsx, Csv, Tsv, Ods],
+            DocumentKind.Slides => [Pdf, Pptx, Png, Jpg],
             DocumentKind.Drawing => [Pdf, Svg, Png, Jpg, Webp, Tiff, Bmp],
             DocumentKind.Pdf => [Docx],
             _ => [],
         };
+        return targets.Where(t => t.Extension != ext);
     }
 
     public IEnumerable<OperationDescriptor> GetOperations(FileSet files, OperationMode mode)
@@ -72,9 +84,20 @@ public sealed class DocumentProvider : IOperationProvider
             ct.ThrowIfCancellationRequested();
             try
             {
-                string output = DocumentEngines.KindOf(file) == DocumentKind.Drawing
-                    ? await ConvertDrawingAsync(file, target, engines.NewWorkFolder(), context, ct)
-                    : await ConvertDocumentAsync(engines, file, target, context, ct);
+                var kind = DocumentEngines.KindOf(file);
+                string output = kind switch
+                {
+                    DocumentKind.Drawing => await ConvertDrawingAsync(file, target, engines.NewWorkFolder(), context, ct),
+                    DocumentKind.Markup when target == Html =>
+                        SafeOutput.Write(file, context.Output, ".html", null, s => WriteText(s, Markup.ToHtmlFile(file)), _ => null, ct),
+                    DocumentKind.Markup when target == Txt =>
+                        SafeOutput.Write(file, context.Output, ".txt", null, s => WriteText(s, Markup.ToPlainText(File.ReadAllText(file))), _ => null, ct),
+                    _ when target == Md => await ConvertToMarkdownAsync(engines, file, context, ct),
+                    DocumentKind.Slides when target == Png || target == Jpg =>
+                        await PdfProvider.RenderPagesAsync(await engines.ConvertToTempAsync(file, ".pdf", ct), file,
+                            target == Png ? WicImageCodec.Png : WicImageCodec.Jpg, context, ct),
+                    _ => await ConvertDocumentAsync(engines, file, target, context, ct),
+                };
                 progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, output));
             }
             catch (OperationCanceledException) { throw; }
@@ -91,6 +114,20 @@ public sealed class DocumentProvider : IOperationProvider
         return SafeOutput.Write(file, context.Output, target.Extension, null,
             s => { using var src = File.OpenRead(temp); src.CopyTo(s); },
             check => target == Pdf ? PdfProvider.ValidatePdf(check) : null, ct);
+    }
+
+    /// <summary>Word documents are read directly; other text formats become DOCX through Word or LibreOffice first.</summary>
+    private static async Task<string> ConvertToMarkdownAsync(DocumentEngines engines, string file, OperationContext context, CancellationToken ct)
+    {
+        string docx = Path.GetExtension(file).Equals(".docx", StringComparison.OrdinalIgnoreCase) ? file : await engines.ConvertToTempAsync(file, ".docx", ct);
+        string markdown = DocxToMarkdown.Convert(docx);
+        return SafeOutput.Write(file, context.Output, ".md", null, s => WriteText(s, markdown), _ => null, ct);
+    }
+
+    private static void WriteText(Stream s, string text)
+    {
+        using var w = new StreamWriter(s, new System.Text.UTF8Encoding(false), leaveOpen: true);
+        w.Write(text);
     }
 
     /// <summary>
@@ -145,8 +182,9 @@ public sealed class DocumentProvider : IOperationProvider
         if (CorelDraw.Available) yield return ("Drawings", "CorelDRAW (.cdr, .cmx) to PDF, SVG, PNG, JPG, WebP, TIFF, BMP · built in");
         var apps = DocumentEngines.Describe();
         yield return ("Documents", apps.Length == 0
-            ? "Word, Excel and PowerPoint files convert when Microsoft Office or LibreOffice is installed"
-            : $"Documents to PDF (and DOCX, XLSX, PPTX) · PDF to Word · using {string.Join(", ", apps)}");
+            ? "Word, Excel and PowerPoint files convert when Microsoft Office or LibreOffice is installed · Markdown to HTML and text, built in"
+            : "Word to PDF, TXT, Markdown, HTML, RTF, ODT · Markdown and text to PDF, DOCX, HTML · spreadsheets to PDF, XLSX, CSV, TSV, ODS · "
+              + $"slides to PDF, PNG, JPG · PDF to Word · using {string.Join(", ", apps)}");
     }
 
     private static string Friendly(Exception ex) => ex switch
@@ -154,6 +192,7 @@ public sealed class DocumentProvider : IOperationProvider
         FileNotFoundException => "The file no longer exists.",
         UnauthorizedAccessException => "Windows denied access (read-only folder or file in use).",
         TimeoutException => "The conversion took too long and was stopped.",
+        NotSupportedException => ex.Message,
         System.Runtime.InteropServices.COMException com when com.Message.Contains("password", StringComparison.OrdinalIgnoreCase)
             => "The file is password-protected.",
         System.Runtime.InteropServices.COMException com => $"Office couldn't convert this file: {com.Message.Trim()}",

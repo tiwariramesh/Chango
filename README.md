@@ -1,77 +1,71 @@
 <p align="center"><img src="src/Flipr.UI/Assets/flipr-256.png" width="96" alt="Flipr icon"></p>
 
 <h1 align="center">Flipr</h1>
-<p align="center"><b>Your files. Your flow.</b><br>Convert, edit and manage files without opening an app. For Windows 10 (19041+) and 11.</p>
+<p align="center"><b>Drag. Flip. Done.</b><br>Convert, edit and manage files without opening an app. For Windows 10 (19041+) and 11.</p>
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-hero-dark.gif">
-    <img src="docs/guide/guide-hero.gif" width="600" alt="Dragging photo.png, tapping Shift, the Flipr wheel opening, releasing on JPG and photo.jpg appearing next to the original">
-  </picture>
-</p>
+Flipr is a drag-and-drop file converter for Windows, in the spirit of Tangerine for Mac. Drag files, tap **Shift**, and let go on the format you want. The result appears next to the original, and the original is never changed.
 
-## Download
-
-<a href="https://apps.microsoft.com/detail/9NJQRMQLL2SZ?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"></a>
-
-**Recommended: [Flipr on the Microsoft Store](https://apps.microsoft.com/detail/9NJQRMQLL2SZ).** Free, installs without any security warning, and the Store keeps it up to date.
-
-Prefer not to use the Store? [Installer](https://github.com/i3sam/Flipr/releases/download/v0.3.4-alpha/Flipr-Setup.exe) · [portable .zip](https://github.com/i3sam/Flipr/releases/download/v0.3.4-alpha/Flipr-Portable.zip) · [all releases](https://github.com/i3sam/Flipr/releases). No admin rights or .NET needed. These downloads aren't code-signed yet, so if Windows shows "Windows protected your PC", click **More info → Run anyway**.
-
-> **Switching from the GitHub version to the Store?** Uninstall the old one first (Settings → Apps → Flipr → Uninstall), so only one Flipr runs.
-
-> **Status: 0.3.4-alpha.** The core gesture is validated on Windows 11 (single monitor, 100% scale). Multi-monitor, mixed-DPI and Windows 10 sign-off are still pending; see [the feasibility report](docs/research/02-feasibility-report.md).
+Flipr is built on [OrbitDrop](https://github.com/i3sam/OrbitDrop) by Mohammed Essam (MIT). It adds document, PDF, spreadsheet, subtitle, media and archive conversions on top, plus its own identity in Flip Teal (`#0EA5A4`).
 
 ## How it works
 
-**1. Drag a file, then tap Shift.** Start dragging one or more files in File Explorer or on the desktop and keep holding. Tap Shift once: the wheel opens around the pointer.
+1. **Drag a file, then tap Shift.** Start dragging one or more files in File Explorer or on the desktop and keep holding. Tap Shift once and the wheel opens around the pointer.
+2. **Let go on what you want.** The result appears **next to the original**. Let go on the centre or press **Esc** to cancel.
+3. **Tap Shift again for more.** Each tap switches between **Convert**, **Tools** and **Actions**. Slices with dots (like **More** or **Compress**) open into more choices when you rest on them.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-drag-dark.gif"><img src="docs/guide/guide-drag.gif" width="600" alt="Dragging a photo and tapping Shift opens the wheel"></picture>
+**No dragging?** Select files, press **Ctrl + Alt + Space** and click an option. **Or right-click** files or folders in File Explorer and choose **Flipr**. Every result can be **undone** for a few seconds (it goes to the Recycle Bin).
 
-**2. Let go on what you want.** The result appears **next to the original**, which is never changed. Let go on the centre or press **Esc** to cancel.
+**Make it yours.** Settings → **Wheel** shows every wheel: click a slice to hide it, drag a slice to move it, then **Save**.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-release-dark.gif"><img src="docs/guide/guide-release.gif" width="600" alt="Releasing on JPG creates photo.jpg next to photo.png"></picture>
+## What it converts
 
-**3. Tap Shift again for more.** Each tap switches between **Convert**, **Tools** and **Actions**.
+| From | To | Needs |
+|---|---|---|
+| **Images** (PNG, JPG, WebP, JFIF, BMP, TIFF, GIF, SVG; HEIC, AVIF, JPEG XL, RAW with Windows codecs) | PNG, JPG, WebP, JFIF, BMP, TIFF, GIF, PDF | — |
+| **PDF** | Word (DOCX), PowerPoint (PPTX, a slide per page), Excel (XLSX, tables rebuilt from the layout), TXT, Markdown, PNG, JPG | Word only for DOCX |
+| **Word** (DOC, DOCX, RTF, ODT) | PDF, DOCX, TXT, Markdown, HTML, RTF, ODT | Microsoft Office or LibreOffice |
+| **Markdown / TXT** | PDF, DOCX, HTML (and Markdown → TXT) | Office or LibreOffice for PDF and DOCX |
+| **Spreadsheets** (XLS, XLSX, ODS, CSV, TSV) | PDF, XLSX, CSV, TSV, ODS | Office or LibreOffice |
+| **Slides** (PPT, PPTX, ODP) | PDF, PPTX, PNG, JPG (an image per slide) | Office or LibreOffice |
+| **Subtitles** (SRT, VTT) | SRT, VTT, TXT transcript | — |
+| **Video** (MP4, MOV, MKV, WebM, AVI, WMV …) | MP4, WMV, GIF; extract MP3, M4A, WAV, WMA, FLAC · **More:** MKV, WebM, MOV, AVI, OGG, Opus, AIFF | FFmpeg for **More** |
+| **Audio** (MP3, M4A, WAV, WMA, FLAC; OGG, Opus, AIFF …) | MP3, M4A, WAV, WMA, FLAC, OGG, Opus, AIFF | FFmpeg for OGG, Opus, AIFF and their inputs |
+| **CorelDRAW** (CDR, CMX) | PDF, SVG, PNG, JPG, WebP, TIFF, BMP | — |
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-modes-dark.gif"><img src="docs/guide/guide-modes.gif" width="600" alt="Tapping Shift cycles the wheel through Convert, Tools and Actions"></picture>
+**Tools:** image edit (crop, adjust, markup, redact), compress, resize, rotate, grayscale, OCR · PDF merge, split, compress, rotate · video trim, compress, remove audio, snapshot, join · audio trim, compress, normalize, mono/stereo · extract ZIP, 7Z, RAR, TAR, TAR.GZ, TAR.XZ, TAR.BZ2, GZ, CAB, ISO · file info, edit details, remove metadata.
 
-**Options with dots open into more choices.** Rest on one (like Compress) to see them; rest on the centre to go back, or let go straight away for the most common choice.
+**Actions:** copy path or name, show in folder, copy/move to, float shelf, share, **archive as ZIP, 7Z or TAR.GZ**, terminal, set as wallpaper. These work on folders too.
 
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-groups-dark.gif"><img src="docs/guide/guide-groups.gif" width="600" alt="Resting on Compress opens sizes; choosing 1 MB saves a compressed copy"></picture>
+### Optional helpers
 
-**No dragging?** Select files, press **Ctrl + Alt + Space** and click an option. Click the centre of the wheel (or tap Shift, or press the shortcut again) for **Tools** and **Actions**; **Esc** closes it.
+- **FFmpeg** unlocks the extra media formats: `winget install Gyan.FFmpeg`. Flipr finds it automatically, even if you install it while Flipr is running.
+- **LibreOffice** is used for documents when Microsoft Office isn't installed: `winget install TheDocumentFoundation.LibreOffice`.
 
-**Or right-click.** Right-click files or folders in File Explorer and choose **Flipr**. Copied a screenshot? Press **Ctrl + Alt + Space** with nothing selected and the wheel opens for the image. Every result can be **undone** for a few seconds (it goes to the Recycle Bin).
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-keyboard-dark.gif"><img src="docs/guide/guide-keyboard.gif" width="600" alt="With a file selected, Ctrl+Alt+Space opens the wheel and a click converts it"></picture>
-
-**Make it yours.** Settings → **Wheel** shows your wheel: click a slice to hide it (click again to bring it back), drag a slice to move it, then **Save**.
-
-<picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-customize-dark.gif"><img src="docs/guide/guide-customize.gif" width="600" alt="In Settings, hiding BMP and TIFF and dragging PDF to the top, then Save, changes the real wheel to match"></picture>
-
-The app includes the same guide with a hands-on practice step (tray menu → **How to use Flipr**). These animations are rendered from the real app: `Flipr.exe --render-guide <folder>`.
-
-| Mode | 0.2 capabilities |
-|---|---|
-| Convert | **Images:** PNG, JPG, WebP, JFIF, BMP, TIFF, GIF, PDF; from SVG too (also reads HEIC, AVIF, JPEG XL and camera RAW when Windows has the codec) · **PDF:** pages to PNG or JPG · **Video:** MP4, WMV, animated GIF, or extract audio as MP3 / M4A / WAV / WMA / FLAC · **Audio:** MP3, M4A, WAV, WMA, FLAC · **Documents:** Word, Excel and PowerPoint to PDF (with Microsoft Office or LibreOffice installed) · **CorelDRAW:** CDR and CMX to PDF, SVG, PNG, JPG, WebP, TIFF, BMP (built in, nothing else to install) |
-| Tools | **Images:** edit (crop, adjust, markup, redact), compress (by % or under 1 MB / 500 KB / 200 KB), resize, rotate & flip, grayscale, copy text (OCR), combine into PDF · **PDF:** merge, split into pages, compress, rotate pages · **Video:** trim, compress (720p / 1080p / 480p / half size), remove audio, snapshot, join · **Audio:** trim, compress, normalize, mono / stereo · **Archives:** extract ZIP, TAR, TAR.GZ, GZ · **Any file:** info, edit details, remove metadata or location |
-| Actions | Copy path or name, show in folder, copy to / move to (recent and common folders), float (a shelf to drag files out later), share (Nearby Share), zip, terminal, set as wallpaper. Works on folders too |
-
-**Private by design:** everything runs locally. No uploads, no account, no telemetry. The only network request is the update check against GitHub Releases, every few hours. Updates install automatically when you are not using Flipr, after their checksum is verified (Settings → About: turn either off any time).
+**Private by design:** everything runs locally. There are no uploads, no account and no telemetry. Update checks stay off until Flipr has its own releases repository (`Brand.ReleasesRepo`).
 
 ## Build from source
 
-Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/download). For the installer, add [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
+Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/download) (`winget install Microsoft.DotNet.SDK.10`). For the installer, add Inno Setup 6 (`winget install JRSoftware.InnoSetup`).
 
 ```powershell
 dotnet build Flipr.slnx -c Release
 dotnet test tests/Flipr.Tests
 dotnet run --project src/Flipr.App          # runs from source (lives in the notification area)
-./build/package.ps1                             # → artifacts/: setup.exe, portable.zip, SHA256SUMS.txt
+./build/package.ps1                         # → artifacts/: setup.exe, portable.zip, SHA256SUMS.txt
+dotnet run --project tools/IconGen          # regenerates the icon set in assets/brand
 ```
 
-More detail: [docs/development/building.md](docs/development/building.md).
+Tests that need Word, Excel, PowerPoint or FFmpeg skip themselves when those aren't installed.
+
+## Brand
+
+| | |
+|---|---|
+| Name | Flipr |
+| Accent | Flip Teal `#0EA5A4` (fill in light and dark themes), ink on it `#011F1E` (5.7:1) |
+| Teal text | `#0A7C7B` on light surfaces, `#2DD4CF` on dark |
+| Icon | A file card flipping over another, on a teal tile (`tools/IconGen`, output in `assets/brand`) |
+| Where it lives | Colours: `src/Flipr.UI/Themes/Tokens.*.xaml` · name, release repo: `src/Flipr.Infrastructure/Brand.cs` |
 
 ## Repository map
 
@@ -81,17 +75,12 @@ More detail: [docs/development/building.md](docs/development/building.md).
 | `src/Flipr.UI` | Design system, radial wheel, toasts, Settings, onboarding |
 | `src/Flipr.Windows` | Win32/COM: drag detection, OLE drop target, tray, theme, shell |
 | `src/Flipr.Core` | Operation contracts, registry, collision-safe atomic output |
-| `src/Flipr.Conversion` / `Tools` | Operation providers (add capabilities here) |
-| `src/Flipr.Jobs` / `Infrastructure` | Background jobs, settings, local logs |
-| `experiments/OrbitProbe` | Feasibility probe, kept as a regression and diagnostics tool |
-| `docs/` | Research, architecture, design system, milestones |
-
-## Documentation
-
-- [Initial assessment](docs/research/00-initial-assessment.md) · [Probe test sheet](docs/research/01-orbit-probe-test-sheet.md) · [Feasibility report](docs/research/02-feasibility-report.md)
-- [Architecture & milestones](docs/architecture/03-architecture-and-milestones.md) · [Design system](docs/design/design-system.md) · [Milestone 1 summary](docs/milestones/M1-foundation.md)
-- [Privacy policy](docs/PRIVACY.md): your files never leave your PC, and Flipr collects no personal data.
+| `src/Flipr.Conversion` | Converters: images, PDF (`Pdf/`), documents (`Documents/`), media (`Media/`, FFmpeg included), subtitles |
+| `src/Flipr.Tools` | Tools and actions: image tools, archives, metadata, file actions |
+| `src/Flipr.Jobs` / `Infrastructure` | Background jobs, settings, brand, local logs |
+| `experiments/OrbitProbe` | Upstream feasibility probe, kept as a diagnostics tool |
+| `docs/` | Research, architecture, design system |
 
 ## License
 
-MIT. See [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Flipr is inspired by the interaction of Tangerine for Mac; it shares no code, artwork or branding with it.
+MIT. See [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Flipr includes OrbitDrop's code under its MIT licence. It shares no code, artwork or branding with Tangerine.

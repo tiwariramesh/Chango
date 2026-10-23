@@ -14,6 +14,10 @@ Flipr is MIT-licensed (see `LICENSE`). This file lists everything a **release bu
 | Svg.Custom | 4.9.1 | MS-PL (Microsoft Public License), © SVG.NET contributors | The SVG parser Svg.Skia builds on (a build of SVG.NET). Source: https://github.com/svg-net/SVG |
 | ExCSS | 4.3.1 | MIT, © Tyler Brinks | CSS inside SVG files |
 | HarfBuzzSharp, HarfBuzzSharp.NativeAssets.Win32 | 8.3.1.3 | MIT, © Microsoft Corporation (HarfBuzz: MIT, © HarfBuzz contributors) | Text inside SVG files |
+| OrbitDrop | 0.4.4-alpha (commit 15bcafe) | MIT, © 2026 Mohammed Essam | The application Flipr is built from. Source: https://github.com/i3sam/OrbitDrop |
+| PdfPig | 0.1.16 | Apache-2.0, © UglyToad (Eliot Jones) and contributors | Reading a PDF's text layer: PDF to TXT, Markdown and Excel. Source: https://github.com/UglyToad/PdfPig |
+| DocumentFormat.OpenXml (Open XML SDK) | 3.5.1 | MIT, © Microsoft Corporation | Word to Markdown; writing PowerPoint and Excel files from PDFs. Source: https://github.com/dotnet/Open-XML-SDK |
+| Markdig | 1.4.2 | BSD-2-Clause, © Alexandre Mutel | Markdown to HTML, DOCX, PDF and text. Source: https://github.com/xoofx/markdig |
 
 ### In FliprCdr.exe (the built-in CorelDRAW reader)
 
@@ -35,6 +39,12 @@ The MPL 2.0 covered files are used as published; their source code is available 
 - **Windows Media Foundation:** video and audio transcoding (H.264/AAC, WMV/WMA, MP3, WAV). Codecs come from Windows; HEVC, VP9 and similar depend on the Microsoft Store video extensions the user has installed.
 - **Segoe UI Variable, Segoe Fluent Icons and Segoe MDL2 Assets fonts:** referenced by name and installed with Windows. Flipr doesn't ship these fonts.
 - **OLE drag-and-drop, Shell and DWM APIs:** documented Windows APIs.
+- **tar.exe (bsdtar / libarchive, BSD-2-Clause):** ships with Windows 10 1803 and later. Used to extract 7Z, RAR, TAR.XZ, TAR.BZ2, CAB and ISO, and to make 7Z and TAR.GZ archives.
+
+## Used when the user has installed them, not redistributed
+
+- **FFmpeg** (LGPL/GPL, depending on the build the user installs): MKV, WebM, MOV, AVI, OGG, Opus and AIFF, run as a separate program. Flipr doesn't bundle or link it.
+- **Microsoft Office** (Word, Excel, PowerPoint) or **LibreOffice** (MPL 2.0): document layout and conversion, driven through COM or the command line.
 
 ## Development only (not shipped)
 
