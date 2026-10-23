@@ -95,7 +95,7 @@ internal static class UiReview
             for (int step = 0; step < onboarding.StepCount; step++)
             {
                 onboarding.ShowStepStill(step);
-                RenderElement(onboarding.ContentRoot, 680, double.NaN, bg, dir, $"onboarding-{step + 1}-{t}", ref count, [1.0]);
+                RenderElement(onboarding.ContentRoot, 900, double.NaN, bg, dir, $"onboarding-{step + 1}-{t}", ref count, [1.0]);
             }
             onboarding.Close();
             guideAssets.Dispose();

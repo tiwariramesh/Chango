@@ -54,7 +54,7 @@ public sealed partial class FfmpegProvider : IOperationProvider
     private static readonly Target[] Standard = [Mp4, Mp3, M4a, Wav, Flac];            // for files only FFmpeg reads
     private static readonly Target[] All = [.. Standard, .. Extra];
 
-    private static readonly OperationGroup More = new("media.more", "More", "\uE712");
+    private static readonly OperationGroup More = new("media.more", "More", null); // the wheel marks group slices with "+"
 
     public static bool IsVideo(string path) => MediaFoundationProvider.IsVideo(path) || OnlyFfmpegVideo.Contains(Path.GetExtension(path));
     public static bool IsAudio(string path) => MediaFoundationProvider.IsAudio(path) || OnlyFfmpegAudio.Contains(Path.GetExtension(path));

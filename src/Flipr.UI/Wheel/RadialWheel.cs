@@ -43,7 +43,7 @@ public sealed class RadialWheel : Window
     private readonly Image _backdrop = new() { Stretch = Stretch.Fill };
     private readonly DropShadowEffect _shadow = new() { BlurRadius = 28, ShadowDepth = 8, Direction = 270, Color = Colors.Black };
     private readonly TextBlock _hubMode, _hubValue, _hubDetail;
-    private readonly Ellipse[] _modeDots = new Ellipse[3];
+    private readonly Rectangle[] _modeDots = new Rectangle[3];
     private readonly List<SegmentVisual> _visuals = [];
     private Win32.RECT _rect;
     private int _highlight = HitOutside;
@@ -71,8 +71,8 @@ public sealed class RadialWheel : Window
         _backdrop.Width = _backdrop.Height = Extent;
         RenderOptions.SetBitmapScalingMode(_backdrop, BitmapScalingMode.LowQuality);
         _tint = new Ellipse { Width = d, Height = d };
-        _rim = new Ellipse { Width = d, Height = d, StrokeThickness = 1.2 };
-        _hub = new Ellipse { Width = HubR * 2, Height = HubR * 2, StrokeThickness = 1 };
+        _rim = new Ellipse { Width = d, Height = d, StrokeThickness = 2 };
+        _hub = new Ellipse { Width = HubR * 2, Height = HubR * 2, StrokeThickness = 2 };
 
         var disc = new Canvas { Width = Extent, Height = Extent };
         foreach (FrameworkElement e in new FrameworkElement[] { _base, backdropHost, _tint, _rim })
@@ -97,7 +97,7 @@ public sealed class RadialWheel : Window
         var dots = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 5, 0, 0) };
         for (int i = 0; i < 3; i++)
         {
-            _modeDots[i] = new Ellipse { Width = 5, Height = 5, Margin = new Thickness(2.5, 0, 2.5, 0) };
+            _modeDots[i] = new Rectangle { Width = 5, Height = 5, RadiusX = 2.5, RadiusY = 2.5, Margin = new Thickness(2, 0, 2, 0) };
             dots.Children.Add(_modeDots[i]);
         }
         var hubStack = new StackPanel
@@ -149,9 +149,10 @@ public sealed class RadialWheel : Window
             ? Frozen(new SolidColorBrush(SystemColors.WindowTextColor))
             : Frozen(new LinearGradientBrush(ThemeManager.Token("WheelRimTop"), ThemeManager.Token("WheelRimBottom"), 90));
         _hub.Fill = Frozen(new SolidColorBrush(hc ? SystemColors.WindowColor : ThemeManager.Token("WheelHub")));
-        _hub.Stroke = Frozen(new SolidColorBrush(Color.FromArgb(0x22, _segmentText.R, _segmentText.G, _segmentText.B)));
+        _hub.Stroke = Frozen(new SolidColorBrush(hc ? SystemColors.WindowTextColor : Color.FromArgb(0x99, _accent.R, _accent.G, _accent.B)));
         var text = Frozen(new SolidColorBrush(_segmentText));
-        _hubMode.Foreground = _hubValue.Foreground = _hubDetail.Foreground = text;
+        _hubValue.Foreground = _hubDetail.Foreground = text;
+        _hubMode.Foreground = hc ? text : Frozen(new SolidColorBrush(ThemeManager.Token("AccentText")));
         foreach (var v in _visuals) Paint(v, _highlight >= 0 && _highlight < _visuals.Count ? _visuals[_highlight] : null);
     }
 
@@ -165,7 +166,11 @@ public sealed class RadialWheel : Window
         SetHub(value, detail);
         var dotOn = Frozen(new SolidColorBrush(_accent));
         var dotOff = Frozen(new SolidColorBrush(Color.FromArgb(0x55, _segmentText.R, _segmentText.G, _segmentText.B)));
-        for (int i = 0; i < 3; i++) _modeDots[i].Fill = i == (int)mode ? dotOn : dotOff;
+        for (int i = 0; i < 3; i++)
+        {
+            _modeDots[i].Fill = i == (int)mode ? dotOn : dotOff;
+            _modeDots[i].Width = i == (int)mode ? 14 : 5;
+        }
 
         if (items.Count == 0)
         {
@@ -218,8 +223,8 @@ public sealed class RadialWheel : Window
             {
                 dots = new TextBlock
                 {
-                    Text = "• • •", FontSize = 8, Opacity = 0.55, HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(0, 2, 0, 0),
+                    Text = "\uE710", FontFamily = (FontFamily)FindResource("Orbit.Font.Icons"), FontSize = 9, FontWeight = FontWeights.Bold,
+                    Opacity = 0.7, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 3, 0, 0),
                 };
                 stack.Children.Add(dots);
             }

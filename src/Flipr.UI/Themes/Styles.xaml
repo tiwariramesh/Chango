@@ -1,6 +1,7 @@
 <!--
   Flipr control styles. Theme-independent: every colour is a DynamicResource token, so a theme switch
-  restyles open windows instantly. Spacing follows the 4 px grid; radii: controls 4, cards 6, surfaces 8.
+  restyles open windows instantly. Spacing follows the 4 px grid.
+  Flipr's shape language: pill buttons, toggles and selections (fully rounded), cards 12, menu rows 8.
 -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -61,7 +62,7 @@
     <Style x:Key="Orbit.Button.Base" TargetType="Button">
         <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Text}" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="Padding" Value="14,6" />
+        <Setter Property="Padding" Value="18,6" />
         <Setter Property="MinHeight" Value="32" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource Orbit.FocusVisual}" />
@@ -70,7 +71,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="Chrome" CornerRadius="4" Background="{TemplateBinding Background}"
+                    <Border x:Name="Chrome" CornerRadius="16" Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
                             Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True">
                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -150,7 +151,21 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="10,0" />
         <Setter Property="Height" Value="36" />
-        <Setter Property="Margin" Value="4,1" />
+        <Setter Property="Margin" Value="6,1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Chrome" CornerRadius="8" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Chrome" Property="Opacity" Value="0.45" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- ===== Toggle switch (CheckBox) ===== -->
@@ -164,11 +179,11 @@
                     <StackPanel Orientation="Horizontal" Background="Transparent">
                         <TextBlock x:Name="State" Text="Off" Margin="0,0,10,0" VerticalAlignment="Center"
                                    Style="{StaticResource Orbit.Text.Body}" Foreground="{DynamicResource Orbit.TextSecondary}" />
-                        <Grid Width="40" Height="20">
-                            <Border x:Name="Track" CornerRadius="10" BorderThickness="1"
-                                    BorderBrush="{DynamicResource Orbit.TextSecondary}" Background="Transparent" />
-                            <Ellipse x:Name="Knob" Width="12" Height="12" HorizontalAlignment="Left" Margin="4,0,0,0"
-                                     Fill="{DynamicResource Orbit.TextSecondary}">
+                        <Grid Width="44" Height="24">
+                            <Border x:Name="Track" CornerRadius="12" BorderThickness="1.5"
+                                    BorderBrush="{DynamicResource Orbit.StrokeStrong}" Background="{DynamicResource Orbit.SubtleFill}" />
+                            <Ellipse x:Name="Knob" Width="16" Height="16" HorizontalAlignment="Left" Margin="4,0,0,0"
+                                     Fill="{DynamicResource Orbit.TextTertiary}">
                                 <Ellipse.RenderTransform>
                                     <TranslateTransform x:Name="KnobShift" X="0" />
                                 </Ellipse.RenderTransform>
@@ -179,7 +194,7 @@
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Track" Property="Background" Value="{DynamicResource Orbit.Accent}" />
                             <Setter TargetName="Track" Property="BorderBrush" Value="{DynamicResource Orbit.Accent}" />
-                            <Setter TargetName="Knob" Property="Fill" Value="{DynamicResource Orbit.OnAccent}" />
+                            <Setter TargetName="Knob" Property="Fill" Value="White" />
                             <Setter TargetName="State" Property="Text" Value="On" />
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
@@ -205,7 +220,7 @@
                                 <Condition Property="IsMouseOver" Value="True" />
                                 <Condition Property="IsChecked" Value="False" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Orbit.SubtleFill}" />
+                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Orbit.SubtleFillPressed}" />
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -233,7 +248,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="Chip" CornerRadius="4" Padding="12,5" Margin="2" Background="Transparent">
+                    <Border x:Name="Chip" CornerRadius="14" Padding="14,5" Margin="2" Background="Transparent">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -252,7 +267,7 @@
     </Style>
 
     <Style x:Key="Orbit.SegmentHost" TargetType="Border">
-        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="CornerRadius" Value="17" />
         <Setter Property="Background" Value="{DynamicResource Orbit.SurfaceAlt}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Orbit.Stroke}" />
         <Setter Property="BorderThickness" Value="1" />
@@ -271,7 +286,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <StackPanel>
-                        <Border x:Name="Frame" CornerRadius="8" BorderThickness="2" BorderBrush="{DynamicResource Orbit.Stroke}" Padding="3">
+                        <Border x:Name="Frame" CornerRadius="12" BorderThickness="2" BorderBrush="{DynamicResource Orbit.Stroke}" Padding="3">
                             <ContentPresenter />
                         </Border>
                         <TextBlock Text="{TemplateBinding Tag}" Margin="0,8,0,0" HorizontalAlignment="Center"
@@ -295,9 +310,9 @@
         <Setter Property="Background" Value="{DynamicResource Orbit.CardFill}" />
         <Setter Property="BorderBrush" Value="{DynamicResource Orbit.Stroke}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16,12" />
-        <Setter Property="Margin" Value="0,0,0,4" />
+        <Setter Property="Margin" Value="0,0,0,6" />
         <Setter Property="MinHeight" Value="64" />
     </Style>
 
@@ -305,6 +320,7 @@
         <Setter Property="Margin" Value="2,20,0,8" />
     </Style>
 
+    <!-- Navigation: the selected page is a solid Flip Teal pill; labels and icons inherit the item's ink. -->
     <Style x:Key="Orbit.NavItem" TargetType="ListBoxItem">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource Orbit.FocusVisual}" />
@@ -312,23 +328,57 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Grid Margin="0,1">
-                        <Border x:Name="Bg" CornerRadius="4" Background="Transparent" Height="36" />
-                        <Border x:Name="Pill" Width="3" Height="16" CornerRadius="1.5" HorizontalAlignment="Left"
-                                Background="{DynamicResource Orbit.Accent}" Visibility="Collapsed" />
-                        <ContentPresenter Margin="12,0" VerticalAlignment="Center" />
+                    <Grid Margin="0,2">
+                        <Border x:Name="Bg" CornerRadius="19" Background="Transparent" Height="38" />
+                        <ContentPresenter Margin="16,0" VerticalAlignment="Center" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Orbit.SubtleFill}" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Orbit.SubtleFillPressed}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Orbit.SubtleFill}" />
-                            <Setter TargetName="Pill" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Orbit.Accent}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Orbit.OnAccent}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="Orbit.NavLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Text}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="Orbit.NavGlyph" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Icons}" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,14,0" />
+    </Style>
+
+    <!-- Page title with Flipr's teal underline. -->
+    <Style x:Key="Flipr.PageTitle" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Title}">
+        <Setter Property="FontSize" Value="26" />
+        <Setter Property="Margin" Value="2,0,0,0" />
+    </Style>
+    <Style x:Key="Flipr.TitleBar" TargetType="Border">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="4" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Background" Value="{DynamicResource Orbit.Accent}" />
+        <Setter Property="Margin" Value="3,6,0,18" />
+    </Style>
+
+    <!-- A setting's icon sits in a round, teal-tinted badge. -->
+    <Style x:Key="Flipr.IconBadge" TargetType="Border">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="CornerRadius" Value="18" />
+        <Setter Property="Background" Value="{DynamicResource Orbit.AccentSubtle}" />
+        <Setter Property="Margin" Value="0,0,14,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 </ResourceDictionary>

@@ -14,9 +14,8 @@
             <Setter Property="Margin" Value="0,2,24,0" />
         </Style>
         <Style x:Key="RowGlyph" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Glyph}">
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="Margin" Value="0,0,16,0" />
-            <Setter Property="Width" Value="20" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="{DynamicResource Orbit.AccentText}" />
         </Style>
         <Style x:Key="Page" TargetType="StackPanel">
             <Setter Property="Margin" Value="32,24,32,32" />
@@ -31,21 +30,25 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- ===== Navigation ===== -->
-        <DockPanel Margin="12,16,8,16">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,0,0,20">
-                <Image Source="pack://application:,,,/Flipr.UI;component/Assets/flipr-64.png" Width="28" Height="28" />
-                <TextBlock Text="Flipr" Style="{StaticResource Orbit.Text.BodyStrong}" FontSize="15" Margin="10,0,0,0" VerticalAlignment="Center" />
-            </StackPanel>
+        <!-- ===== Navigation: Flipr's teal rail ===== -->
+        <Border Background="{DynamicResource Orbit.AccentSubtle}" CornerRadius="0,16,16,0" />
+        <DockPanel Margin="14,20,14,16">
+            <DockPanel DockPanel.Dock="Top" Margin="6,0,0,24">
+                <Image Source="pack://application:,,,/Flipr.UI;component/Assets/flipr-64.png" Width="40" Height="40" />
+                <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                    <TextBlock Text="Flipr" Style="{StaticResource Orbit.Text.Subtitle}" FontSize="18" LineHeight="22" />
+                    <TextBlock Text="Drag. Flip. Done." Style="{StaticResource Orbit.Text.Caption}" Foreground="{DynamicResource Orbit.AccentText}" FontWeight="SemiBold" />
+                </StackPanel>
+            </DockPanel>
             <ListBox x:Name="Nav" BorderThickness="0" Background="Transparent" SelectionChanged="OnNavChanged"
                      ItemContainerStyle="{StaticResource Orbit.NavItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBoxItem Tag="General"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE713;" Margin="0,0,14,0" /><TextBlock Text="General" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
-                <ListBoxItem Tag="Appearance"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE790;" Margin="0,0,14,0" /><TextBlock Text="Appearance" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
-                <ListBoxItem Tag="Shortcuts"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE765;" Margin="0,0,14,0" /><TextBlock Text="Shortcuts" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
-                <ListBoxItem Tag="Wheel"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE7F4;" Margin="0,0,14,0" /><TextBlock Text="Wheel" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
-                <ListBoxItem Tag="Conversions"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE8AB;" Margin="0,0,14,0" /><TextBlock Text="Conversions" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
-                <ListBoxItem Tag="Advanced"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE90F;" Margin="0,0,14,0" /><TextBlock Text="Advanced" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
-                <ListBoxItem Tag="About"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE946;" Margin="0,0,14,0" /><TextBlock Text="About" Style="{StaticResource Orbit.Text.Body}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="General"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.NavGlyph}" Text="&#xE713;" /><TextBlock Text="General" Style="{StaticResource Orbit.NavLabel}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Appearance"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.NavGlyph}" Text="&#xE790;" /><TextBlock Text="Appearance" Style="{StaticResource Orbit.NavLabel}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Shortcuts"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.NavGlyph}" Text="&#xE765;" /><TextBlock Text="Shortcuts" Style="{StaticResource Orbit.NavLabel}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Wheel"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.NavGlyph}" Text="&#xE7F4;" /><TextBlock Text="Wheel" Style="{StaticResource Orbit.NavLabel}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Conversions"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.NavGlyph}" Text="&#xE8AB;" /><TextBlock Text="Conversions" Style="{StaticResource Orbit.NavLabel}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="Advanced"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.NavGlyph}" Text="&#xE90F;" /><TextBlock Text="Advanced" Style="{StaticResource Orbit.NavLabel}" /></StackPanel></ListBoxItem>
+                <ListBoxItem Tag="About"><StackPanel Orientation="Horizontal"><TextBlock Style="{StaticResource Orbit.NavGlyph}" Text="&#xE946;" /><TextBlock Text="About" Style="{StaticResource Orbit.NavLabel}" /></StackPanel></ListBoxItem>
             </ListBox>
         </DockPanel>
 
@@ -55,10 +58,11 @@
 
                 <!-- General -->
                 <StackPanel x:Name="General" Style="{StaticResource Page}">
-                    <TextBlock Text="General" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <TextBlock Text="General" Style="{StaticResource Flipr.PageTitle}" />
+                    <Border Style="{StaticResource Flipr.TitleBar}" />
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE7E8;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE7E8;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding LaunchAtStartup}" AutomationProperties.Name="Launch at Windows sign-in" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Launch at Windows sign-in" Style="{StaticResource RowTitle}" />
@@ -68,7 +72,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xEA8F;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xEA8F;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ShowCompletionNotifications}" AutomationProperties.Name="Show completion notifications" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Show completion notifications" Style="{StaticResource RowTitle}" />
@@ -78,7 +82,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE838;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE838;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding RevealWhenDone}" AutomationProperties.Name="Show new files in File Explorer" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Show new files in File Explorer" Style="{StaticResource RowTitle}" />
@@ -88,7 +92,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE7A7;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE7A7;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding OfferUndo}" AutomationProperties.Name="Undo button" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Undo button" Style="{StaticResource RowTitle}" />
@@ -99,7 +103,7 @@
                     <TextBlock Text="Help" Style="{StaticResource Orbit.SectionHeader}" />
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE897;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE897;" /></Border>
                             <Button DockPanel.Dock="Right" Content="Open guide" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding ShowOnboardingCommand}" VerticalAlignment="Center" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="How to use Flipr" Style="{StaticResource RowTitle}" />
@@ -109,7 +113,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE734;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE734;" /></Border>
                             <Button DockPanel.Dock="Right" Content="{Binding RateButtonText}" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding RateCommand}" VerticalAlignment="Center" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Enjoying Flipr?" Style="{StaticResource RowTitle}" />
@@ -121,7 +125,8 @@
 
                 <!-- Appearance -->
                 <StackPanel x:Name="Appearance" Style="{StaticResource Page}">
-                    <TextBlock Text="Appearance" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <TextBlock Text="Appearance" Style="{StaticResource Flipr.PageTitle}" />
+                    <Border Style="{StaticResource Flipr.TitleBar}" />
                     <Border Style="{StaticResource Orbit.Card}" Padding="16,14,16,16">
                         <StackPanel>
                             <TextBlock Text="Theme" Style="{StaticResource RowTitle}" />
@@ -157,7 +162,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE771;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE771;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding UseWindowsAccent}" AutomationProperties.Name="Use Windows accent colour" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Use Windows accent colour" Style="{StaticResource RowTitle}" />
@@ -170,7 +175,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE740;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE740;" /></Border>
                             <Border DockPanel.Dock="Right" Style="{StaticResource Orbit.SegmentHost}">
                                 <StackPanel Orientation="Horizontal">
                                     <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Size" Content="Compact" IsChecked="{Binding SizeCompact}" />
@@ -186,7 +191,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE945;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE945;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ReduceMotion}" AutomationProperties.Name="Reduce motion" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Reduce motion" Style="{StaticResource RowTitle}" />
@@ -198,10 +203,11 @@
 
                 <!-- Shortcuts -->
                 <StackPanel x:Name="Shortcuts" Style="{StaticResource Page}">
-                    <TextBlock Text="Shortcuts" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <TextBlock Text="Shortcuts" Style="{StaticResource Flipr.PageTitle}" />
+                    <Border Style="{StaticResource Flipr.TitleBar}" />
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE765;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE765;" /></Border>
                             <Border DockPanel.Dock="Right" Style="{StaticResource Orbit.SegmentHost}">
                                 <StackPanel Orientation="Horizontal">
                                     <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Trigger" Content="Shift" IsChecked="{Binding TriggerShift}" />
@@ -216,7 +222,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B0;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B0;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding KeepOpenOnCentre}" AutomationProperties.Name="Click instead of holding" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Click instead of holding" Style="{StaticResource RowTitle}" />
@@ -226,7 +232,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE92E;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE92E;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding KeyboardShortcut}" AutomationProperties.Name="Keyboard shortcut" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Ctrl + Alt + Space" Style="{StaticResource RowTitle}" />
@@ -236,7 +242,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE77F;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE77F;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding UseClipboard}" IsEnabled="{Binding KeyboardShortcut}" AutomationProperties.Name="Use the clipboard" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Use the clipboard" Style="{StaticResource RowTitle}" />
@@ -246,7 +252,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8A7;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8A7;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ContextMenu}" AutomationProperties.Name="Right-click menu" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Right-click menu" Style="{StaticResource RowTitle}" />
@@ -277,7 +283,8 @@
 
                 <!-- Wheel: an editable copy of the wheel -->
                 <StackPanel x:Name="Wheel" Style="{StaticResource Page}">
-                    <TextBlock Text="Wheel" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,4" />
+                    <TextBlock Text="Wheel" Style="{StaticResource Flipr.PageTitle}" />
+                    <Border Style="{StaticResource Flipr.TitleBar}" Margin="3,6,0,6" />
                     <TextBlock Style="{StaticResource Orbit.Text.Caption}" Margin="2,0,0,16" TextWrapping="Wrap"
                                Text="Click a slice to hide it (click again to bring it back). Drag a slice to move it. Then press Save." />
                     <Border Style="{StaticResource Orbit.Card}" Padding="20,18,20,14">
@@ -303,7 +310,7 @@
                     <TextBlock Text="Extras" Style="{StaticResource Orbit.SectionHeader}" />
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE81C;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE81C;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding LastUsedFirst}" AutomationProperties.Name="Put my last choice first" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Put my last choice first" Style="{StaticResource RowTitle}" />
@@ -313,7 +320,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE9D2;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE9D2;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ShowSizeEstimates}" AutomationProperties.Name="Show estimated size" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Show estimated size" Style="{StaticResource RowTitle}" />
@@ -325,11 +332,12 @@
 
                 <!-- Conversions -->
                 <StackPanel x:Name="Conversions" Style="{StaticResource Page}">
-                    <TextBlock Text="Conversions" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <TextBlock Text="Conversions" Style="{StaticResource Flipr.PageTitle}" />
+                    <Border Style="{StaticResource Flipr.TitleBar}" />
                     <Border Style="{StaticResource Orbit.Card}" Padding="16,14">
                         <StackPanel>
                             <DockPanel>
-                                <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B7;" />
+                                <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B7;" /></Border>
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock Text="Where new files are saved" Style="{StaticResource RowTitle}" />
                                     <TextBlock Text="Originals are never changed or overwritten; name clashes get a number, like 'photo (2).png'." Style="{StaticResource RowHint}" />
@@ -353,7 +361,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xEB9F;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xEB9F;" /></Border>
                             <Border DockPanel.Dock="Right" Style="{StaticResource Orbit.SegmentHost}">
                                 <StackPanel Orientation="Horizontal">
                                     <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Quality" Content="Smaller" IsChecked="{Binding Quality75}" ToolTip="Quality 75" />
@@ -386,10 +394,11 @@
 
                 <!-- Advanced -->
                 <StackPanel x:Name="Advanced" Style="{StaticResource Page}">
-                    <TextBlock Text="Advanced" Style="{StaticResource Orbit.Text.Subtitle}" Margin="2,0,0,16" />
+                    <TextBlock Text="Advanced" Style="{StaticResource Flipr.PageTitle}" />
+                    <Border Style="{StaticResource Flipr.TitleBar}" />
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE962;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE962;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding ExtendedDragDetection}" AutomationProperties.Name="Extended drag detection" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Extended drag detection" Style="{StaticResource RowTitle}" />
@@ -399,7 +408,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE9F9;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE9F9;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding DetailedLogging}" AutomationProperties.Name="Detailed logging" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Detailed logging" Style="{StaticResource RowTitle}" />
@@ -409,7 +418,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B7;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8B7;" /></Border>
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
                                 <Button Content="Logs" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding OpenLogsCommand}" Margin="0,0,8,0" />
                                 <Button Content="Settings file" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding OpenSettingsFileCommand}" />
@@ -422,7 +431,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE777;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE777;" /></Border>
                             <Button DockPanel.Dock="Right" Content="Reset" Style="{StaticResource Orbit.Button.Standard}" Click="OnReset" VerticalAlignment="Center" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Reset all settings" Style="{StaticResource RowTitle}" />
@@ -446,7 +455,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE895;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE895;" /></Border>
                             <Button DockPanel.Dock="Right" Content="{Binding UpdateButtonText}" Style="{StaticResource Orbit.Button.Standard}"
                                     Command="{Binding UpdateCommand}" IsEnabled="{Binding UpdateButtonEnabled}" VerticalAlignment="Center" />
                             <StackPanel VerticalAlignment="Center">
@@ -457,7 +466,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}" Visibility="{Binding UpdateSwitchesVisibility}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE823;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE823;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding CheckForUpdates}" AutomationProperties.Name="Check for updates automatically" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Check for updates automatically" Style="{StaticResource RowTitle}" />
@@ -467,7 +476,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}" Visibility="{Binding UpdateSwitchesVisibility}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE896;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE896;" /></Border>
                             <CheckBox DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}" IsChecked="{Binding AutoInstallUpdates}" AutomationProperties.Name="Install updates automatically" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Install updates automatically" Style="{StaticResource RowTitle}" />
@@ -477,7 +486,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE72E;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE72E;" /></Border>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Private by design" Style="{StaticResource RowTitle}" />
                                 <TextBlock Text="Everything runs on this PC. Flipr never uploads files, needs no account, and collects no telemetry. The only network request it can make is the optional update check." Style="{StaticResource RowHint}" />
@@ -486,7 +495,7 @@
                     </Border>
                     <Border Style="{StaticResource Orbit.Card}">
                         <DockPanel>
-                            <TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8A5;" />
+                            <Border Style="{StaticResource Flipr.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE8A5;" /></Border>
                             <Button DockPanel.Dock="Right" Content="View licence" Style="{StaticResource Orbit.Button.Standard}" Command="{Binding OpenLicenseCommand}" VerticalAlignment="Center" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Open source · MIT License" Style="{StaticResource RowTitle}" />

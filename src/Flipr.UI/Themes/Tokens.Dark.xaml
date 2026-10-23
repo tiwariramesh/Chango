@@ -39,8 +39,8 @@
     <sys:Double x:Key="Orbit.WheelSegmentOpacity">0.86</sys:Double>
     <Color x:Key="Orbit.C.WheelSegmentText">#F3F3F7</Color>
     <Color x:Key="Orbit.C.WheelHub">#F52A2A32</Color>
-    <Color x:Key="Orbit.C.WheelRimTop">#38FFFFFF</Color>
-    <Color x:Key="Orbit.C.WheelRimBottom">#0FFFFFFF</Color>
+    <Color x:Key="Orbit.C.WheelRimTop">#D92DD4CF</Color>
+    <Color x:Key="Orbit.C.WheelRimBottom">#332DD4CF</Color>
     <sys:Double x:Key="Orbit.WheelShadowOpacity">0.50</sys:Double>
     <sys:Double x:Key="Orbit.ToastShadowOpacity">0.40</sys:Double>
 

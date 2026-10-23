@@ -96,7 +96,7 @@ internal static class FilmAssets
 
             var guide = new OnboardingWindow("Shift");
             guide.ShowStep(1);
-            RenderElementOn(guide.ContentRoot, 560, 470, (Brush)Application.Current.FindResource("Orbit.SurfaceBase"), dir, $"guide-2{t}", ref n);
+            RenderElementOn(guide.ContentRoot, 900, 600, (Brush)Application.Current.FindResource("Orbit.SurfaceBase"), dir, $"guide-2{t}", ref n);
             guide.Close();
         }
 

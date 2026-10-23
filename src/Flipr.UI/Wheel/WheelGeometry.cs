@@ -7,7 +7,7 @@ namespace Flipr.UI.Wheel;
 public static class WheelGeometry
 {
     public const double Disc = 300, Margin = 28, Extent = Disc + 2 * Margin;
-    public const double DiscR = Disc / 2, OuterR = 140, InnerR = 66, HubR = 56, Gap = 6, Corner = 10;
+    public const double DiscR = Disc / 2, OuterR = 140, InnerR = 66, HubR = 56, Gap = 7, Corner = 14;
     public const double LabelR = (OuterR + InnerR) / 2, HoverLift = 3;
     public const int HitHub = -1, HitOutside = -2;
 

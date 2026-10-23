@@ -12,12 +12,18 @@ using Flipr.Windows.Interop;
 namespace Flipr.UI.Onboarding;
 
 /// <summary>
-/// The guide: animated demonstrations of each part of the gesture (built from the real wheel and notification),
-/// then a hands-on practice step with a real photo that the user drags, converts and sees appear.
+/// The Flipr tour: a teal brand panel listing the chapters, and beside it animated demonstrations of each part of the
+/// gesture (built from the real wheel and notification), ending in a hands-on practice with a real photo that the
+/// user drags, flips to JPG and sees appear.
 /// </summary>
 public partial class OnboardingWindow : Window
 {
-    private sealed record Step(GuideScene? Scene, string Label, string Heading, string Body);
+    private sealed record Step(GuideScene? Scene, string Chapter, string Label, string Heading, string Body);
+
+    private static readonly Brush PanelInk = Frozen(new SolidColorBrush(Color.FromRgb(0x01, 0x1F, 0x1E)));
+    private static readonly Brush PanelPill = Frozen(new SolidColorBrush(Color.FromArgb(0xF2, 0xFF, 0xFF, 0xFF)));
+
+    private static Brush Frozen(Brush b) { b.Freeze(); return b; }
 
     private readonly Step[] _steps;
     private readonly GuideStage? _stage;
@@ -37,25 +43,25 @@ public partial class OnboardingWindow : Window
         _practiceFolder = practiceFolder ?? System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Flipr guide");
         _steps =
         [
-            new(GuideScene.Hero, "WELCOME", "Do it right where your files are",
-                $"Convert, compress, edit and share files without opening an app. Drag a file, tap {triggerKey}, let go on what you want. That's the whole idea."),
-            new(GuideScene.Drag, "STEP 1", $"Drag a file, then tap {triggerKey}",
-                $"Start dragging any file in File Explorer, on the desktop or in VS Code, and keep holding it. Tap {triggerKey} once (no need to hold it): the wheel opens around your pointer."),
-            new(GuideScene.Release, "STEP 2", "Let go on what you want",
-                "Move onto an option and release the mouse button. The result appears next to the original, which is never changed. Let go on the centre, or press Esc, to cancel."),
-            new(GuideScene.Modes, "STEP 3", $"Tap {triggerKey} again for more",
-                $"Each tap switches the wheel: Convert (PNG, JPG, PDF, MP3…), Tools (edit, compress, resize, trim…) and Actions (copy to, share, zip, float…)."),
-            new(GuideScene.Groups, "TIP", "Options with dots open into more choices",
-                "Rest on one for a moment and its choices appear; rest on the centre to go back. In a hurry? Let go on it straight away for the most common choice."),
-            new(GuideScene.Keyboard, "TIP", "Prefer the keyboard? Click instead",
-                "Select files in File Explorer, on the desktop or in VS Code, press Ctrl + Alt + Space, then click an option. For Tools and Actions, click the centre of the wheel (or tap Shift, or press the shortcut again). Esc closes it."),
-            new(GuideScene.Customize, "TIP", "Make the wheel yours",
-                "Open Settings → Wheel and you'll see your wheel. Click a slice to hide it (click again to bring it back), drag a slice to move it, then press Save. Reset brings back the original wheel."),
-            new(null, "PRACTICE", "Try it now",
-                $"Drag the photo on the left a little way, tap {triggerKey} while you're still holding it, and let go on JPG. It's a sample file, so nothing of yours is touched."),
+            new(GuideScene.Hero, "Welcome", "WELCOME TO FLIPR", "Flip any file into the format you need",
+                $"Flipr waits quietly in the notification area until you drag a file. Drag, tap {triggerKey}, let go on a format, and the new file lands right beside the original. No app to open, nothing uploaded."),
+            new(GuideScene.Drag, "Drag", "STEP 1 · DRAG", $"Pick up a file and tap {triggerKey}",
+                $"Start dragging from File Explorer, the desktop or VS Code and keep the mouse button down. One tap of {triggerKey} (no need to hold it) opens the Flipr wheel right under your pointer."),
+            new(GuideScene.Release, "Flip", "STEP 2 · FLIP", "Let go on a format",
+                "Glide onto PDF, JPG, MP3 or any other option and release. Flipr writes the result beside the original and never touches the file you started with. Changed your mind? Let go in the centre, or press Esc."),
+            new(GuideScene.Modes, "Three wheels", "STEP 3 · SWITCH", $"Tap {triggerKey} again to switch wheels",
+                "Flipr has three wheels: Convert (PDF, Word, PNG, MP3 and more), Tools (edit, compress, resize, trim, merge) and Actions (copy to, share, archive, float). Each tap moves to the next one."),
+            new(GuideScene.Groups, "Sub-wheels", "TIP", "Slices marked + hold more choices",
+                "Pause on one and its choices fan out; pause in the centre to go back. In a hurry? Let go on it straight away for the most popular choice."),
+            new(GuideScene.Keyboard, "Keyboard", "TIP", "No dragging? Press Ctrl + Alt + Space",
+                "Select files in File Explorer, on the desktop or in VS Code, press Ctrl + Alt + Space and click an option. Click the centre (or tap Shift) to switch wheels; Esc closes it."),
+            new(GuideScene.Customize, "Your wheel", "TIP", "Make the wheel your own",
+                "Settings → Wheel shows every wheel Flipr has. Click a slice to hide it (click again to bring it back), drag one to move it, then Save. Reset brings back the defaults."),
+            new(null, "Try it", "PRACTICE", "Your turn: flip a photo",
+                $"Drag the sample photo a little way, tap {triggerKey} while you're still holding it, and let go on JPG. It's a practice file, so nothing of yours is touched."),
         ];
         Step2Title.Text = $"Tap {triggerKey}";
-        foreach (var _ in _steps) Dots.Children.Add(new Ellipse { Height = 6, Margin = new Thickness(3, 0, 3, 0) });
+        foreach (var step in _steps) Dots.Children.Add(ChapterRow(step.Chapter));
 
         if (assets is not null)
         {
@@ -91,16 +97,12 @@ public partial class OnboardingWindow : Window
         StepLabel.Text = s.Label;
         Heading.Text = s.Heading;
         Body.Text = s.Body;
-        for (int i = 0; i < Dots.Children.Count; i++)
-        {
-            var dot = (Ellipse)Dots.Children[i];
-            dot.SetResourceReference(Shape.FillProperty, i == _step ? "Orbit.Accent" : "Orbit.StrokeStrong");
-            dot.Width = i == _step ? 18 : 6;
-        }
+        StepCounter.Text = $"{_step + 1} of {_steps.Length}";
+        for (int i = 0; i < Dots.Children.Count; i++) PaintChapter((Border)Dots.Children[i], i);
         bool last = _step == _steps.Length - 1;
         BackButton.Visibility = _step == 0 ? Visibility.Hidden : Visibility.Visible;
         SkipButton.Visibility = last ? Visibility.Hidden : Visibility.Visible;
-        NextButton.Content = last ? (_practiceResult is null ? "Finish" : "Done") : _step == 0 ? "Show me" : "Next";
+        NextButton.Content = last ? (_practiceResult is null ? "Finish" : "Done") : _step == 0 ? "Let's go" : "Next";
 
         StageHost.Visibility = s.Scene is null ? Visibility.Collapsed : Visibility.Visible;
         Practice.Visibility = s.Scene is null ? Visibility.Visible : Visibility.Collapsed;
@@ -116,6 +118,34 @@ public partial class OnboardingWindow : Window
 
         if (!ThemeManager.Current.ReduceMotion && IsLoaded)
             Root.BeginAnimation(OpacityProperty, new DoubleAnimation(0.6, 1, TimeSpan.FromMilliseconds(160)));
+    }
+
+    /// <summary>A chapter in the brand panel: a marker (number, or a tick once done) and its name. Clickable.</summary>
+    private Border ChapterRow(string chapter)
+    {
+        int index = Dots.Children.Count;
+        var marker = new TextBlock { Width = 22, FontSize = 12, FontWeight = FontWeights.SemiBold, TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+        var label = new TextBlock { Text = chapter, FontSize = 14, Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
+        var row = new DockPanel();
+        row.Children.Add(marker);
+        row.Children.Add(label);
+        var pill = new Border { Height = 34, CornerRadius = new CornerRadius(17), Padding = new Thickness(8, 0, 12, 0), Margin = new Thickness(-8, 1, 0, 1), Child = row, Cursor = Cursors.Hand };
+        pill.MouseLeftButtonUp += (_, _) => ShowStep(index);
+        return pill;
+    }
+
+    private void PaintChapter(Border pill, int index)
+    {
+        var row = (DockPanel)pill.Child;
+        var marker = (TextBlock)row.Children[0];
+        var label = (TextBlock)row.Children[1];
+        bool current = index == _step, done = index < _step;
+        pill.Background = current ? PanelPill : Brushes.Transparent;
+        marker.Foreground = label.Foreground = PanelInk;
+        label.FontWeight = current ? FontWeights.SemiBold : FontWeights.Normal;
+        pill.Opacity = current || done ? 1 : 0.7;
+        marker.FontFamily = done ? (FontFamily)FindResource("Orbit.Font.Icons") : (FontFamily)FindResource("Orbit.Font.Text");
+        marker.Text = done ? "" : (index + 1).ToString(); // a tick for chapters already seen
     }
 
     /// <summary>Design review (--render-ui): a step with its scene frozen on a representative frame.</summary>

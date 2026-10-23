@@ -11,13 +11,13 @@
         </Grid.RenderTransform>
 
         <!-- Shadow lives on a sibling so the text above stays crisp (effects rasterise their content). -->
-        <Border CornerRadius="8" Background="{DynamicResource Orbit.Surface}">
+        <Border CornerRadius="14" Background="{DynamicResource Orbit.Surface}">
             <Border.Effect>
                 <DropShadowEffect x:Name="Shadow" BlurRadius="24" ShadowDepth="8" Direction="270" Opacity="0.14" />
             </Border.Effect>
         </Border>
 
-        <Border CornerRadius="8" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}"
+        <Border CornerRadius="14" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}"
                 BorderThickness="1" ClipToBounds="True">
             <Grid>
                 <Grid.RowDefinitions>
