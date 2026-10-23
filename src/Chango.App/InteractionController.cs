@@ -12,9 +12,8 @@ using Chango.Windows.Shell;
 namespace Chango.App;
 
 /// <summary>
-/// The signature interaction, ported from Orbit Probe's validated state machine:
+/// The signature interaction, as a state machine:
 /// drag armed → trigger tap → wheel → OLE DragEnter (files known before the drop) → hover → drop → job → toast.
-/// Changes from the probe are only those the feasibility log required (R4, R7, R8, R9).
 /// </summary>
 public sealed class InteractionController : IDropSink, IDisposable
 {

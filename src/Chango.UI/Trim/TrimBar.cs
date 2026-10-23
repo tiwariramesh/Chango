@@ -51,10 +51,10 @@ public sealed class TrimBar : FrameworkElement
     protected override void OnRender(DrawingContext dc)
     {
         var t = Track;
-        var fill = (Brush)FindResource("Orbit.SubtleFill");
-        var accent = (Brush)FindResource("Orbit.Accent");
-        var onAccent = (Brush)FindResource("Orbit.OnAccent");
-        var text = (Brush)FindResource("Orbit.TextPrimary");
+        var fill = (Brush)FindResource("Chango.SubtleFill");
+        var accent = (Brush)FindResource("Chango.Accent");
+        var onAccent = (Brush)FindResource("Chango.OnAccent");
+        var text = (Brush)FindResource("Chango.TextPrimary");
 
         dc.DrawRoundedRectangle(fill, null, t, 8, 8);
         // The kept range: a frame in the accent colour with grips at both ends (like Photos' trimmer).

@@ -4,8 +4,8 @@
         Title="Welcome to Chango" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
         Icon="pack://application:,,,/Chango.UI;component/Assets/chango.ico"
-        Background="{DynamicResource Orbit.SurfaceBase}"
-        FontFamily="{StaticResource Orbit.Font.Text}">
+        Background="{DynamicResource Chango.SurfaceBase}"
+        FontFamily="{StaticResource Chango.Font.Text}">
     <Window.Resources>
         <!-- Ink for text on the teal panel: the same dark teal Chango uses on every teal surface (5.7:1 or better). -->
         <SolidColorBrush x:Key="PanelInk" Color="#011F1E" />
@@ -28,11 +28,11 @@
         <DockPanel Margin="24,28,20,24">
             <StackPanel DockPanel.Dock="Top" Margin="0,0,0,28">
                 <Image Source="pack://application:,,,/Chango.UI;component/Assets/chango-256.png" Width="56" Height="56" HorizontalAlignment="Left" />
-                <TextBlock Text="Chango" Style="{StaticResource Orbit.Text.Title}" Foreground="{StaticResource PanelInk}" Margin="0,12,0,0" />
-                <TextBlock Text="Drag. Tap. Chango." Style="{StaticResource Orbit.Text.Body}" Foreground="{StaticResource PanelInk}" FontWeight="SemiBold" Opacity="0.8" />
+                <TextBlock Text="Chango" Style="{StaticResource Chango.Text.Title}" Foreground="{StaticResource PanelInk}" Margin="0,12,0,0" />
+                <TextBlock Text="Drag. Tap. Chango." Style="{StaticResource Chango.Text.Body}" Foreground="{StaticResource PanelInk}" FontWeight="SemiBold" Opacity="0.8" />
             </StackPanel>
             <Button x:Name="SkipButton" DockPanel.Dock="Bottom" HorizontalAlignment="Left" Content="Skip the tour" Click="OnSkip"
-                    Style="{StaticResource Orbit.Button.Link}" Foreground="{StaticResource PanelInk}" />
+                    Style="{StaticResource Chango.Button.Link}" Foreground="{StaticResource PanelInk}" />
             <!-- Chapters, filled in code: the current one is a white pill, finished ones are ticked. -->
             <StackPanel x:Name="Dots" />
         </DockPanel>
@@ -50,7 +50,7 @@
                 <ContentControl x:Name="StageHost" />
 
                 <Border x:Name="Practice" CornerRadius="16" Visibility="Collapsed"
-                        Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}" BorderThickness="1">
+                        Background="{DynamicResource Chango.Surface}" BorderBrush="{DynamicResource Chango.Stroke}" BorderThickness="1">
                     <Grid Margin="28,24">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="230" />
@@ -59,15 +59,15 @@
 
                         <!-- The real file to drag -->
                         <Border x:Name="PracticeTile" Width="190" Padding="14" CornerRadius="16" Cursor="Hand" VerticalAlignment="Center"
-                                Background="{DynamicResource Orbit.AccentSubtle}" BorderBrush="{DynamicResource Orbit.Accent}" BorderThickness="1.5"
+                                Background="{DynamicResource Chango.AccentSubtle}" BorderBrush="{DynamicResource Chango.Accent}" BorderThickness="1.5"
                                 MouseLeftButtonDown="OnPracticeDown" MouseMove="OnPracticeMove" ToolTip="Drag me">
                             <Border.RenderTransform><TranslateTransform x:Name="PracticeBob" /></Border.RenderTransform>
                             <StackPanel>
                                 <Border Width="132" Height="132" CornerRadius="12" HorizontalAlignment="Center">
                                     <Border.Background><ImageBrush x:Name="PracticeThumb" Stretch="UniformToFill" /></Border.Background>
                                 </Border>
-                                <TextBlock x:Name="PracticeName" Text="Try me.png" Style="{StaticResource Orbit.Text.BodyStrong}" HorizontalAlignment="Center" Margin="0,10,0,0" />
-                                <TextBlock Text="Drag me" Style="{StaticResource Orbit.Text.Caption}" HorizontalAlignment="Center" />
+                                <TextBlock x:Name="PracticeName" Text="Try me.png" Style="{StaticResource Chango.Text.BodyStrong}" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                                <TextBlock Text="Drag me" Style="{StaticResource Chango.Text.Caption}" HorizontalAlignment="Center" />
                             </StackPanel>
                         </Border>
 
@@ -78,8 +78,8 @@
                                     <TextBlock x:Name="Check1Text" Text="1" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                                 <StackPanel>
-                                    <TextBlock Text="Pick up the photo" Style="{StaticResource Orbit.Text.BodyStrong}" />
-                                    <TextBlock Text="Start dragging and keep the button down." Style="{StaticResource Orbit.Text.Caption}" />
+                                    <TextBlock Text="Pick up the photo" Style="{StaticResource Chango.Text.BodyStrong}" />
+                                    <TextBlock Text="Start dragging and keep the button down." Style="{StaticResource Chango.Text.Caption}" />
                                 </StackPanel>
                             </DockPanel>
                             <DockPanel Margin="0,0,0,16">
@@ -87,8 +87,8 @@
                                     <TextBlock x:Name="Check2Text" Text="2" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                                 <StackPanel>
-                                    <TextBlock x:Name="Step2Title" Text="Tap Shift" Style="{StaticResource Orbit.Text.BodyStrong}" />
-                                    <TextBlock Text="The Chango wheel opens under your pointer." Style="{StaticResource Orbit.Text.Caption}" />
+                                    <TextBlock x:Name="Step2Title" Text="Tap Shift" Style="{StaticResource Chango.Text.BodyStrong}" />
+                                    <TextBlock Text="The Chango wheel opens under your pointer." Style="{StaticResource Chango.Text.Caption}" />
                                 </StackPanel>
                             </DockPanel>
                             <DockPanel>
@@ -96,11 +96,11 @@
                                     <TextBlock x:Name="Check3Text" Text="3" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                                 <StackPanel>
-                                    <TextBlock Text="Change it to JPG" Style="{StaticResource Orbit.Text.BodyStrong}" />
-                                    <TextBlock x:Name="Check3Hint" Text="A JPG copy appears next to the photo." Style="{StaticResource Orbit.Text.Caption}" TextWrapping="Wrap" />
+                                    <TextBlock Text="Change it to JPG" Style="{StaticResource Chango.Text.BodyStrong}" />
+                                    <TextBlock x:Name="Check3Hint" Text="A JPG copy appears next to the photo." Style="{StaticResource Chango.Text.Caption}" TextWrapping="Wrap" />
                                 </StackPanel>
                             </DockPanel>
-                            <Button x:Name="ShowResultButton" Content="Show the new file" Style="{StaticResource Orbit.Button.Standard}"
+                            <Button x:Name="ShowResultButton" Content="Show the new file" Style="{StaticResource Chango.Button.Standard}"
                                     HorizontalAlignment="Left" Margin="42,18,0,0" Visibility="Collapsed" Click="OnShowResult" />
                         </StackPanel>
                     </Grid>
@@ -109,19 +109,19 @@
 
             <!-- Text. Fixed height: steps have different amounts of text, and the window must not resize between them. -->
             <StackPanel Grid.Row="1" Margin="4,24,4,0" Width="592" Height="148" ClipToBounds="True">
-                <TextBlock x:Name="StepLabel" Style="{StaticResource Orbit.Text.Caption}" FontWeight="SemiBold" Foreground="{DynamicResource Orbit.AccentText}" />
-                <TextBlock x:Name="Heading" Style="{StaticResource Orbit.Text.Title}" FontSize="24" LineHeight="32" Margin="0,4,0,0" TextWrapping="Wrap" />
-                <TextBlock x:Name="Body" Style="{StaticResource Orbit.Text.Body}" FontSize="14" LineHeight="21" Margin="0,8,0,0" TextWrapping="Wrap"
-                           Foreground="{DynamicResource Orbit.TextSecondary}" />
+                <TextBlock x:Name="StepLabel" Style="{StaticResource Chango.Text.Caption}" FontWeight="SemiBold" Foreground="{DynamicResource Chango.AccentText}" />
+                <TextBlock x:Name="Heading" Style="{StaticResource Chango.Text.Title}" FontSize="24" LineHeight="32" Margin="0,4,0,0" TextWrapping="Wrap" />
+                <TextBlock x:Name="Body" Style="{StaticResource Chango.Text.Body}" FontSize="14" LineHeight="21" Margin="0,8,0,0" TextWrapping="Wrap"
+                           Foreground="{DynamicResource Chango.TextSecondary}" />
             </StackPanel>
 
             <!-- Navigation -->
             <DockPanel Grid.Row="2" Margin="0,16,0,0">
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <Button x:Name="BackButton" Content="Back" Style="{StaticResource Orbit.Button.Standard}" MinWidth="88" Margin="0,0,8,0" Click="OnBack" />
-                    <Button x:Name="NextButton" Content="Next" Style="{StaticResource Orbit.Button.Accent}" MinWidth="112" Click="OnNext" IsDefault="True" />
+                    <Button x:Name="BackButton" Content="Back" Style="{StaticResource Chango.Button.Standard}" MinWidth="88" Margin="0,0,8,0" Click="OnBack" />
+                    <Button x:Name="NextButton" Content="Next" Style="{StaticResource Chango.Button.Accent}" MinWidth="112" Click="OnNext" IsDefault="True" />
                 </StackPanel>
-                <TextBlock x:Name="StepCounter" Style="{StaticResource Orbit.Text.Caption}" VerticalAlignment="Center" Margin="4,0,0,0" />
+                <TextBlock x:Name="StepCounter" Style="{StaticResource Chango.Text.Caption}" VerticalAlignment="Center" Margin="4,0,0,0" />
             </DockPanel>
         </Grid>
     </Grid>

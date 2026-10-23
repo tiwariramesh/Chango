@@ -132,7 +132,7 @@ internal static class StoreArt
         var v = new DrawingVisual();
         using (var dc = v.RenderOpen())
         {
-            dc.DrawRectangle((Brush)Application.Current.FindResource("Orbit.SurfaceBase"), null, new Rect(0, 0, w, h));
+            dc.DrawRectangle((Brush)Application.Current.FindResource("Chango.SurfaceBase"), null, new Rect(0, 0, w, h));
             dc.DrawRectangle(new VisualBrush(content) { Stretch = Stretch.None, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top }, null, new Rect(0, 0, w, h));
         }
         return Render(v, w, h, 3);

@@ -6,66 +6,66 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <FontFamily x:Key="Orbit.Font.Text">Segoe UI Variable Text, Segoe UI</FontFamily>
-    <FontFamily x:Key="Orbit.Font.Display">Segoe UI Variable Display, Segoe UI</FontFamily>
-    <FontFamily x:Key="Orbit.Font.Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+    <FontFamily x:Key="Chango.Font.Text">Segoe UI Variable Text, Segoe UI</FontFamily>
+    <FontFamily x:Key="Chango.Font.Display">Segoe UI Variable Display, Segoe UI</FontFamily>
+    <FontFamily x:Key="Chango.Font.Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
 
     <!-- ===== Typography ===== -->
-    <Style x:Key="Orbit.Text.Caption" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Text}" />
+    <Style x:Key="Chango.Text.Caption" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Text}" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="LineHeight" Value="16" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextSecondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextSecondary}" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
-    <Style x:Key="Orbit.Text.Body" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Text}" />
+    <Style x:Key="Chango.Text.Body" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Text}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="LineHeight" Value="20" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
         <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
-    <Style x:Key="Orbit.Text.BodyStrong" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Body}">
+    <Style x:Key="Chango.Text.BodyStrong" TargetType="TextBlock" BasedOn="{StaticResource Chango.Text.Body}">
         <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
-    <Style x:Key="Orbit.Text.Subtitle" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Display}" />
+    <Style x:Key="Chango.Text.Subtitle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Display}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="LineHeight" Value="28" />
         <Setter Property="FontWeight" Value="SemiBold" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
     </Style>
-    <Style x:Key="Orbit.Text.Title" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Subtitle}">
+    <Style x:Key="Chango.Text.Title" TargetType="TextBlock" BasedOn="{StaticResource Chango.Text.Subtitle}">
         <Setter Property="FontSize" Value="28" />
         <Setter Property="LineHeight" Value="36" />
     </Style>
-    <Style x:Key="Orbit.Glyph" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Icons}" />
+    <Style x:Key="Chango.Glyph" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Icons}" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
     <!-- ===== Focus ===== -->
-    <Style x:Key="Orbit.FocusVisual">
+    <Style x:Key="Chango.FocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Border Margin="-3" CornerRadius="7" BorderThickness="2" BorderBrush="{DynamicResource Orbit.Accent}" />
+                    <Border Margin="-3" CornerRadius="7" BorderThickness="2" BorderBrush="{DynamicResource Chango.Accent}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <!-- ===== Buttons ===== -->
-    <Style x:Key="Orbit.Button.Base" TargetType="Button">
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Text}" />
+    <Style x:Key="Chango.Button.Base" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Text}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="18,6" />
         <Setter Property="MinHeight" Value="32" />
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{StaticResource Orbit.FocusVisual}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource Chango.FocusVisual}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
@@ -87,67 +87,67 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Orbit.Button.Accent" TargetType="Button" BasedOn="{StaticResource Orbit.Button.Base}">
-        <Setter Property="Background" Value="{DynamicResource Orbit.Accent}" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.OnAccent}" />
+    <Style x:Key="Chango.Button.Accent" TargetType="Button" BasedOn="{StaticResource Chango.Button.Base}">
+        <Setter Property="Background" Value="{DynamicResource Chango.Accent}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.OnAccent}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Orbit.AccentHover}" />
+                <Setter Property="Background" Value="{DynamicResource Chango.AccentHover}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Orbit.AccentPressed}" />
+                <Setter Property="Background" Value="{DynamicResource Chango.AccentPressed}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="Orbit.Button.Standard" TargetType="Button" BasedOn="{StaticResource Orbit.Button.Base}">
-        <Setter Property="Background" Value="{DynamicResource Orbit.Surface}" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Orbit.Stroke}" />
+    <Style x:Key="Chango.Button.Standard" TargetType="Button" BasedOn="{StaticResource Chango.Button.Base}">
+        <Setter Property="Background" Value="{DynamicResource Chango.Surface}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Chango.Stroke}" />
         <Setter Property="BorderThickness" Value="1" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Orbit.SurfaceAlt}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource Orbit.StrokeStrong}" />
+                <Setter Property="Background" Value="{DynamicResource Chango.SurfaceAlt}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Chango.StrokeStrong}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Orbit.SubtleFillPressed}" />
+                <Setter Property="Background" Value="{DynamicResource Chango.SubtleFillPressed}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="Orbit.Button.Subtle" TargetType="Button" BasedOn="{StaticResource Orbit.Button.Base}">
+    <Style x:Key="Chango.Button.Subtle" TargetType="Button" BasedOn="{StaticResource Chango.Button.Base}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
         <Setter Property="BorderThickness" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Orbit.SubtleFill}" />
+                <Setter Property="Background" Value="{DynamicResource Chango.SubtleFill}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Orbit.SubtleFillPressed}" />
+                <Setter Property="Background" Value="{DynamicResource Chango.SubtleFillPressed}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="Orbit.Button.Link" TargetType="Button" BasedOn="{StaticResource Orbit.Button.Base}">
+    <Style x:Key="Chango.Button.Link" TargetType="Button" BasedOn="{StaticResource Chango.Button.Base}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.AccentText}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.AccentText}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="4,2" />
         <Setter Property="MinHeight" Value="0" />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource Orbit.SubtleFill}" />
+                <Setter Property="Background" Value="{DynamicResource Chango.SubtleFill}" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!-- Menu row (tray flyout): icon + label, full width. Content is set by the caller. -->
-    <Style x:Key="Orbit.Button.MenuRow" TargetType="Button" BasedOn="{StaticResource Orbit.Button.Subtle}">
+    <Style x:Key="Chango.Button.MenuRow" TargetType="Button" BasedOn="{StaticResource Chango.Button.Subtle}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="Padding" Value="10,0" />
         <Setter Property="Height" Value="36" />
@@ -169,21 +169,21 @@
     </Style>
 
     <!-- ===== Toggle switch (CheckBox) ===== -->
-    <Style x:Key="Orbit.ToggleSwitch" TargetType="CheckBox">
+    <Style x:Key="Chango.ToggleSwitch" TargetType="CheckBox">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{StaticResource Orbit.FocusVisual}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource Chango.FocusVisual}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
                     <StackPanel Orientation="Horizontal" Background="Transparent">
                         <TextBlock x:Name="State" Text="Off" Margin="0,0,10,0" VerticalAlignment="Center"
-                                   Style="{StaticResource Orbit.Text.Body}" Foreground="{DynamicResource Orbit.TextSecondary}" />
+                                   Style="{StaticResource Chango.Text.Body}" Foreground="{DynamicResource Chango.TextSecondary}" />
                         <Grid Width="44" Height="24">
                             <Border x:Name="Track" CornerRadius="12" BorderThickness="1.5"
-                                    BorderBrush="{DynamicResource Orbit.StrokeStrong}" Background="{DynamicResource Orbit.SubtleFill}" />
+                                    BorderBrush="{DynamicResource Chango.StrokeStrong}" Background="{DynamicResource Chango.SubtleFill}" />
                             <Ellipse x:Name="Knob" Width="16" Height="16" HorizontalAlignment="Left" Margin="4,0,0,0"
-                                     Fill="{DynamicResource Orbit.TextTertiary}">
+                                     Fill="{DynamicResource Chango.TextTertiary}">
                                 <Ellipse.RenderTransform>
                                     <TranslateTransform x:Name="KnobShift" X="0" />
                                 </Ellipse.RenderTransform>
@@ -192,8 +192,8 @@
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Orbit.Accent}" />
-                            <Setter TargetName="Track" Property="BorderBrush" Value="{DynamicResource Orbit.Accent}" />
+                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Chango.Accent}" />
+                            <Setter TargetName="Track" Property="BorderBrush" Value="{DynamicResource Chango.Accent}" />
                             <Setter TargetName="Knob" Property="Fill" Value="White" />
                             <Setter TargetName="State" Property="Text" Value="On" />
                             <Trigger.EnterActions>
@@ -220,14 +220,14 @@
                                 <Condition Property="IsMouseOver" Value="True" />
                                 <Condition Property="IsChecked" Value="False" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Orbit.SubtleFillPressed}" />
+                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Chango.SubtleFillPressed}" />
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsMouseOver" Value="True" />
                                 <Condition Property="IsChecked" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Orbit.AccentHover}" />
+                            <Setter TargetName="Track" Property="Background" Value="{DynamicResource Chango.AccentHover}" />
                         </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.45" />
@@ -239,12 +239,12 @@
     </Style>
 
     <!-- ===== Segmented choice (RadioButton) ===== -->
-    <Style x:Key="Orbit.Segment" TargetType="RadioButton">
+    <Style x:Key="Chango.Segment" TargetType="RadioButton">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{StaticResource Orbit.FocusVisual}" />
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Text}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource Chango.FocusVisual}" />
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Text}" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
@@ -253,11 +253,11 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Chip" Property="Background" Value="{DynamicResource Orbit.SubtleFill}" />
+                            <Setter TargetName="Chip" Property="Background" Value="{DynamicResource Chango.SubtleFill}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Chip" Property="Background" Value="{DynamicResource Orbit.Accent}" />
-                            <Setter Property="Foreground" Value="{DynamicResource Orbit.OnAccent}" />
+                            <Setter TargetName="Chip" Property="Background" Value="{DynamicResource Chango.Accent}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Chango.OnAccent}" />
                             <Setter Property="FontWeight" Value="SemiBold" />
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -266,10 +266,10 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Orbit.SegmentHost" TargetType="Border">
+    <Style x:Key="Chango.SegmentHost" TargetType="Border">
         <Setter Property="CornerRadius" Value="17" />
-        <Setter Property="Background" Value="{DynamicResource Orbit.SurfaceAlt}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Orbit.Stroke}" />
+        <Setter Property="Background" Value="{DynamicResource Chango.SurfaceAlt}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Chango.Stroke}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="1" />
         <Setter Property="HorizontalAlignment" Value="Right" />
@@ -277,27 +277,27 @@
     </Style>
 
     <!-- ===== Theme picker card (RadioButton with preview) ===== -->
-    <Style x:Key="Orbit.ThemeCard" TargetType="RadioButton">
+    <Style x:Key="Chango.ThemeCard" TargetType="RadioButton">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{StaticResource Orbit.FocusVisual}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource Chango.FocusVisual}" />
         <Setter Property="Width" Value="132" />
         <Setter Property="Margin" Value="0,0,12,0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <StackPanel>
-                        <Border x:Name="Frame" CornerRadius="12" BorderThickness="2" BorderBrush="{DynamicResource Orbit.Stroke}" Padding="3">
+                        <Border x:Name="Frame" CornerRadius="12" BorderThickness="2" BorderBrush="{DynamicResource Chango.Stroke}" Padding="3">
                             <ContentPresenter />
                         </Border>
                         <TextBlock Text="{TemplateBinding Tag}" Margin="0,8,0,0" HorizontalAlignment="Center"
-                                   Style="{StaticResource Orbit.Text.Body}" />
+                                   Style="{StaticResource Chango.Text.Body}" />
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Frame" Property="BorderBrush" Value="{DynamicResource Orbit.StrokeStrong}" />
+                            <Setter TargetName="Frame" Property="BorderBrush" Value="{DynamicResource Chango.StrokeStrong}" />
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Frame" Property="BorderBrush" Value="{DynamicResource Orbit.Accent}" />
+                            <Setter TargetName="Frame" Property="BorderBrush" Value="{DynamicResource Chango.Accent}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -306,9 +306,9 @@
     </Style>
 
     <!-- ===== Cards & navigation ===== -->
-    <Style x:Key="Orbit.Card" TargetType="Border">
-        <Setter Property="Background" Value="{DynamicResource Orbit.CardFill}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Orbit.Stroke}" />
+    <Style x:Key="Chango.Card" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Chango.CardFill}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Chango.Stroke}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="12" />
         <Setter Property="Padding" Value="16,12" />
@@ -316,15 +316,15 @@
         <Setter Property="MinHeight" Value="64" />
     </Style>
 
-    <Style x:Key="Orbit.SectionHeader" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.BodyStrong}">
+    <Style x:Key="Chango.SectionHeader" TargetType="TextBlock" BasedOn="{StaticResource Chango.Text.BodyStrong}">
         <Setter Property="Margin" Value="2,20,0,8" />
     </Style>
 
     <!-- Navigation: the selected page is a solid Chango Teal pill; labels and icons inherit the item's ink. -->
-    <Style x:Key="Orbit.NavItem" TargetType="ListBoxItem">
+    <Style x:Key="Chango.NavItem" TargetType="ListBoxItem">
         <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="FocusVisualStyle" Value="{StaticResource Orbit.FocusVisual}" />
-        <Setter Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource Chango.FocusVisual}" />
+        <Setter Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
@@ -334,11 +334,11 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Orbit.SubtleFillPressed}" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Chango.SubtleFillPressed}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Orbit.Accent}" />
-                            <Setter Property="Foreground" Value="{DynamicResource Orbit.OnAccent}" />
+                            <Setter TargetName="Bg" Property="Background" Value="{DynamicResource Chango.Accent}" />
+                            <Setter Property="Foreground" Value="{DynamicResource Chango.OnAccent}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -346,20 +346,20 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Orbit.NavLabel" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Text}" />
+    <Style x:Key="Chango.NavLabel" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Text}" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
-    <Style x:Key="Orbit.NavGlyph" TargetType="TextBlock">
-        <Setter Property="FontFamily" Value="{StaticResource Orbit.Font.Icons}" />
+    <Style x:Key="Chango.NavGlyph" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Chango.Font.Icons}" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0,0,14,0" />
     </Style>
 
     <!-- Page title with Chango's teal underline. -->
-    <Style x:Key="Chango.PageTitle" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Title}">
+    <Style x:Key="Chango.PageTitle" TargetType="TextBlock" BasedOn="{StaticResource Chango.Text.Title}">
         <Setter Property="FontSize" Value="26" />
         <Setter Property="Margin" Value="2,0,0,0" />
     </Style>
@@ -368,7 +368,7 @@
         <Setter Property="Height" Value="4" />
         <Setter Property="CornerRadius" Value="2" />
         <Setter Property="HorizontalAlignment" Value="Left" />
-        <Setter Property="Background" Value="{DynamicResource Orbit.Accent}" />
+        <Setter Property="Background" Value="{DynamicResource Chango.Accent}" />
         <Setter Property="Margin" Value="3,6,0,18" />
     </Style>
 
@@ -377,7 +377,7 @@
         <Setter Property="Width" Value="36" />
         <Setter Property="Height" Value="36" />
         <Setter Property="CornerRadius" Value="18" />
-        <Setter Property="Background" Value="{DynamicResource Orbit.AccentSubtle}" />
+        <Setter Property="Background" Value="{DynamicResource Chango.AccentSubtle}" />
         <Setter Property="Margin" Value="0,0,14,0" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>

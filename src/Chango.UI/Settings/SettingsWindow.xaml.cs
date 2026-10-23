@@ -34,6 +34,15 @@ public partial class SettingsWindow : Window
 
     private void OnThemeChanged() => _vm.Refresh();
 
+    /// <summary>About page links: a button's Tag is a web address or an email address (opened as mailto:).</summary>
+    private void OnOpenLink(object sender, RoutedEventArgs e)
+    {
+        if ((sender as FrameworkElement)?.Tag is not string target || target.Length == 0) return;
+        string uri = target.Contains('@') && !target.Contains("://") ? $"mailto:{target}?subject=Chango" : target;
+        try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(uri) { UseShellExecute = true }); }
+        catch (Exception ex) { MessageBox.Show(this, $"Couldn't open {target}: {ex.Message}", "Chango"); }
+    }
+
     private void OnNavChanged(object sender, SelectionChangedEventArgs e)
     {
         if (Nav.SelectedItem is not ListBoxItem { Tag: string page }) return;
@@ -61,7 +70,7 @@ public partial class SettingsWindow : Window
         foreach (var category in _catalog)
         {
             var kind = category;
-            var button = new RadioButton { Style = (Style)FindResource("Orbit.Segment"), GroupName = "WheelKind", Content = kind.Title };
+            var button = new RadioButton { Style = (Style)FindResource("Chango.Segment"), GroupName = "WheelKind", Content = kind.Title };
             button.Checked += (_, _) => { _kind = kind; BuildModePicker(); };
             KindPicker.Children.Add(button);
         }
@@ -87,7 +96,7 @@ public partial class SettingsWindow : Window
         foreach (var section in _kind.Modes)
         {
             var mode = section.Mode;
-            var button = new RadioButton { Style = (Style)FindResource("Orbit.Segment"), GroupName = "WheelMode", Content = mode.ToString(), IsChecked = mode == _mode };
+            var button = new RadioButton { Style = (Style)FindResource("Chango.Segment"), GroupName = "WheelMode", Content = mode.ToString(), IsChecked = mode == _mode };
             button.Checked += (_, _) => { _mode = mode; ShowEditor(); };
             ModePicker.Children.Add(button);
         }

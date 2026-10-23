@@ -74,19 +74,19 @@ public class UpdateFeedTests
 {
     private const string Feed = """
     <feed xmlns="http://www.w3.org/2005/Atom">
-      <entry><title>Chango v0.2.3-alpha</title><link rel="alternate" type="text/html" href="https://github.com/i3sam/Chango/releases/tag/v0.2.3-alpha"/></entry>
-      <entry><title>Chango v0.2.2-alpha</title><link rel="alternate" type="text/html" href="https://github.com/i3sam/Chango/releases/tag/v0.2.2-alpha"/></entry>
-      <entry><title>Chango v0.1.0</title><link rel="alternate" type="text/html" href="https://github.com/i3sam/Chango/releases/tag/v0.1.0"/></entry>
+      <entry><title>Chango v0.2.3-alpha</title><link rel="alternate" type="text/html" href="https://github.com/tiwariramesh/Chango/releases/tag/v0.2.3-alpha"/></entry>
+      <entry><title>Chango v0.2.2-alpha</title><link rel="alternate" type="text/html" href="https://github.com/tiwariramesh/Chango/releases/tag/v0.2.2-alpha"/></entry>
+      <entry><title>Chango v0.1.0</title><link rel="alternate" type="text/html" href="https://github.com/tiwariramesh/Chango/releases/tag/v0.1.0"/></entry>
     </feed>
     """;
 
     [Fact]
     public void Feed_fallback_finds_the_newest_release_and_its_standard_assets()
     {
-        var r = UpdateService.PickLatestFromFeed(Feed, "https://github.com/i3sam/Chango/releases/download")!;
+        var r = UpdateService.PickLatestFromFeed(Feed, "https://github.com/tiwariramesh/Chango/releases/download")!;
         Assert.Equal("v0.2.3-alpha", r.Tag);
-        Assert.Equal("https://github.com/i3sam/Chango/releases/download/v0.2.3-alpha/Chango-Setup.exe", r.SetupUrl);
-        Assert.Equal("https://github.com/i3sam/Chango/releases/download/v0.2.3-alpha/SHA256SUMS.txt", r.ChecksumsUrl);
+        Assert.Equal("https://github.com/tiwariramesh/Chango/releases/download/v0.2.3-alpha/Chango-Setup.exe", r.SetupUrl);
+        Assert.Equal("https://github.com/tiwariramesh/Chango/releases/download/v0.2.3-alpha/SHA256SUMS.txt", r.ChecksumsUrl);
         Assert.Equal("v0.1.0", UpdateService.PickLatestFromFeed(Feed, "x", includePrereleases: false)!.Tag);
     }
 }

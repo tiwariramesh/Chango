@@ -43,22 +43,22 @@ public partial class OnboardingWindow : Window
         _practiceFolder = practiceFolder ?? System.IO.Path.Combine(System.IO.Path.GetTempPath(), "Chango guide");
         _steps =
         [
-            new(GuideScene.Hero, "Welcome", "WELCOME TO CHANGO", "Change any file into the format you need",
-                $"Chango waits quietly in the notification area until you drag a file. Drag, tap {triggerKey}, let go on a format, and the new file lands right beside the original. No app to open, nothing uploaded."),
-            new(GuideScene.Drag, "Drag", "STEP 1 · DRAG", $"Pick up a file and tap {triggerKey}",
-                $"Start dragging from File Explorer, the desktop or VS Code and keep the mouse button down. One tap of {triggerKey} (no need to hold it) opens the Chango wheel right under your pointer."),
-            new(GuideScene.Release, "Change", "STEP 2 · CHANGE", "Let go on a format",
-                "Glide onto PDF, JPG, MP3 or any other option and release. Chango writes the result beside the original and never touches the file you started with. Changed your mind? Let go in the centre, or press Esc."),
-            new(GuideScene.Modes, "Three wheels", "STEP 3 · SWITCH", $"Tap {triggerKey} again to switch wheels",
-                "Chango has three wheels: Convert (PDF, Word, PNG, MP3 and more), Tools (edit, compress, resize, trim, merge) and Actions (copy to, share, archive, float). Each tap moves to the next one."),
-            new(GuideScene.Groups, "Sub-wheels", "TIP", "Slices marked + hold more choices",
-                "Pause on one and its choices fan out; pause in the centre to go back. In a hurry? Let go on it straight away for the most popular choice."),
-            new(GuideScene.Keyboard, "Keyboard", "TIP", "No dragging? Press Ctrl + Alt + Space",
-                "Select files in File Explorer, on the desktop or in VS Code, press Ctrl + Alt + Space and click an option. Click the centre (or tap Shift) to switch wheels; Esc closes it."),
-            new(GuideScene.Customize, "Your wheel", "TIP", "Make the wheel your own",
-                "Settings → Wheel shows every wheel Chango has. Click a slice to hide it (click again to bring it back), drag one to move it, then Save. Reset brings back the defaults."),
-            new(null, "Try it", "PRACTICE", "Your turn: change a photo",
-                $"Drag the sample photo a little way, tap {triggerKey} while you're still holding it, and let go on JPG. It's a practice file, so nothing of yours is touched."),
+            new(GuideScene.Hero, "Welcome", "WELCOME TO CHANGO", "G'day! Meet Chango",
+                "Chango changes your files into the format you need, right here on your PC. No uploads, no sign-ups, no limits and no fees, ever. It waits quietly in the notification area and springs to life when you drag a file."),
+            new(GuideScene.Drag, "Drag", "STEP 1 · DRAG", $"Grab a file, then tap {triggerKey}",
+                $"Start dragging from File Explorer, the desktop or VS Code and keep the mouse button down. A quick tap of {triggerKey} is all it takes: the Chango wheel pops open right under your pointer."),
+            new(GuideScene.Release, "Change", "STEP 2 · CHANGE", "Drop it on the format you want",
+                "Slide onto PDF, Word, JPG, MP3 or anything else and let go. The new file appears next to the old one in a moment, and your original stays exactly as it was. Changed your mind? Let go in the middle, or press Esc."),
+            new(GuideScene.Modes, "Three wheels", "STEP 3 · SWITCH", $"Tap {triggerKey} again for more wheels",
+                $"Convert changes the format. Tools edit, shrink, resize, trim and merge. Actions copy, share, archive or park files on a shelf for later. Every tap of {triggerKey} moves to the next wheel."),
+            new(GuideScene.Groups, "Sub-wheels", "TIP", "A + means there's more inside",
+                "Rest on a slice marked + and its choices fan out around it; rest in the middle to step back. Let go straight away and you get the most popular choice."),
+            new(GuideScene.Keyboard, "Keyboard", "TIP", "Prefer clicking? Press Ctrl + Alt + Space",
+                "Select files in File Explorer, on the desktop or in VS Code, press Ctrl + Alt + Space and click what you want. Click the middle of the wheel (or tap Shift) to switch wheels; Esc closes it."),
+            new(GuideScene.Customize, "Your wheel", "TIP", "Shape the wheel around you",
+                "In Settings → Wheel, click a slice to hide it (click again to bring it back) and drag one to a new spot, then Save. Reset puts everything back the way it was."),
+            new(null, "Try it", "PRACTICE", "Your turn: give it a go",
+                $"Drag the practice photo a little way, tap {triggerKey} while you're still holding it, and drop it on JPG. It's a sample file, so nothing of yours changes."),
         ];
         Step2Title.Text = $"Tap {triggerKey}";
         foreach (var step in _steps) Dots.Children.Add(ChapterRow(step.Chapter));
@@ -144,7 +144,7 @@ public partial class OnboardingWindow : Window
         marker.Foreground = label.Foreground = PanelInk;
         label.FontWeight = current ? FontWeights.SemiBold : FontWeights.Normal;
         pill.Opacity = current || done ? 1 : 0.7;
-        marker.FontFamily = done ? (FontFamily)FindResource("Orbit.Font.Icons") : (FontFamily)FindResource("Orbit.Font.Text");
+        marker.FontFamily = done ? (FontFamily)FindResource("Chango.Font.Icons") : (FontFamily)FindResource("Chango.Font.Text");
         marker.Text = done ? "" : (index + 1).ToString(); // a tick for chapters already seen
     }
 
@@ -207,10 +207,10 @@ public partial class OnboardingWindow : Window
     private void SetCheck(int n, bool done)
     {
         var (badge, text) = n switch { 1 => (Check1, Check1Text), 2 => (Check2, Check2Text), _ => (Check3, Check3Text) };
-        badge.SetResourceReference(Border.BackgroundProperty, done ? "Orbit.Accent" : "Orbit.Surface");
-        badge.SetResourceReference(Border.BorderBrushProperty, done ? "Orbit.Accent" : "Orbit.StrokeStrong");
-        text.SetResourceReference(TextBlock.ForegroundProperty, done ? "Orbit.OnAccent" : "Orbit.TextSecondary");
-        text.FontFamily = done ? (FontFamily)FindResource("Orbit.Font.Icons") : FontFamily;
+        badge.SetResourceReference(Border.BackgroundProperty, done ? "Chango.Accent" : "Chango.Surface");
+        badge.SetResourceReference(Border.BorderBrushProperty, done ? "Chango.Accent" : "Chango.StrokeStrong");
+        text.SetResourceReference(TextBlock.ForegroundProperty, done ? "Chango.OnAccent" : "Chango.TextSecondary");
+        text.FontFamily = done ? (FontFamily)FindResource("Chango.Font.Icons") : FontFamily;
         text.Text = done ? "" : n.ToString();
     }
 
@@ -239,7 +239,7 @@ public partial class OnboardingWindow : Window
         if (!sources.Any(s => string.Equals(s, PracticeFile, StringComparison.OrdinalIgnoreCase)) || outputs.Count == 0) return;
         _practiceResult = outputs[0];
         SetCheck(1, true); SetCheck(2, true); SetCheck(3, true);
-        Check3Hint.Text = $"Nice! You made \"{System.IO.Path.GetFileName(_practiceResult)}\". That's all there is to it.";
+        Check3Hint.Text = $"Beauty! You made \"{System.IO.Path.GetFileName(_practiceResult)}\". That's all there is to it.";
         ShowResultButton.Visibility = Visibility.Visible;
         if (_step == _steps.Length - 1) NextButton.Content = "Done";
     }

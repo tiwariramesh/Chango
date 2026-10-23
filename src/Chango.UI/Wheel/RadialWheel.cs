@@ -18,7 +18,7 @@ namespace Chango.UI.Wheel;
 /// The Chango radial wheel: topmost, never activates, per-pixel transparent, Per-Monitor-V2 aware.
 /// Everything is laid out in base units on a <see cref="WheelGeometry.Extent"/>-sized canvas inside a Viewbox, so the
 /// window's physical size alone decides DPI scaling and the Compact/Standard/Large setting.
-/// The whole disc has non-zero alpha so the OS (and OLE) hit-tests every point on it (probe finding F1).
+/// The whole disc has non-zero alpha so the OS (and OLE) hit-tests every point on it.
 /// </summary>
 public sealed class RadialWheel : Window
 {
@@ -198,7 +198,7 @@ public sealed class RadialWheel : Window
             var label = new TextBlock
             {
                 Text = item.Label, // format labels are already upper-case ("PNG"); presets keep their case ("720p")
-                FontFamily = (FontFamily)FindResource("Orbit.Font.Display"),
+                FontFamily = (FontFamily)FindResource("Chango.Font.Display"),
                 FontSize = item.Glyph is null ? (items.Count > 6 ? 12.5 : 13.5) : 11,
                 FontWeight = FontWeights.SemiBold,
                 TextAlignment = TextAlignment.Center,
@@ -210,7 +210,7 @@ public sealed class RadialWheel : Window
             {
                 glyph = new TextBlock
                 {
-                    Text = item.Glyph, FontFamily = (FontFamily)FindResource("Orbit.Font.Icons"), FontSize = 19,
+                    Text = item.Glyph, FontFamily = (FontFamily)FindResource("Chango.Font.Icons"), FontSize = 19,
                     HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 0, 0, 3),
                     RenderTransformOrigin = new Point(0.5, 0.5),
                     RenderTransform = item.MirrorGlyph ? new ScaleTransform(-1, 1) : Transform.Identity,
@@ -223,7 +223,7 @@ public sealed class RadialWheel : Window
             {
                 dots = new TextBlock
                 {
-                    Text = "\uE710", FontFamily = (FontFamily)FindResource("Orbit.Font.Icons"), FontSize = 9, FontWeight = FontWeights.Bold,
+                    Text = "\uE710", FontFamily = (FontFamily)FindResource("Chango.Font.Icons"), FontSize = 9, FontWeight = FontWeights.Bold,
                     Opacity = 0.7, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 3, 0, 0),
                 };
                 stack.Children.Add(dots);
@@ -388,7 +388,7 @@ public sealed class RadialWheel : Window
         _root.Opacity = 1;
     }
 
-    /// <summary>Shows and hides the window off-screen once so the first real open is instant (feasibility R4).</summary>
+    /// <summary>Shows and hides the window off-screen once so the first real open is instant.</summary>
     public void Prewarm()
     {
         _rect = new Win32.RECT(-32000, -32000, -32000 + 64, -32000 + 64);
@@ -518,7 +518,7 @@ public sealed class RadialWheel : Window
     private TextBlock HubText(double size, FontWeight weight, double opacity) => new()
     {
         FontSize = size, FontWeight = weight, Opacity = opacity, TextAlignment = TextAlignment.Center,
-        TextTrimming = TextTrimming.CharacterEllipsis, FontFamily = (FontFamily)FindResource("Orbit.Font.Display"),
+        TextTrimming = TextTrimming.CharacterEllipsis, FontFamily = (FontFamily)FindResource("Chango.Font.Display"),
     };
 
     private static T Frozen<T>(T f) where T : Freezable { f.Freeze(); return f; }

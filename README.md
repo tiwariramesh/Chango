@@ -3,9 +3,9 @@
 <h1 align="center">Chango</h1>
 <p align="center"><b>Drag. Tap. Chango.</b><br>Convert, edit and manage files without opening an app. For Windows 10 (19041+) and 11.</p>
 
-Chango is a drag-and-drop file converter for Windows, in the spirit of Tangerine for Mac. Drag files, tap **Shift**, and let go on the format you want. The result appears next to the original, and the original is never changed.
+Chango is a drag-and-drop file converter for Windows. Drag files, tap **Shift**, and let go on the format you want. The result appears next to the original, and the original is never changed.
 
-Chango is built on [OrbitDrop](https://github.com/i3sam/OrbitDrop) by Mohammed Essam (MIT). It adds document, PDF, spreadsheet, subtitle, media and archive conversions on top, plus its own identity in Chango Teal (`#0EA5A4`).
+Converting a file is basic computer work, so it shouldn't mean uploading it to someone else's server, waiting in a queue or paying past a limit. Chango does it on your own PC: **free forever, no uploads, no limits, no account.** Made by Ramesh Tiwari in Perth, Australia · [chango.rameshtiwari.com](https://chango.rameshtiwari.com) · ramestiwarii@gmail.com
 
 ## How it works
 
@@ -78,9 +78,10 @@ Tests that need Word, Excel, PowerPoint or FFmpeg skip themselves when those are
 | `src/Chango.Conversion` | Converters: images, PDF (`Pdf/`), documents (`Documents/`), media (`Media/`, FFmpeg included), subtitles |
 | `src/Chango.Tools` | Tools and actions: image tools, archives, metadata, file actions |
 | `src/Chango.Jobs` / `Infrastructure` | Background jobs, settings, brand, local logs |
-| `experiments/OrbitProbe` | Upstream feasibility probe, kept as a diagnostics tool |
-| `docs/` | Research, architecture, design system |
+| `docs/` | Privacy policy, design system, build guide |
 
 ## License
 
-MIT. See [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Chango includes OrbitDrop's code under its MIT licence. It shares no code, artwork or branding with Tangerine.
+MIT. See [LICENSE](LICENSE), [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) and the full licence texts in [licenses/](licenses/).
+
+Chango includes code from [OrbitDrop](https://github.com/i3sam/OrbitDrop), © 2026 Mohammed Essam, used under the MIT License.

@@ -32,13 +32,13 @@ public partial class MetadataWindow : Window
         foreach (var (label, value) in snapshot.Facts.Where(f => f.Key is not ("Type" or "Size")))
         {
             FactsGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            var l = new TextBlock { Text = label, Style = (Style)FindResource("Orbit.Text.Caption"), Margin = new Thickness(0, 4, 12, 3), VerticalAlignment = VerticalAlignment.Top };
+            var l = new TextBlock { Text = label, Style = (Style)FindResource("Chango.Text.Caption"), Margin = new Thickness(0, 4, 12, 3), VerticalAlignment = VerticalAlignment.Top };
             var v = new TextBox
             {
                 Text = value, IsReadOnly = true, BorderThickness = new Thickness(0), Background = null, Padding = new Thickness(0),
                 Margin = new Thickness(0, 3, 0, 3), MinHeight = 0, TextWrapping = TextWrapping.Wrap, FontFamily = FontFamily, FontSize = 13,
                 Template = ReadOnlyTemplate(),
-                Foreground = (System.Windows.Media.Brush)FindResource("Orbit.TextPrimary"),
+                Foreground = (System.Windows.Media.Brush)FindResource("Chango.TextPrimary"),
             };
             Grid.SetRow(l, row); Grid.SetRow(v, row); Grid.SetColumn(v, 1);
             FactsGrid.Children.Add(l); FactsGrid.Children.Add(v);

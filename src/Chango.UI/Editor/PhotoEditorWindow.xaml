@@ -5,10 +5,10 @@
         Title="Edit" Width="1120" Height="780" MinWidth="860" MinHeight="560"
         WindowStartupLocation="CenterScreen" UseLayoutRounding="True"
         Icon="pack://application:,,,/Chango.UI;component/Assets/chango.ico"
-        Background="{DynamicResource Orbit.SurfaceBase}"
-        FontFamily="{StaticResource Orbit.Font.Text}">
+        Background="{DynamicResource Chango.SurfaceBase}"
+        FontFamily="{StaticResource Chango.Font.Text}">
     <Window.Resources>
-        <Style x:Key="ToolLabel" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Caption}">
+        <Style x:Key="ToolLabel" TargetType="TextBlock" BasedOn="{StaticResource Chango.Text.Caption}">
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Margin" Value="0,0,10,0" />
         </Style>
@@ -22,8 +22,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Grid>
-                            <Ellipse x:Name="Ring" Stroke="{DynamicResource Orbit.TextPrimary}" StrokeThickness="2" Opacity="0" />
-                            <Ellipse Margin="4" Fill="{TemplateBinding Background}" Stroke="{DynamicResource Orbit.StrokeStrong}" StrokeThickness="1" />
+                            <Ellipse x:Name="Ring" Stroke="{DynamicResource Chango.TextPrimary}" StrokeThickness="2" Opacity="0" />
+                            <Ellipse Margin="4" Fill="{TemplateBinding Background}" Stroke="{DynamicResource Chango.StrokeStrong}" StrokeThickness="1" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
@@ -45,24 +45,24 @@
 
     <DockPanel>
         <!-- Top bar: modes · undo · cancel · save -->
-        <Border DockPanel.Dock="Top" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}" BorderThickness="0,0,0,1" Padding="16,10">
+        <Border DockPanel.Dock="Top" Background="{DynamicResource Chango.Surface}" BorderBrush="{DynamicResource Chango.Stroke}" BorderThickness="0,0,0,1" Padding="16,10">
             <DockPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button x:Name="UndoButton" Style="{StaticResource Orbit.Button.Subtle}" Click="OnUndo" ToolTip="Undo (Ctrl+Z)" Margin="0,0,8,0" Padding="10,6">
-                        <TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE7A7;" />
+                    <Button x:Name="UndoButton" Style="{StaticResource Chango.Button.Subtle}" Click="OnUndo" ToolTip="Undo (Ctrl+Z)" Margin="0,0,8,0" Padding="10,6">
+                        <TextBlock Style="{StaticResource Chango.Glyph}" Text="&#xE7A7;" />
                     </Button>
-                    <Button Content="Cancel" Style="{StaticResource Orbit.Button.Standard}" MinWidth="92" Margin="0,0,8,0" Click="OnCancel" />
-                    <Button x:Name="SaveButton" Content="Save copy" Style="{StaticResource Orbit.Button.Accent}" MinWidth="108" Click="OnSave" ToolTip="Save a copy next to the original (Ctrl+S)" />
+                    <Button Content="Cancel" Style="{StaticResource Chango.Button.Standard}" MinWidth="92" Margin="0,0,8,0" Click="OnCancel" />
+                    <Button x:Name="SaveButton" Content="Save copy" Style="{StaticResource Chango.Button.Accent}" MinWidth="108" Click="OnSave" ToolTip="Save a copy next to the original (Ctrl+S)" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock x:Name="FileNameText" Style="{StaticResource Orbit.Text.BodyStrong}" VerticalAlignment="Center" Margin="0,0,20,0"
+                    <TextBlock x:Name="FileNameText" Style="{StaticResource Chango.Text.BodyStrong}" VerticalAlignment="Center" Margin="0,0,20,0"
                                MaxWidth="260" TextTrimming="CharacterEllipsis" />
-                    <Border Style="{StaticResource Orbit.SegmentHost}" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource Chango.SegmentHost}" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="ModeCrop" Style="{StaticResource Orbit.Segment}" GroupName="Mode" Checked="OnMode" Content="Crop" />
-                            <RadioButton x:Name="ModeAdjust" Style="{StaticResource Orbit.Segment}" GroupName="Mode" Checked="OnMode" Content="Adjust" />
-                            <RadioButton x:Name="ModeMarkup" Style="{StaticResource Orbit.Segment}" GroupName="Mode" Checked="OnMode" Content="Markup" />
-                            <RadioButton x:Name="ModeRedact" Style="{StaticResource Orbit.Segment}" GroupName="Mode" Checked="OnMode" Content="Redact" />
+                            <RadioButton x:Name="ModeCrop" Style="{StaticResource Chango.Segment}" GroupName="Mode" Checked="OnMode" Content="Crop" />
+                            <RadioButton x:Name="ModeAdjust" Style="{StaticResource Chango.Segment}" GroupName="Mode" Checked="OnMode" Content="Adjust" />
+                            <RadioButton x:Name="ModeMarkup" Style="{StaticResource Chango.Segment}" GroupName="Mode" Checked="OnMode" Content="Markup" />
+                            <RadioButton x:Name="ModeRedact" Style="{StaticResource Chango.Segment}" GroupName="Mode" Checked="OnMode" Content="Redact" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -70,52 +70,52 @@
         </Border>
 
         <!-- Bottom bar: options for the current mode -->
-        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}" BorderThickness="0,1,0,0" Padding="20,12" MinHeight="64">
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Chango.Surface}" BorderBrush="{DynamicResource Chango.Stroke}" BorderThickness="0,1,0,0" Padding="20,12" MinHeight="64">
             <Grid>
                 <StackPanel x:Name="CropPanel" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Aspect" Style="{StaticResource ToolLabel}" />
-                    <Border Style="{StaticResource Orbit.SegmentHost}" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource Chango.SegmentHost}" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Aspect" Content="Free" Tag="0" IsChecked="True" Checked="OnAspect" />
-                            <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Aspect" Content="Original" Tag="-1" Checked="OnAspect" />
-                            <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Aspect" Content="Square" Tag="1" Checked="OnAspect" />
-                            <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Aspect" Content="4:3" Tag="1.3333333" Checked="OnAspect" />
-                            <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Aspect" Content="3:2" Tag="1.5" Checked="OnAspect" />
-                            <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Aspect" Content="16:9" Tag="1.7777778" Checked="OnAspect" />
-                            <RadioButton Style="{StaticResource Orbit.Segment}" GroupName="Aspect" Content="9:16" Tag="0.5625" Checked="OnAspect" />
+                            <RadioButton Style="{StaticResource Chango.Segment}" GroupName="Aspect" Content="Free" Tag="0" IsChecked="True" Checked="OnAspect" />
+                            <RadioButton Style="{StaticResource Chango.Segment}" GroupName="Aspect" Content="Original" Tag="-1" Checked="OnAspect" />
+                            <RadioButton Style="{StaticResource Chango.Segment}" GroupName="Aspect" Content="Square" Tag="1" Checked="OnAspect" />
+                            <RadioButton Style="{StaticResource Chango.Segment}" GroupName="Aspect" Content="4:3" Tag="1.3333333" Checked="OnAspect" />
+                            <RadioButton Style="{StaticResource Chango.Segment}" GroupName="Aspect" Content="3:2" Tag="1.5" Checked="OnAspect" />
+                            <RadioButton Style="{StaticResource Chango.Segment}" GroupName="Aspect" Content="16:9" Tag="1.7777778" Checked="OnAspect" />
+                            <RadioButton Style="{StaticResource Chango.Segment}" GroupName="Aspect" Content="9:16" Tag="0.5625" Checked="OnAspect" />
                         </StackPanel>
                     </Border>
-                    <Button Content="Reset crop" Style="{StaticResource Orbit.Button.Standard}" Margin="16,0,0,0" Click="OnResetCrop" />
+                    <Button Content="Reset crop" Style="{StaticResource Chango.Button.Standard}" Margin="16,0,0,0" Click="OnResetCrop" />
                     <TextBlock x:Name="CropSizeText" Style="{StaticResource ToolLabel}" Margin="16,0,0,0" />
                 </StackPanel>
 
                 <StackPanel x:Name="AdjustPanel" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
                     <StackPanel Style="{StaticResource SliderRow}">
-                        <TextBlock Text="Brightness" Style="{StaticResource Orbit.Text.Caption}" />
+                        <TextBlock Text="Brightness" Style="{StaticResource Chango.Text.Caption}" />
                         <Slider x:Name="BrightnessSlider" Minimum="-1" Maximum="1" ValueChanged="OnAdjust" MouseDoubleClick="OnResetSlider" />
                     </StackPanel>
                     <StackPanel Style="{StaticResource SliderRow}">
-                        <TextBlock Text="Contrast" Style="{StaticResource Orbit.Text.Caption}" />
+                        <TextBlock Text="Contrast" Style="{StaticResource Chango.Text.Caption}" />
                         <Slider x:Name="ContrastSlider" Minimum="-1" Maximum="1" ValueChanged="OnAdjust" MouseDoubleClick="OnResetSlider" />
                     </StackPanel>
                     <StackPanel Style="{StaticResource SliderRow}">
-                        <TextBlock Text="Saturation" Style="{StaticResource Orbit.Text.Caption}" />
+                        <TextBlock Text="Saturation" Style="{StaticResource Chango.Text.Caption}" />
                         <Slider x:Name="SaturationSlider" Minimum="-1" Maximum="1" ValueChanged="OnAdjust" MouseDoubleClick="OnResetSlider" />
                     </StackPanel>
                     <StackPanel Style="{StaticResource SliderRow}">
-                        <TextBlock Text="Warmth" Style="{StaticResource Orbit.Text.Caption}" />
+                        <TextBlock Text="Warmth" Style="{StaticResource Chango.Text.Caption}" />
                         <Slider x:Name="WarmthSlider" Minimum="-1" Maximum="1" ValueChanged="OnAdjust" MouseDoubleClick="OnResetSlider" />
                     </StackPanel>
-                    <Button Content="Reset" Style="{StaticResource Orbit.Button.Standard}" VerticalAlignment="Center" Click="OnResetAdjust" />
+                    <Button Content="Reset" Style="{StaticResource Chango.Button.Standard}" VerticalAlignment="Center" Click="OnResetAdjust" />
                 </StackPanel>
 
                 <StackPanel x:Name="MarkupPanel" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
-                    <Border Style="{StaticResource Orbit.SegmentHost}" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource Chango.SegmentHost}" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="ToolPen" Style="{StaticResource Orbit.Segment}" GroupName="Tool" Content="Pen" IsChecked="True" />
-                            <RadioButton x:Name="ToolArrow" Style="{StaticResource Orbit.Segment}" GroupName="Tool" Content="Arrow" />
-                            <RadioButton x:Name="ToolBox" Style="{StaticResource Orbit.Segment}" GroupName="Tool" Content="Box" />
-                            <RadioButton x:Name="ToolText" Style="{StaticResource Orbit.Segment}" GroupName="Tool" Content="Text" />
+                            <RadioButton x:Name="ToolPen" Style="{StaticResource Chango.Segment}" GroupName="Tool" Content="Pen" IsChecked="True" />
+                            <RadioButton x:Name="ToolArrow" Style="{StaticResource Chango.Segment}" GroupName="Tool" Content="Arrow" />
+                            <RadioButton x:Name="ToolBox" Style="{StaticResource Chango.Segment}" GroupName="Tool" Content="Box" />
+                            <RadioButton x:Name="ToolText" Style="{StaticResource Chango.Segment}" GroupName="Tool" Content="Text" />
                         </StackPanel>
                     </Border>
                     <StackPanel x:Name="Swatches" Orientation="Horizontal" Margin="20,0">
@@ -126,20 +126,20 @@
                         <RadioButton Style="{StaticResource Swatch}" Background="#111114" ToolTip="Black" />
                         <RadioButton Style="{StaticResource Swatch}" Background="#FFFFFF" ToolTip="White" />
                     </StackPanel>
-                    <Border Style="{StaticResource Orbit.SegmentHost}" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource Chango.SegmentHost}" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="SizeS" Style="{StaticResource Orbit.Segment}" GroupName="Size" Content="S" />
-                            <RadioButton x:Name="SizeM" Style="{StaticResource Orbit.Segment}" GroupName="Size" Content="M" IsChecked="True" />
-                            <RadioButton x:Name="SizeL" Style="{StaticResource Orbit.Segment}" GroupName="Size" Content="L" />
+                            <RadioButton x:Name="SizeS" Style="{StaticResource Chango.Segment}" GroupName="Size" Content="S" />
+                            <RadioButton x:Name="SizeM" Style="{StaticResource Chango.Segment}" GroupName="Size" Content="M" IsChecked="True" />
+                            <RadioButton x:Name="SizeL" Style="{StaticResource Chango.Segment}" GroupName="Size" Content="L" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
 
                 <StackPanel x:Name="RedactPanel" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Collapsed">
-                    <Border Style="{StaticResource Orbit.SegmentHost}" HorizontalAlignment="Left">
+                    <Border Style="{StaticResource Chango.SegmentHost}" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="RedactBlack" Style="{StaticResource Orbit.Segment}" GroupName="Redact" Content="Black box" IsChecked="True" />
-                            <RadioButton x:Name="RedactPixelate" Style="{StaticResource Orbit.Segment}" GroupName="Redact" Content="Pixelate" />
+                            <RadioButton x:Name="RedactBlack" Style="{StaticResource Chango.Segment}" GroupName="Redact" Content="Black box" IsChecked="True" />
+                            <RadioButton x:Name="RedactPixelate" Style="{StaticResource Chango.Segment}" GroupName="Redact" Content="Pixelate" />
                         </StackPanel>
                     </Border>
                     <TextBlock Text="Drag over anything you want hidden. It's burned into the copy and can't be undone there."

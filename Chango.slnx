@@ -1,7 +1,4 @@
 <Solution>
-  <Folder Name="/experiments/">
-    <Project Path="experiments/OrbitProbe/OrbitProbe.csproj" />
-  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Chango.App/Chango.App.csproj" />
     <Project Path="src/Chango.Conversion/Chango.Conversion.csproj" />

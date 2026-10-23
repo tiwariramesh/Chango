@@ -26,7 +26,7 @@ internal static class UiReview
         {
             ThemeManager.Current.Apply(theme, useWindowsAccent: false, reduceMotion: true);
             string t = theme.ToString().ToLowerInvariant();
-            var bg = (Brush)Application.Current.FindResource("Orbit.SurfaceBase");
+            var bg = (Brush)Application.Current.FindResource("Chango.SurfaceBase");
 
             // --- wheel on a bright and a dark wallpaper
             foreach (var (wallName, wall) in new[] { ("bright", Wallpaper(false)), ("dark", Wallpaper(true)) })

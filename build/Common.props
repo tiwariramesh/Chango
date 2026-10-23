@@ -1,7 +1,7 @@
 <Project>
-  <!-- Shared settings for src/ and tests/ (the Orbit Probe experiment stays independent). -->
+  <!-- Shared settings for src/ and tests/. -->
   <PropertyGroup>
-    <OrbitWindowsTfm>net10.0-windows10.0.19041.0</OrbitWindowsTfm>
+    <ChangoWindowsTfm>net10.0-windows10.0.19041.0</ChangoWindowsTfm>
     <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -11,7 +11,7 @@
     <Product>Chango</Product>
     <Company>Ramesh Tiwari</Company>
     <Authors>Ramesh Tiwari</Authors>
-    <Copyright>© 2026 Ramesh Tiwari · based on OrbitDrop © 2026 Mohammed Essam · MIT License</Copyright>
+    <Copyright>© 2026 Ramesh Tiwari · MIT License</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <!-- WPF Fluent ThemeMode is marked experimental in .NET 10; usage is isolated in ThemeManager. -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>

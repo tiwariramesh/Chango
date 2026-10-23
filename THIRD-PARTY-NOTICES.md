@@ -1,6 +1,6 @@
 # Third-party notices
 
-Chango is MIT-licensed (see `LICENSE`). This file lists everything a **release build** redistributes that isn't Chango's own code. It's updated whenever a dependency is added; each addition needs a licence review first (see `docs/research/00-initial-assessment.md` §6.2). The full licence texts are in `licenses/`, which ships next to `Chango.exe`.
+Chango is MIT-licensed (see `LICENSE`). This file lists everything a **release build** redistributes that isn't Chango's own code. It's updated whenever a dependency is added; each addition needs a licence review first: its licence must allow free redistribution in the Microsoft Store. The full licence texts are in `licenses/`, which ships next to `Chango.exe`.
 
 ## Redistributed in release builds
 

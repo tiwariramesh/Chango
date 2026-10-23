@@ -4,10 +4,10 @@
         Title="Info" Width="520" SizeToContent="Height" MaxHeight="820" ResizeMode="CanMinimize"
         WindowStartupLocation="Manual" UseLayoutRounding="True" ShowInTaskbar="True"
         Icon="pack://application:,,,/Chango.UI;component/Assets/chango.ico"
-        Background="{DynamicResource Orbit.SurfaceBase}"
-        FontFamily="{StaticResource Orbit.Font.Text}">
+        Background="{DynamicResource Chango.SurfaceBase}"
+        FontFamily="{StaticResource Chango.Font.Text}">
     <Window.Resources>
-        <Style x:Key="FieldLabel" TargetType="TextBlock" BasedOn="{StaticResource Orbit.Text.Caption}">
+        <Style x:Key="FieldLabel" TargetType="TextBlock" BasedOn="{StaticResource Chango.Text.Caption}">
             <Setter Property="Margin" Value="0,10,0,4" />
         </Style>
         <Style x:Key="Star" TargetType="ToggleButton">
@@ -18,16 +18,16 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
                         <Border Background="Transparent">
-                            <TextBlock x:Name="G" Text="&#xE734;" FontFamily="{StaticResource Orbit.Font.Icons}" FontSize="18"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Orbit.TextTertiary}" />
+                            <TextBlock x:Name="G" Text="&#xE734;" FontFamily="{StaticResource Chango.Font.Icons}" FontSize="18"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Chango.TextTertiary}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="G" Property="Text" Value="&#xE735;" />
-                                <Setter TargetName="G" Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+                                <Setter TargetName="G" Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="G" Property="Foreground" Value="{DynamicResource Orbit.TextPrimary}" />
+                                <Setter TargetName="G" Property="Foreground" Value="{DynamicResource Chango.TextPrimary}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -38,16 +38,16 @@
 
     <DockPanel>
         <!-- Footer -->
-        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}"
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Chango.Surface}" BorderBrush="{DynamicResource Chango.Stroke}"
                 BorderThickness="0,1,0,0" Padding="24,14">
             <DockPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <Button x:Name="CancelButton" Content="Cancel" Style="{StaticResource Orbit.Button.Standard}" MinWidth="96"
+                    <Button x:Name="CancelButton" Content="Cancel" Style="{StaticResource Chango.Button.Standard}" MinWidth="96"
                             Margin="0,0,8,0" IsCancel="True" Click="OnCancel" />
-                    <Button x:Name="SaveButton" Content="Save copy" Style="{StaticResource Orbit.Button.Accent}" MinWidth="112"
+                    <Button x:Name="SaveButton" Content="Save copy" Style="{StaticResource Chango.Button.Accent}" MinWidth="112"
                             IsDefault="True" Click="OnSave" />
                 </StackPanel>
-                <TextBlock x:Name="FooterHint" Style="{StaticResource Orbit.Text.Caption}" VerticalAlignment="Center"
+                <TextBlock x:Name="FooterHint" Style="{StaticResource Chango.Text.Caption}" VerticalAlignment="Center"
                            TextWrapping="Wrap" Margin="0,0,16,0"
                            Text="Your original stays as it is. Changes go into a copy next to it." />
             </DockPanel>
@@ -56,16 +56,16 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="24,20,24,20">
                 <DockPanel Margin="0,0,0,14">
-                    <Border DockPanel.Dock="Left" Width="44" Height="44" CornerRadius="10" Background="{DynamicResource Orbit.SubtleFill}" Margin="0,0,14,0">
-                        <TextBlock x:Name="KindGlyph" Style="{StaticResource Orbit.Glyph}" FontSize="20" HorizontalAlignment="Center" />
+                    <Border DockPanel.Dock="Left" Width="44" Height="44" CornerRadius="10" Background="{DynamicResource Chango.SubtleFill}" Margin="0,0,14,0">
+                        <TextBlock x:Name="KindGlyph" Style="{StaticResource Chango.Glyph}" FontSize="20" HorizontalAlignment="Center" />
                     </Border>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock x:Name="FileNameText" Style="{StaticResource Orbit.Text.Subtitle}" FontSize="18" TextTrimming="CharacterEllipsis" />
-                        <TextBlock x:Name="SummaryText" Style="{StaticResource Orbit.Text.Caption}" Margin="0,2,0,0" />
+                        <TextBlock x:Name="FileNameText" Style="{StaticResource Chango.Text.Subtitle}" FontSize="18" TextTrimming="CharacterEllipsis" />
+                        <TextBlock x:Name="SummaryText" Style="{StaticResource Chango.Text.Caption}" Margin="0,2,0,0" />
                     </StackPanel>
                 </DockPanel>
 
-                <Border Style="{StaticResource Orbit.Card}" Padding="16,10">
+                <Border Style="{StaticResource Chango.Card}" Padding="16,10">
                     <Grid x:Name="FactsGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="104" />
@@ -75,20 +75,20 @@
                 </Border>
 
                 <StackPanel x:Name="EditSection">
-                    <TextBlock Text="Details" Style="{StaticResource Orbit.SectionHeader}" />
-                    <Border Style="{StaticResource Orbit.Card}" Padding="16,4,16,14">
+                    <TextBlock Text="Details" Style="{StaticResource Chango.SectionHeader}" />
+                    <Border Style="{StaticResource Chango.Card}" Padding="16,4,16,14">
                         <StackPanel x:Name="FieldsPanel" />
                     </Border>
                 </StackPanel>
 
-                <Border x:Name="LocationCard" Style="{StaticResource Orbit.Card}" MinHeight="0" Margin="0,8,0,0">
+                <Border x:Name="LocationCard" Style="{StaticResource Chango.Card}" MinHeight="0" Margin="0,8,0,0">
                     <DockPanel>
-                        <CheckBox x:Name="RemoveLocationBox" DockPanel.Dock="Right" Style="{StaticResource Orbit.ToggleSwitch}"
+                        <CheckBox x:Name="RemoveLocationBox" DockPanel.Dock="Right" Style="{StaticResource Chango.ToggleSwitch}"
                                   VerticalAlignment="Center" AutomationProperties.Name="Remove location" Checked="OnChanged" Unchecked="OnChanged" />
-                        <TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE707;" FontSize="18" Margin="0,0,14,0" />
+                        <TextBlock Style="{StaticResource Chango.Glyph}" Text="&#xE707;" FontSize="18" Margin="0,0,14,0" />
                         <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="Remove location" Style="{StaticResource Orbit.Text.Body}" />
-                            <TextBlock Text="Leave the GPS position out of the copy." Style="{StaticResource Orbit.Text.Caption}" />
+                            <TextBlock Text="Remove location" Style="{StaticResource Chango.Text.Body}" />
+                            <TextBlock Text="Leave the GPS position out of the copy." Style="{StaticResource Chango.Text.Caption}" />
                         </StackPanel>
                     </DockPanel>
                 </Border>

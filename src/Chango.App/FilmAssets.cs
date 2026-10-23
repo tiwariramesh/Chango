@@ -87,7 +87,7 @@ internal static class FilmAssets
             var host = new FilmHost(registry, theme);
             var settings = new SettingsWindow(new SettingsViewModel(host));
             settings.ShowPage("Appearance");
-            RenderElementOn(settings.ContentRoot, 880, 620, (Brush)Application.Current.FindResource("Orbit.SurfaceBase"), dir, $"settings-appearance{t}", ref n);
+            RenderElementOn(settings.ContentRoot, 880, 620, (Brush)Application.Current.FindResource("Chango.SurfaceBase"), dir, $"settings-appearance{t}", ref n);
             settings.Close();
 
             var tray = new TrayFlyout(new FilmTray());
@@ -96,7 +96,7 @@ internal static class FilmAssets
 
             var guide = new OnboardingWindow("Shift");
             guide.ShowStep(1);
-            RenderElementOn(guide.ContentRoot, 900, 600, (Brush)Application.Current.FindResource("Orbit.SurfaceBase"), dir, $"guide-2{t}", ref n);
+            RenderElementOn(guide.ContentRoot, 900, 600, (Brush)Application.Current.FindResource("Chango.SurfaceBase"), dir, $"guide-2{t}", ref n);
             guide.Close();
         }
 

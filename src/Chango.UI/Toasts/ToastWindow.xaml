@@ -11,13 +11,13 @@
         </Grid.RenderTransform>
 
         <!-- Shadow lives on a sibling so the text above stays crisp (effects rasterise their content). -->
-        <Border CornerRadius="14" Background="{DynamicResource Orbit.Surface}">
+        <Border CornerRadius="14" Background="{DynamicResource Chango.Surface}">
             <Border.Effect>
                 <DropShadowEffect x:Name="Shadow" BlurRadius="24" ShadowDepth="8" Direction="270" Opacity="0.14" />
             </Border.Effect>
         </Border>
 
-        <Border CornerRadius="14" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}"
+        <Border CornerRadius="14" Background="{DynamicResource Chango.Surface}" BorderBrush="{DynamicResource Chango.Stroke}"
                 BorderThickness="1" ClipToBounds="True">
             <Grid>
                 <Grid.RowDefinitions>
@@ -35,8 +35,8 @@
                     <!-- Status: progress ring while running, glyph badge when finished. -->
                     <Grid Width="28" Height="28" VerticalAlignment="Top" Margin="0,1,0,0">
                         <Grid x:Name="RingHost">
-                            <Ellipse Stroke="{DynamicResource Orbit.Stroke}" StrokeThickness="3" />
-                            <Path x:Name="RingArc" Stroke="{DynamicResource Orbit.Accent}" StrokeThickness="3"
+                            <Ellipse Stroke="{DynamicResource Chango.Stroke}" StrokeThickness="3" />
+                            <Path x:Name="RingArc" Stroke="{DynamicResource Chango.Accent}" StrokeThickness="3"
                                   StrokeStartLineCap="Round" StrokeEndLineCap="Round" RenderTransformOrigin="0.5,0.5">
                                 <Path.RenderTransform>
                                     <RotateTransform x:Name="RingSpin" />
@@ -44,32 +44,32 @@
                             </Path>
                         </Grid>
                         <Border x:Name="Badge" CornerRadius="14" Visibility="Collapsed">
-                            <TextBlock x:Name="BadgeGlyph" Style="{StaticResource Orbit.Glyph}" FontSize="14"
-                                       Foreground="{DynamicResource Orbit.OnAccent}" />
+                            <TextBlock x:Name="BadgeGlyph" Style="{StaticResource Chango.Glyph}" FontSize="14"
+                                       Foreground="{DynamicResource Chango.OnAccent}" />
                         </Border>
                     </Grid>
 
                     <StackPanel Grid.Column="1" Margin="10,0,6,0" VerticalAlignment="Center">
-                        <TextBlock x:Name="TitleText" Style="{StaticResource Orbit.Text.BodyStrong}"
+                        <TextBlock x:Name="TitleText" Style="{StaticResource Chango.Text.BodyStrong}"
                                    TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
-                        <TextBlock x:Name="DetailText" Style="{StaticResource Orbit.Text.Caption}" Margin="0,2,0,0"
+                        <TextBlock x:Name="DetailText" Style="{StaticResource Chango.Text.Caption}" Margin="0,2,0,0"
                                    MaxHeight="48" TextTrimming="CharacterEllipsis" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top">
-                        <Button x:Name="UndoButton" Content="Undo" Style="{StaticResource Orbit.Button.Link}"
+                        <Button x:Name="UndoButton" Content="Undo" Style="{StaticResource Chango.Button.Link}"
                                 Margin="0,2,2,0" Visibility="Collapsed" Click="OnUndo" ToolTip="Move what was just made to the Recycle Bin" />
-                        <Button x:Name="ShowButton" Content="Show" Style="{StaticResource Orbit.Button.Link}"
+                        <Button x:Name="ShowButton" Content="Show" Style="{StaticResource Chango.Button.Link}"
                                 Margin="0,2,2,0" Visibility="Collapsed" Click="OnShow" ToolTip="Show in File Explorer" />
-                        <Button x:Name="CloseButton" Style="{StaticResource Orbit.Button.Subtle}" Width="28" Height="28"
+                        <Button x:Name="CloseButton" Style="{StaticResource Chango.Button.Subtle}" Width="28" Height="28"
                                 MinHeight="0" Padding="0" Click="OnClose" ToolTip="Cancel">
-                            <TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE711;" FontSize="11" />
+                            <TextBlock Style="{StaticResource Chango.Glyph}" Text="&#xE711;" FontSize="11" />
                         </Button>
                     </StackPanel>
                 </Grid>
 
-                <Border Grid.Row="1" Background="{DynamicResource Orbit.SubtleFill}" />
-                <Border Grid.Row="1" x:Name="ProgressFill" Background="{DynamicResource Orbit.Accent}"
+                <Border Grid.Row="1" Background="{DynamicResource Chango.SubtleFill}" />
+                <Border Grid.Row="1" x:Name="ProgressFill" Background="{DynamicResource Chango.Accent}"
                         HorizontalAlignment="Left" Width="0" />
             </Grid>
         </Border>

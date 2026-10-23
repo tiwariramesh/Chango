@@ -78,10 +78,10 @@ public partial class ToastWindow : Window
         Badge.Visibility = Visibility.Visible;
         (string glyph, string brush) = kind switch
         {
-            ToastKind.Success => ("", "Orbit.Success"),
-            ToastKind.Warning => ("", "Orbit.Warning"),
-            ToastKind.Error => ("", "Orbit.Danger"),
-            _ => ("", "Orbit.Accent"),
+            ToastKind.Success => ("", "Chango.Success"),
+            ToastKind.Warning => ("", "Chango.Warning"),
+            ToastKind.Error => ("", "Chango.Danger"),
+            _ => ("", "Chango.Accent"),
         };
         BadgeGlyph.Text = glyph;
         Badge.SetResourceReference(System.Windows.Controls.Border.BackgroundProperty, brush);

@@ -38,15 +38,6 @@ jobs:
             }
           }
 
-      - name: Probe self-test (regression, diagnostic)
-        continue-on-error: true
-        shell: pwsh
-        run: |
-          $p = Start-Process experiments/OrbitProbe/bin/Release/net10.0-windows10.0.19041.0/OrbitProbe.exe -ArgumentList '--selftest', "$env:RUNNER_TEMP/probe" -Wait -PassThru
-          Get-Content "$env:RUNNER_TEMP/probe/selftest-result.txt" -ErrorAction SilentlyContinue
-          Get-ChildItem "$env:LOCALAPPDATA/OrbitProbe" -Filter *.log -ErrorAction SilentlyContinue | Get-Content -Tail 40
-          exit $p.ExitCode
-
       - name: Render UI for design review (light + dark)
         continue-on-error: true
         shell: pwsh

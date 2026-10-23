@@ -23,7 +23,7 @@ Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview
 | Category | **Productivity** |
 | Subcategory | (none) |
 | Privacy policy URL | `https://github.com/tiwariramesh/Chango/blob/main/docs/PRIVACY.md` (docs/PRIVACY.md in the public repository) |
-| Website | `https://github.com/tiwariramesh/Chango` |
+| Website | `https://chango.rameshtiwari.com` |
 | Support contact info | `ramestiwarii@gmail.com` |
 | Does this product access, collect, or transmit personal information? | **No** |
 | Product declarations | Leave all unticked, **except** "This app has been tested to meet accessibility guidelines" (leave unticked too, unless you've tested it). |
@@ -160,7 +160,7 @@ compress images
 |---|---|
 | Short title | Chango |
 | Short description | Change files into PDF, Word, Excel, JPG, MP3 and more. Drag, tap Shift, let go. |
-| Copyright and trademark info | © 2026 Ramesh Tiwari. Includes OrbitDrop © 2026 Mohammed Essam (MIT). |
+| Copyright and trademark info | © 2026 Ramesh Tiwari |
 | Additional license terms | MIT License: https://github.com/tiwariramesh/Chango/blob/main/LICENSE |
 | Developed by | Ramesh Tiwari |
 

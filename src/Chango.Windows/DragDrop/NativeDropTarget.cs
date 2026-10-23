@@ -17,7 +17,7 @@ public interface IDropSink
 }
 
 /// <summary>
-/// Raw COM IDropTarget registered on the wheel HWND (validated in Orbit Probe, feasibility R1/R2/R10).
+/// Raw COM IDropTarget registered on the wheel HWND.
 /// Uses IDropTargetHelper so the shell drag image behaves correctly over our window, and DROPDESCRIPTION for the
 /// native "Convert to PNG" drag tooltip. Answers only DROPEFFECT_COPY or NONE, <b>never MOVE</b>, so the drag source can
 /// never delete or move the original file.

@@ -74,17 +74,17 @@ public sealed class GuideStage : Canvas
         _window = new Border
         {
             Width = 252, Height = 270, CornerRadius = new CornerRadius(10),
-            Background = (Brush)Application.Current.FindResource("Orbit.Surface"),
-            BorderBrush = (Brush)Application.Current.FindResource("Orbit.Stroke"), BorderThickness = new Thickness(1),
+            Background = (Brush)Application.Current.FindResource("Chango.Surface"),
+            BorderBrush = (Brush)Application.Current.FindResource("Chango.Stroke"), BorderThickness = new Thickness(1),
             Effect = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 4, Direction = 270, Opacity = 0.12 },
         };
         var bar = new DockPanel { Margin = new Thickness(12, 10, 12, 0), Height = 18 };
         var dots = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 10, 0) };
         foreach (var _ in Enumerable.Range(0, 3))
-            dots.Children.Add(new System.Windows.Shapes.Ellipse { Width = 8, Height = 8, Margin = new Thickness(0, 0, 5, 0), Fill = (Brush)Application.Current.FindResource("Orbit.StrokeStrong") });
+            dots.Children.Add(new System.Windows.Shapes.Ellipse { Width = 8, Height = 8, Margin = new Thickness(0, 0, 5, 0), Fill = (Brush)Application.Current.FindResource("Chango.StrokeStrong") });
         bar.Children.Add(dots);
         bar.Children.Add(new TextBlock { Text = "Pictures", FontSize = 11.5, FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center,
-            Foreground = (Brush)Application.Current.FindResource("Orbit.TextPrimary") });
+            Foreground = (Brush)Application.Current.FindResource("Chango.TextPrimary") });
         _window.Child = new StackPanel { Children = { bar } };
         Place(_window, 22, 24);
         _content.Children.Add(_window);
@@ -92,7 +92,7 @@ public sealed class GuideStage : Canvas
         // A mini Settings → Wheel page for the customization scene: the real wheel editor, plus Save.
         var panel = new Canvas { Width = 252, Height = 270 };
         var title = new TextBlock { Text = "Settings  ›  Wheel", FontSize = 12, FontWeight = FontWeights.SemiBold,
-            Foreground = (Brush)Application.Current.FindResource("Orbit.TextPrimary") };
+            Foreground = (Brush)Application.Current.FindResource("Chango.TextPrimary") };
         Place(title, 16, 14);
         panel.Children.Add(title);
         Place(_editor, (252 - EditorSize) / 2, 36);
@@ -100,17 +100,17 @@ public sealed class GuideStage : Canvas
         _save = new Border
         {
             Width = 96, Height = 28, CornerRadius = new CornerRadius(6),
-            Background = (Brush)Application.Current.FindResource("Orbit.Accent"),
+            Background = (Brush)Application.Current.FindResource("Chango.Accent"),
             Child = new TextBlock { Text = "Save", FontSize = 12, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center, Foreground = (Brush)Application.Current.FindResource("Orbit.OnAccent") },
+                VerticalAlignment = VerticalAlignment.Center, Foreground = (Brush)Application.Current.FindResource("Chango.OnAccent") },
         };
         Place(_save, 252 - 96 - 16, 270 - 28 - 14);
         panel.Children.Add(_save);
         _settings = new Border
         {
             Width = 252, Height = 270, CornerRadius = new CornerRadius(10), Child = panel,
-            Background = (Brush)Application.Current.FindResource("Orbit.Surface"),
-            BorderBrush = (Brush)Application.Current.FindResource("Orbit.Stroke"), BorderThickness = new Thickness(1),
+            Background = (Brush)Application.Current.FindResource("Chango.Surface"),
+            BorderBrush = (Brush)Application.Current.FindResource("Chango.Stroke"), BorderThickness = new Thickness(1),
             Effect = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 4, Direction = 270, Opacity = 0.12 },
         };
         Place(_settings, 22, 24);
@@ -148,12 +148,12 @@ public sealed class GuideStage : Canvas
         _content.Children.Add(_keys);
 
         // A caption chip above the wheel that says what the next click does (keyboard scene).
-        _caption.Background = (Brush)Application.Current.FindResource("Orbit.Accent");
-        _captionText.Foreground = (Brush)Application.Current.FindResource("Orbit.OnAccent");
+        _caption.Background = (Brush)Application.Current.FindResource("Chango.Accent");
+        _captionText.Foreground = (Brush)Application.Current.FindResource("Chango.OnAccent");
         _caption.Child = _captionText;
         _content.Children.Add(_caption);
 
-        var accent = (Brush)Application.Current.FindResource("Orbit.Accent");
+        var accent = (Brush)Application.Current.FindResource("Chango.Accent");
         _ripple.Stroke = accent;
         _dwell.Stroke = accent;
         _content.Children.Add(_ripple);
@@ -185,7 +185,7 @@ public sealed class GuideStage : Canvas
         label = new TextBlock
         {
             Text = name, FontSize = 10.5, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, MaxWidth = 96,
-            Foreground = (Brush)Application.Current.FindResource("Orbit.TextPrimary"), Margin = new Thickness(0, 5, 0, 0),
+            Foreground = (Brush)Application.Current.FindResource("Chango.TextPrimary"), Margin = new Thickness(0, 5, 0, 0),
         };
         var thumb = new Border
         {
@@ -326,7 +326,7 @@ public sealed class GuideStage : Canvas
         s.ScaleX = s.ScaleY = 0.6 + 0.4 * Back(k);
     }
 
-    private void Select(bool on) => _tileA.Background = on ? (Brush)Application.Current.FindResource("Orbit.AccentSubtle") : Brushes.Transparent;
+    private void Select(bool on) => _tileA.Background = on ? (Brush)Application.Current.FindResource("Chango.AccentSubtle") : Brushes.Transparent;
 
     private void ToastState(BitmapSource? image, double k)
     {
@@ -367,9 +367,9 @@ public sealed class GuideStage : Canvas
 
     private void Press(Border cap, bool down)
     {
-        cap.Background = (Brush)Application.Current.FindResource(down ? "Orbit.Accent" : "Orbit.Surface");
-        cap.BorderBrush = (Brush)Application.Current.FindResource(down ? "Orbit.AccentPressed" : "Orbit.StrokeStrong");
-        ((TextBlock)cap.Child).Foreground = (Brush)Application.Current.FindResource(down ? "Orbit.OnAccent" : "Orbit.TextPrimary");
+        cap.Background = (Brush)Application.Current.FindResource(down ? "Chango.Accent" : "Chango.Surface");
+        cap.BorderBrush = (Brush)Application.Current.FindResource(down ? "Chango.AccentPressed" : "Chango.StrokeStrong");
+        ((TextBlock)cap.Child).Foreground = (Brush)Application.Current.FindResource(down ? "Chango.OnAccent" : "Chango.TextPrimary");
         ((TranslateTransform)cap.RenderTransform).Y = down ? 2 : 0;
     }
 

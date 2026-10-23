@@ -43,7 +43,7 @@ public partial class TrayFlyout : Window
     {
         bool paused = _commands.Paused;
         StatusText.Text = paused ? "Paused" : $"Ready · drag files, tap {_commands.TriggerKeyName}";
-        StatusDot.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, paused ? "Orbit.Warning" : "Orbit.Success");
+        StatusDot.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, paused ? "Chango.Warning" : "Chango.Success");
         PauseGlyph.Text = paused ? "" : "";
         PauseText.Text = paused ? "Resume" : "Pause";
         UpdateText.Text = _commands.UpdateMenuText;

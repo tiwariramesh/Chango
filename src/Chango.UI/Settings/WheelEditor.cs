@@ -166,8 +166,8 @@ public sealed class WheelEditor : FrameworkElement
         var entries = dragging ? Moved(_entries, _press, _dropAt) : _entries.ToList();
         int n = entries.Count;
         double step = Step(n);
-        var display = (FontFamily)FindResource("Orbit.Font.Display");
-        var icons = (FontFamily)FindResource("Orbit.Font.Icons");
+        var display = (FontFamily)FindResource("Chango.Font.Display");
+        var icons = (FontFamily)FindResource("Chango.Font.Icons");
         for (int i = 0; i < n; i++)
         {
             var entry = entries[i];

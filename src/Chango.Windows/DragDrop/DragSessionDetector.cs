@@ -7,14 +7,14 @@ namespace Chango.Windows.DragDrop;
 /// <summary>
 /// Detects "a shell file drag is in progress" and the trigger-key taps during it.
 /// <list type="bullet">
-/// <item><b>Primary signal</b>: the shell's <c>SysDragImage</c> window is shown (out-of-context WinEvent; 18/18 in the
-/// feasibility run, never on plain clicks). It is <i>latched</i> until the drag button is released, because the shell
-/// hides the image while the cursor is over our wheel (feasibility R8).</item>
+/// <item><b>Primary signal</b>: the shell's <c>SysDragImage</c> window is shown (out-of-context WinEvent; reliable for
+/// file drags, never fires on plain clicks). It is <i>latched</i> until the drag button is released, because the shell
+/// hides the image while the cursor is over our wheel.</item>
 /// <item><b>OLE drag loop</b>: every OLE drag (<c>DoDragDrop</c>) gives mouse capture to OLE's hidden
 /// <c>CLIPBRDWNDCLASS</c> window for as long as the drag lasts. Apps that draw their own drag image (VS Code and other
 /// Chromium/Electron apps) never show <c>SysDragImage</c>, but they all go through this loop. Latched the same way.</item>
 /// <item><b>Optional</b> "extended detection": a low-level mouse hook heuristic for drag sources that don't use the
-/// shell drag image (off by default; it is noisy, feasibility R9).</item>
+/// shell drag image (off by default; it is noisy).</item>
 /// <item>Key and button state is polled at ~60 Hz <b>only while a drag is armed or a wheel is open</b>. There is no
 /// keyboard hook, and nothing runs while idle.</item>
 /// </list>

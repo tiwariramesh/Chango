@@ -2,7 +2,7 @@
 
 ## 1.0.0-beta
 
-The first Chango release, built on OrbitDrop 0.4.4 (MIT).
+The first Chango release.
 
 - **Documents:** Word to PDF, TXT, Markdown, HTML, RTF and ODT; Markdown and text to PDF, Word and HTML.
 - **PDF:** to Word, PowerPoint (a slide per page), Excel (tables rebuilt from the layout), text and Markdown.

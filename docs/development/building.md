@@ -25,11 +25,6 @@ Command-line switches for `Chango.exe`:
 | `--background` | Start silently (used by "launch at sign-in"): no welcome toast or guide |
 | `--render-ui <folder>` | Render every surface (wheel, toasts, Settings pages, guide, tray menu) in light and dark at 100% and 150% to PNG. No screen capture; settings untouched. Can run alongside a live instance |
 
-The probe remains available for regression and diagnostics:
-```powershell
-experiments\OrbitProbe\bin\Debug\net10.0-windows10.0.19041.0\OrbitProbe.exe --selftest <folder>
-```
-
 ## 3. Release packaging
 
 ```powershell
