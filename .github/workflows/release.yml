@@ -30,10 +30,10 @@ jobs:
       # are marked as pre-releases, so nothing unfinished is ever presented as a stable release.
       - uses: softprops/action-gh-release@v2
         with:
-          name: OrbitDrop ${{ github.ref_name }}
+          name: Flipr ${{ github.ref_name }}
           prerelease: ${{ contains(github.ref_name, '-') }}
           body_path: build/release-notes.md
           files: |
-            artifacts/OrbitDrop-Setup.exe
-            artifacts/OrbitDrop-Portable.zip
+            artifacts/Flipr-Setup.exe
+            artifacts/Flipr-Portable.zip
             artifacts/SHA256SUMS.txt

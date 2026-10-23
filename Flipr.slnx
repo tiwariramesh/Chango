@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/experiments/">
+    <Project Path="experiments/OrbitProbe/OrbitProbe.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Flipr.App/Flipr.App.csproj" />
+    <Project Path="src/Flipr.Conversion/Flipr.Conversion.csproj" />
+    <Project Path="src/Flipr.Core/Flipr.Core.csproj" />
+    <Project Path="src/Flipr.Infrastructure/Flipr.Infrastructure.csproj" />
+    <Project Path="src/Flipr.Jobs/Flipr.Jobs.csproj" />
+    <Project Path="src/Flipr.Tools/Flipr.Tools.csproj" />
+    <Project Path="src/Flipr.UI/Flipr.UI.csproj" />
+    <Project Path="src/Flipr.Windows/Flipr.Windows.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Flipr.Tests/Flipr.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/IconGen/IconGen.csproj" />
+  </Folder>
+</Solution>

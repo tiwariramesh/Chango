@@ -18,7 +18,7 @@ artifacts/
 ui-review/
 
 # Keep our own synthetic test fixtures (all other video stays ignored)
-!tests/OrbitDrop.Tests/Fixtures/*.mp4
+!tests/Flipr.Tests/Fixtures/*.mp4
 
 # The website's own videos (our app renders and our film; nothing third-party)
 !website/assets/*.mp4

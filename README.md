@@ -1,12 +1,12 @@
-<p align="center"><img src="src/OrbitDrop.UI/Assets/orbitdrop-256.png" width="96" alt="OrbitDrop icon"></p>
+<p align="center"><img src="src/Flipr.UI/Assets/flipr-256.png" width="96" alt="Flipr icon"></p>
 
-<h1 align="center">OrbitDrop</h1>
+<h1 align="center">Flipr</h1>
 <p align="center"><b>Your files. Your flow.</b><br>Convert, edit and manage files without opening an app. For Windows 10 (19041+) and 11.</p>
 
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-hero-dark.gif">
-    <img src="docs/guide/guide-hero.gif" width="600" alt="Dragging photo.png, tapping Shift, the OrbitDrop wheel opening, releasing on JPG and photo.jpg appearing next to the original">
+    <img src="docs/guide/guide-hero.gif" width="600" alt="Dragging photo.png, tapping Shift, the Flipr wheel opening, releasing on JPG and photo.jpg appearing next to the original">
   </picture>
 </p>
 
@@ -14,11 +14,11 @@
 
 <a href="https://apps.microsoft.com/detail/9NJQRMQLL2SZ?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"></a>
 
-**Recommended: [OrbitDrop on the Microsoft Store](https://apps.microsoft.com/detail/9NJQRMQLL2SZ).** Free, installs without any security warning, and the Store keeps it up to date.
+**Recommended: [Flipr on the Microsoft Store](https://apps.microsoft.com/detail/9NJQRMQLL2SZ).** Free, installs without any security warning, and the Store keeps it up to date.
 
-Prefer not to use the Store? [Installer](https://github.com/i3sam/OrbitDrop/releases/download/v0.3.4-alpha/OrbitDrop-Setup.exe) · [portable .zip](https://github.com/i3sam/OrbitDrop/releases/download/v0.3.4-alpha/OrbitDrop-Portable.zip) · [all releases](https://github.com/i3sam/OrbitDrop/releases). No admin rights or .NET needed. These downloads aren't code-signed yet, so if Windows shows "Windows protected your PC", click **More info → Run anyway**.
+Prefer not to use the Store? [Installer](https://github.com/i3sam/Flipr/releases/download/v0.3.4-alpha/Flipr-Setup.exe) · [portable .zip](https://github.com/i3sam/Flipr/releases/download/v0.3.4-alpha/Flipr-Portable.zip) · [all releases](https://github.com/i3sam/Flipr/releases). No admin rights or .NET needed. These downloads aren't code-signed yet, so if Windows shows "Windows protected your PC", click **More info → Run anyway**.
 
-> **Switching from the GitHub version to the Store?** Uninstall the old one first (Settings → Apps → OrbitDrop → Uninstall), so only one OrbitDrop runs.
+> **Switching from the GitHub version to the Store?** Uninstall the old one first (Settings → Apps → Flipr → Uninstall), so only one Flipr runs.
 
 > **Status: 0.3.4-alpha.** The core gesture is validated on Windows 11 (single monitor, 100% scale). Multi-monitor, mixed-DPI and Windows 10 sign-off are still pending; see [the feasibility report](docs/research/02-feasibility-report.md).
 
@@ -42,7 +42,7 @@ Prefer not to use the Store? [Installer](https://github.com/i3sam/OrbitDrop/rele
 
 **No dragging?** Select files, press **Ctrl + Alt + Space** and click an option. Click the centre of the wheel (or tap Shift, or press the shortcut again) for **Tools** and **Actions**; **Esc** closes it.
 
-**Or right-click.** Right-click files or folders in File Explorer and choose **OrbitDrop**. Copied a screenshot? Press **Ctrl + Alt + Space** with nothing selected and the wheel opens for the image. Every result can be **undone** for a few seconds (it goes to the Recycle Bin).
+**Or right-click.** Right-click files or folders in File Explorer and choose **Flipr**. Copied a screenshot? Press **Ctrl + Alt + Space** with nothing selected and the wheel opens for the image. Every result can be **undone** for a few seconds (it goes to the Recycle Bin).
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-keyboard-dark.gif"><img src="docs/guide/guide-keyboard.gif" width="600" alt="With a file selected, Ctrl+Alt+Space opens the wheel and a click converts it"></picture>
 
@@ -50,7 +50,7 @@ Prefer not to use the Store? [Installer](https://github.com/i3sam/OrbitDrop/rele
 
 <picture><source media="(prefers-color-scheme: dark)" srcset="docs/guide/guide-customize-dark.gif"><img src="docs/guide/guide-customize.gif" width="600" alt="In Settings, hiding BMP and TIFF and dragging PDF to the top, then Save, changes the real wheel to match"></picture>
 
-The app includes the same guide with a hands-on practice step (tray menu → **How to use OrbitDrop**). These animations are rendered from the real app: `OrbitDrop.exe --render-guide <folder>`.
+The app includes the same guide with a hands-on practice step (tray menu → **How to use Flipr**). These animations are rendered from the real app: `Flipr.exe --render-guide <folder>`.
 
 | Mode | 0.2 capabilities |
 |---|---|
@@ -58,16 +58,16 @@ The app includes the same guide with a hands-on practice step (tray menu → **H
 | Tools | **Images:** edit (crop, adjust, markup, redact), compress (by % or under 1 MB / 500 KB / 200 KB), resize, rotate & flip, grayscale, copy text (OCR), combine into PDF · **PDF:** merge, split into pages, compress, rotate pages · **Video:** trim, compress (720p / 1080p / 480p / half size), remove audio, snapshot, join · **Audio:** trim, compress, normalize, mono / stereo · **Archives:** extract ZIP, TAR, TAR.GZ, GZ · **Any file:** info, edit details, remove metadata or location |
 | Actions | Copy path or name, show in folder, copy to / move to (recent and common folders), float (a shelf to drag files out later), share (Nearby Share), zip, terminal, set as wallpaper. Works on folders too |
 
-**Private by design:** everything runs locally. No uploads, no account, no telemetry. The only network request is the update check against GitHub Releases, every few hours. Updates install automatically when you are not using OrbitDrop, after their checksum is verified (Settings → About: turn either off any time).
+**Private by design:** everything runs locally. No uploads, no account, no telemetry. The only network request is the update check against GitHub Releases, every few hours. Updates install automatically when you are not using Flipr, after their checksum is verified (Settings → About: turn either off any time).
 
 ## Build from source
 
 Requirements: Windows 10/11 and the [.NET 10 SDK](https://dotnet.microsoft.com/download). For the installer, add [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
 
 ```powershell
-dotnet build OrbitDrop.slnx -c Release
-dotnet test tests/OrbitDrop.Tests
-dotnet run --project src/OrbitDrop.App          # runs from source (lives in the notification area)
+dotnet build Flipr.slnx -c Release
+dotnet test tests/Flipr.Tests
+dotnet run --project src/Flipr.App          # runs from source (lives in the notification area)
 ./build/package.ps1                             # → artifacts/: setup.exe, portable.zip, SHA256SUMS.txt
 ```
 
@@ -77,12 +77,12 @@ More detail: [docs/development/building.md](docs/development/building.md).
 
 | Path | What |
 |---|---|
-| `src/OrbitDrop.App` | Composition root, tray lifecycle, interaction controller |
-| `src/OrbitDrop.UI` | Design system, radial wheel, toasts, Settings, onboarding |
-| `src/OrbitDrop.Windows` | Win32/COM: drag detection, OLE drop target, tray, theme, shell |
-| `src/OrbitDrop.Core` | Operation contracts, registry, collision-safe atomic output |
-| `src/OrbitDrop.Conversion` / `Tools` | Operation providers (add capabilities here) |
-| `src/OrbitDrop.Jobs` / `Infrastructure` | Background jobs, settings, local logs |
+| `src/Flipr.App` | Composition root, tray lifecycle, interaction controller |
+| `src/Flipr.UI` | Design system, radial wheel, toasts, Settings, onboarding |
+| `src/Flipr.Windows` | Win32/COM: drag detection, OLE drop target, tray, theme, shell |
+| `src/Flipr.Core` | Operation contracts, registry, collision-safe atomic output |
+| `src/Flipr.Conversion` / `Tools` | Operation providers (add capabilities here) |
+| `src/Flipr.Jobs` / `Infrastructure` | Background jobs, settings, local logs |
 | `experiments/OrbitProbe` | Feasibility probe, kept as a regression and diagnostics tool |
 | `docs/` | Research, architecture, design system, milestones |
 
@@ -90,8 +90,8 @@ More detail: [docs/development/building.md](docs/development/building.md).
 
 - [Initial assessment](docs/research/00-initial-assessment.md) · [Probe test sheet](docs/research/01-orbit-probe-test-sheet.md) · [Feasibility report](docs/research/02-feasibility-report.md)
 - [Architecture & milestones](docs/architecture/03-architecture-and-milestones.md) · [Design system](docs/design/design-system.md) · [Milestone 1 summary](docs/milestones/M1-foundation.md)
-- [Privacy policy](docs/PRIVACY.md): your files never leave your PC, and OrbitDrop collects no personal data.
+- [Privacy policy](docs/PRIVACY.md): your files never leave your PC, and Flipr collects no personal data.
 
 ## License
 
-MIT. See [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). OrbitDrop is inspired by the interaction of Tangerine for Mac; it shares no code, artwork or branding with it.
+MIT. See [LICENSE](LICENSE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Flipr is inspired by the interaction of Tangerine for Mac; it shares no code, artwork or branding with it.

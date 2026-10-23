@@ -3,10 +3,9 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-// OrbitDrop brand mark v2 (monochrome): a white droplet orbited by a ring, on a glossy near-black squircle tile.
-// Realism comes from layered shading: tile depth gradient + top sheen + rim light, a droplet with a soft
-// radial body, specular highlight and contact shadow, and a ring that passes behind and in front of the drop.
-// At 16–24 px the mark simplifies (flat drop, thicker ring) so it stays crisp in the notification area.
+// Flipr brand mark: a white file card flipping over another, with a curved flip arrow, on a Flip Teal (#0EA5A4)
+// squircle tile. Depth comes from the tile gradient + top sheen + rim light and a soft shadow under the front card.
+// At 16–24 px the mark simplifies (two flat cards, no arrow or lines) so it stays crisp in the notification area.
 
 namespace IconGen;
 
@@ -18,10 +17,10 @@ internal static class Program
         if (args.Length > 0 && args[0] == "--pfp")
         {
             // Profile pictures (Instagram, TikTok, X …): full-bleed, so the round crop shows the mark, not a tile corner.
-            string dir = args.Length > 1 ? args[1] : "marketing/brand";
+            string dir = args.Length > 1 ? args[1] : "assets/brand";
             Directory.CreateDirectory(dir);
-            File.WriteAllBytes(Path.Combine(dir, "pfp-orbitdrop.png"), Png(RenderAvatar(1080, glow: false)));
-            File.WriteAllBytes(Path.Combine(dir, "pfp-orbitdrop-glow.png"), Png(RenderAvatar(1080, glow: true)));
+            File.WriteAllBytes(Path.Combine(dir, "pfp-flipr.png"), Png(RenderAvatar(1080, glow: false)));
+            File.WriteAllBytes(Path.Combine(dir, "pfp-flipr-glow.png"), Png(RenderAvatar(1080, glow: true)));
             Console.WriteLine($"Wrote profile pictures to {Path.GetFullPath(dir)}");
             return 0;
         }
@@ -31,9 +30,9 @@ internal static class Program
 
         int[] icoSizes = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256];
         var pngs = icoSizes.Select(s => (Size: s, Data: Png(Render(s)))).ToList();
-        File.WriteAllBytes(Path.Combine(outDir, "orbitdrop.ico"), Ico(pngs));
+        File.WriteAllBytes(Path.Combine(outDir, "flipr.ico"), Ico(pngs));
         foreach (int s in new[] { 32, 64, 256, 512, 1024 })
-            File.WriteAllBytes(Path.Combine(outDir, $"orbitdrop-{s}.png"), Png(Render(s)));
+            File.WriteAllBytes(Path.Combine(outDir, $"flipr-{s}.png"), Png(Render(s)));
 
         Console.WriteLine($"Wrote icon set to {Path.GetFullPath(outDir)}");
         return 0;
@@ -51,7 +50,7 @@ internal static class Program
             // ---- tile: squircle with depth
             double inset = small ? 0.5 : s * 0.035;
             var tile = Squircle(new Rect(inset, inset, s - 2 * inset, s - 2 * inset), 5.0);
-            dc.DrawGeometry(new LinearGradientBrush(Rgb(0x2E, 0x2E, 0x34), Rgb(0x08, 0x08, 0x0A), 90), null, tile);
+            dc.DrawGeometry(new LinearGradientBrush(Rgb(0x1B, 0xC7, 0xC3), Rgb(0x0A, 0x85, 0x84), 90), null, tile);
             if (!small)
             {
                 // soft top sheen
@@ -82,7 +81,7 @@ internal static class Program
         var dv = new DrawingVisual();
         using (var dc = dv.RenderOpen())
         {
-            dc.DrawRectangle(new LinearGradientBrush(Rgb(0x2E, 0x2E, 0x34), Rgb(0x08, 0x08, 0x0A), 90), null, new Rect(0, 0, s, s));
+            dc.DrawRectangle(new LinearGradientBrush(Rgb(0x1B, 0xC7, 0xC3), Rgb(0x0A, 0x85, 0x84), 90), null, new Rect(0, 0, s, s));
             dc.DrawEllipse(new RadialGradientBrush(Rgb(255, 255, 255, 30), Rgb(255, 255, 255, 0)), null, new Point(s * 0.5, s * 0.08), s * 0.7, s * 0.45);
             if (glow)
                 dc.DrawEllipse(new RadialGradientBrush(Rgb(255, 255, 255, 46), Rgb(255, 255, 255, 0)), null, new Point(s * 0.5, s * 0.52), s * 0.36, s * 0.36);
@@ -96,75 +95,89 @@ internal static class Program
         return bmp;
     }
 
-    /// <summary>The droplet, its ring (behind and in front) and the satellite, for an <paramref name="s"/>-pixel square.</summary>
+    /// <summary>
+    /// The Flipr mark for an <paramref name="s"/>-pixel square: a file card flipping over another (the one behind is
+    /// tilted, mid-turn) with a curved arrow showing the flip. The front card's folded corner is Flip Teal.
+    /// </summary>
     private static void DrawMark(DrawingContext dc, double s, bool small)
     {
+        double radius = s * (small ? 0.06 : 0.05);
+
+        // ---- back card, tilted: the file before it flips
+        var back = new RectangleGeometry(new Rect(s * 0.2, s * 0.22, s * 0.36, s * 0.46), radius, radius,
+            new RotateTransform(-14, s * 0.38, s * 0.45));
+        dc.DrawGeometry(new SolidColorBrush(Rgb(255, 255, 255, small ? (byte)140 : (byte)105)), null, back);
+
+        // ---- front card with a folded top-right corner: the converted file
+        var front = new Rect(s * 0.4, s * 0.3, s * 0.38, s * 0.5);
+        double fold = s * (small ? 0.15 : 0.13);
+        var card = Card(front, radius, fold);
+        if (!small)
+            dc.DrawGeometry(new SolidColorBrush(Rgb(0x02, 0x3A, 0x39, 70)), null, Card(Rect.Offset(front, s * 0.012, s * 0.022), radius, fold));
+        Brush paper = small ? Brushes.White : new LinearGradientBrush(Rgb(255, 255, 255), Rgb(0xE4, 0xF6, 0xF5), 90);
+        dc.DrawGeometry(paper, null, card);
+
+        var flap = new StreamGeometry();
+        using (var ctx = flap.Open())
         {
-            var c = new Point(s * 0.5, s * 0.54);
-            double r = s * (small ? 0.2 : 0.165);
-            var drop = Droplet(c, r, tipY: s * (small ? 0.2 : 0.235));
-
-            double rx = s * (small ? 0.42 : 0.385), ry = s * (small ? 0.14 : 0.115), tilt = -17;
-            var ringCenter = new Point(s * 0.5, c.Y - r * 0.15);
-            double ringW = s * (small ? 0.075 : 0.038);
-            var rotate = new RotateTransform(tilt, ringCenter.X, ringCenter.Y);
-
-            // ---- ring, back half (behind the drop)
-            dc.PushTransform(rotate);
-            dc.DrawGeometry(null, new Pen(new SolidColorBrush(Rgb(255, 255, 255, small ? (byte)150 : (byte)95)), ringW) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round },
-                HalfEllipse(ringCenter, rx, ry, top: true));
-            dc.Pop();
-
-            // ---- droplet
-            if (small)
-            {
-                dc.DrawGeometry(Brushes.White, null, drop);
-            }
-            else
-            {
-                // contact shadow under the drop
-                dc.DrawEllipse(new RadialGradientBrush(Rgb(0, 0, 0, 120), Rgb(0, 0, 0, 0)), null, new Point(c.X, c.Y + r * 1.05), r * 1.05, r * 0.28);
-                // body: bright top-left, cool grey falloff toward the lower-right edge
-                var body = new RadialGradientBrush
-                {
-                    GradientOrigin = new Point(0.36, 0.42), Center = new Point(0.45, 0.5), RadiusX = 0.75, RadiusY = 0.7,
-                    GradientStops = { new GradientStop(Rgb(255, 255, 255), 0), new GradientStop(Rgb(0xF1, 0xF1, 0xF4), 0.45), new GradientStop(Rgb(0xB9, 0xBB, 0xC4), 1) },
-                };
-                dc.DrawGeometry(body, null, drop);
-                // inner edge darkening for volume
-                dc.DrawGeometry(null, new Pen(new LinearGradientBrush(Rgb(0, 0, 0, 0), Rgb(0x3A, 0x3C, 0x46, 70), 70), r * 0.08), drop);
-                // specular highlight
-                dc.PushClip(drop);
-                dc.DrawEllipse(new RadialGradientBrush(Rgb(255, 255, 255, 235), Rgb(255, 255, 255, 0)), null, new Point(c.X - r * 0.38, c.Y - r * 0.32), r * 0.32, r * 0.42);
-                dc.DrawEllipse(new RadialGradientBrush(Rgb(255, 255, 255, 120), Rgb(255, 255, 255, 0)), null, new Point(c.X + r * 0.42, c.Y + r * 0.45), r * 0.18, r * 0.12);
-                dc.Pop();
-            }
-
-            // ---- ring, front half (in front of the drop) + satellite
-            dc.PushTransform(rotate);
-            var frontBrush = new LinearGradientBrush(Rgb(255, 255, 255, 200), Rgb(255, 255, 255), 0);
-            dc.DrawGeometry(null, new Pen(frontBrush, ringW) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round }, HalfEllipse(ringCenter, rx, ry, top: false));
-            double a = 24 * Math.PI / 180;
-            var sat = new Point(ringCenter.X + rx * Math.Cos(a), ringCenter.Y + ry * Math.Sin(a));
-            double satR = s * (small ? 0.075 : 0.05);
-            if (!small) dc.DrawEllipse(new SolidColorBrush(Rgb(0x0B, 0x0B, 0x0D)), null, sat, satR * 1.28, satR * 1.28); // gap where the moon crosses the ring
-            var moon = small ? (Brush)Brushes.White : new RadialGradientBrush(Rgb(255, 255, 255), Rgb(0xC2, 0xC4, 0xCC)) { GradientOrigin = new Point(0.35, 0.35) };
-            dc.DrawEllipse(moon, null, sat, satR, satR);
-            dc.Pop();
+            ctx.BeginFigure(new Point(front.Right - fold, front.Top), true, true);
+            ctx.LineTo(new Point(front.Right - fold, front.Top + fold), true, true);
+            ctx.LineTo(new Point(front.Right, front.Top + fold), true, true);
         }
+        flap.Freeze();
+        dc.DrawGeometry(new SolidColorBrush(small ? Rgb(0x0A, 0x7C, 0x7B) : Rgb(0x0E, 0xA5, 0xA4)), null, flap);
+
+        if (small) return; // at tray sizes the two cards alone read best
+
+        // ---- text lines on the front card
+        var line = new SolidColorBrush(Rgb(0x0E, 0xA5, 0xA4, 150));
+        foreach (double y in new[] { 0.52, 0.6, 0.68 })
+        {
+            double right = y < 0.55 ? 0.68 : 0.72;
+            dc.DrawRoundedRectangle(line, null, new Rect(s * 0.47, s * y, s * (right - 0.47), s * 0.032), s * 0.016, s * 0.016);
+        }
+
+        // ---- the flip: an arc over the top, from the back card to the front card, ending in an arrowhead
+        var arc = new StreamGeometry();
+        var from = new Point(s * 0.27, s * 0.17);
+        var to = new Point(s * 0.6, s * 0.17);
+        using (var ctx = arc.Open())
+        {
+            ctx.BeginFigure(from, false, false);
+            ctx.ArcTo(to, new Size(s * 0.19, s * 0.12), 0, false, SweepDirection.Clockwise, true, true);
+        }
+        arc.Freeze();
+        var pen = new Pen(Brushes.White, s * 0.04) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round, LineJoin = PenLineJoin.Round };
+        dc.PushTransform(new TranslateTransform(0, s * 0.012));
+        dc.DrawGeometry(null, new Pen(new SolidColorBrush(Rgb(0x02, 0x3A, 0x39, 60)), pen.Thickness) { StartLineCap = PenLineCap.Round, EndLineCap = PenLineCap.Round }, arc);
+        dc.Pop();
+        dc.DrawGeometry(null, pen, arc);
+        var head = new StreamGeometry();
+        using (var ctx = head.Open())
+        {
+            ctx.BeginFigure(new Point(to.X - s * 0.075, to.Y - s * 0.035), false, false);
+            ctx.LineTo(to, true, true);
+            ctx.LineTo(new Point(to.X - s * 0.02, to.Y - s * 0.085), true, true);
+        }
+        head.Freeze();
+        dc.DrawGeometry(null, pen, head);
     }
 
-    /// <summary>Teardrop pointing up: round base centred at <paramref name="c"/>, tip at <paramref name="tipY"/>.</summary>
-    private static Geometry Droplet(Point c, double r, double tipY)
+    /// <summary>A rounded card whose top-right corner is cut diagonally for a folded corner of size <paramref name="fold"/>.</summary>
+    private static Geometry Card(Rect r, double radius, double fold)
     {
         var g = new StreamGeometry();
         using (var ctx = g.Open())
         {
-            var tip = new Point(c.X, tipY);
-            ctx.BeginFigure(tip, true, true);
-            ctx.BezierTo(new Point(c.X - r * 0.12, tipY + (c.Y - tipY) * 0.35), new Point(c.X - r, c.Y - r * 0.85), new Point(c.X - r, c.Y), true, true);
-            ctx.ArcTo(new Point(c.X + r, c.Y), new Size(r, r), 0, false, SweepDirection.Counterclockwise, true, true);
-            ctx.BezierTo(new Point(c.X + r, c.Y - r * 0.85), new Point(c.X + r * 0.12, tipY + (c.Y - tipY) * 0.35), tip, true, true);
+            ctx.BeginFigure(new Point(r.Left + radius, r.Top), true, true);
+            ctx.LineTo(new Point(r.Right - fold, r.Top), true, true);
+            ctx.LineTo(new Point(r.Right, r.Top + fold), true, true);
+            ctx.LineTo(new Point(r.Right, r.Bottom - radius), true, true);
+            ctx.ArcTo(new Point(r.Right - radius, r.Bottom), new Size(radius, radius), 0, false, SweepDirection.Clockwise, true, true);
+            ctx.LineTo(new Point(r.Left + radius, r.Bottom), true, true);
+            ctx.ArcTo(new Point(r.Left, r.Bottom - radius), new Size(radius, radius), 0, false, SweepDirection.Clockwise, true, true);
+            ctx.LineTo(new Point(r.Left, r.Top + radius), true, true);
+            ctx.ArcTo(new Point(r.Left + radius, r.Top), new Size(radius, radius), 0, false, SweepDirection.Clockwise, true, true);
         }
         g.Freeze();
         return g;
@@ -184,18 +197,6 @@ internal static class Program
                 var p = new Point(cx + a * Math.Sign(ct) * Math.Pow(Math.Abs(ct), 2 / n), cy + b * Math.Sign(st) * Math.Pow(Math.Abs(st), 2 / n));
                 if (i == 0) ctx.BeginFigure(p, true, true); else ctx.LineTo(p, true, true);
             }
-        }
-        g.Freeze();
-        return g;
-    }
-
-    private static Geometry HalfEllipse(Point c, double rx, double ry, bool top)
-    {
-        var g = new StreamGeometry();
-        using (var ctx = g.Open())
-        {
-            ctx.BeginFigure(new Point(c.X - rx, c.Y), false, false);
-            ctx.ArcTo(new Point(c.X + rx, c.Y), new Size(rx, ry), 0, false, top ? SweepDirection.Clockwise : SweepDirection.Counterclockwise, true, true);
         }
         g.Freeze();
         return g;

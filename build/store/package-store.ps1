@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-  Builds the Microsoft Store package: artifacts\store\OrbitDrop-<version>-Store.msix
+  Builds the Microsoft Store package: artifacts\store\Flipr-<version>-Store.msix
 .DESCRIPTION
-  1. Publishes OrbitDrop (self-contained, single file, win-x64), the same build as the installer.
+  1. Publishes Flipr (self-contained, single file, win-x64), the same build as the installer.
   2. Generates the Store icons (tiles, taskbar, Store logo) from the master icon.
   3. Writes the manifest (identity from Partner Center; version from build/Common.props) and indexes the icons
      with makepri, then packs with makeappx (Windows SDK).
@@ -17,7 +17,7 @@ if (-not $Version) { $Version = ([xml](Get-Content (Join-Path $root 'build\Commo
 # Store versions are four numbers ending in .0: "0.2.7-alpha" -> "0.2.7.0".
 $numeric = (($Version -split '-')[0] -split '\.' | Select-Object -First 3) -join '.'
 $storeVersion = "$numeric.0"
-Write-Host "OrbitDrop Store package $storeVersion (from $Version)"
+Write-Host "Flipr Store package $storeVersion (from $Version)"
 
 $sdk = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\makeappx.exe' | Sort-Object FullName -Descending | Select-Object -First 1
 if (-not $sdk) { throw 'makeappx.exe not found: install the Windows 10/11 SDK.' }
@@ -30,22 +30,22 @@ if (Test-Path $layout) { Remove-Item $layout -Recurse -Force }
 New-Item -ItemType Directory -Force $layout, (Join-Path $layout 'Assets') | Out-Null
 
 Write-Host '> Publish'
-dotnet publish (Join-Path $root 'src\OrbitDrop.App\OrbitDrop.App.csproj') -c Release -r win-x64 --self-contained true `
+dotnet publish (Join-Path $root 'src\Flipr.App\Flipr.App.csproj') -c Release -r win-x64 --self-contained true `
     -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:Version=$Version -o $layout --nologo | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed' }
 Get-ChildItem $layout -Filter *.pdb | Remove-Item
 Write-Host '> Right-click menu and CorelDRAW reader'
 & (Join-Path $root 'build\shell\build-shell.ps1') | Out-Null
 & (Join-Path $root 'build\cdr\build-cdr.ps1') | Out-Null
-Copy-Item (Join-Path $root 'artifacts\shell\OrbitDropShell.dll') $layout
-Copy-Item (Join-Path $root 'artifacts\cdr\OrbitDropCdr.exe') $layout
+Copy-Item (Join-Path $root 'artifacts\shell\FliprShell.dll') $layout
+Copy-Item (Join-Path $root 'artifacts\cdr\FliprCdr.exe') $layout
 Copy-Item (Join-Path $root 'artifacts\cdr\licenses') (Join-Path $layout 'licenses') -Recurse
 Copy-Item (Join-Path $root 'THIRD-PARTY-NOTICES.md') (Join-Path $layout 'THIRD-PARTY-NOTICES.md')
 Copy-Item (Join-Path $root 'LICENSE') (Join-Path $layout 'LICENSE.txt')
 
 Write-Host '> Icons'
 Add-Type -AssemblyName System.Drawing
-$master = [System.Drawing.Image]::FromFile((Join-Path $root 'src\OrbitDrop.UI\Assets\orbitdrop-1024.png'))
+$master = [System.Drawing.Image]::FromFile((Join-Path $root 'src\Flipr.UI\Assets\flipr-1024.png'))
 function Save-Icon([string]$name, [int]$w, [int]$h, [double]$fill) {
     $bmp = New-Object System.Drawing.Bitmap $w, $h
     $g = [System.Drawing.Graphics]::FromImage($bmp)
@@ -84,7 +84,7 @@ $cfg.Save($priconfig)
 if ($LASTEXITCODE -ne 0) { throw 'makepri failed' }
 
 Write-Host '> Pack'
-$msix = Join-Path $out "OrbitDrop-$Version-Store.msix"
+$msix = Join-Path $out "Flipr-$Version-Store.msix"
 & $makeappx pack /d $layout /p $msix /o | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'makeappx failed' }
 Write-Host ("`n{0}  {1:N1} MB" -f $msix, ((Get-Item $msix).Length / 1MB))

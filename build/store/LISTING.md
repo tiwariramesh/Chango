@@ -1,8 +1,8 @@
-# Microsoft Store submission: OrbitDrop - Drag & Convert
+# Microsoft Store submission: Flipr - Drag & Convert
 
-Everything to paste into Partner Center, section by section. Make the package with `./build/store/package-store.ps1` and the artwork with `OrbitDrop.exe --render-store <folder>`.
+Everything to paste into Partner Center, section by section. Make the package with `./build/store/package-store.ps1` and the artwork with `Flipr.exe --render-store <folder>`.
 
-Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview> → **OrbitDrop - Drag & Convert** → **Start your submission**.
+Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview> → **Flipr - Drag & Convert** → **Start your submission**.
 
 ---
 
@@ -22,9 +22,9 @@ Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview
 |---|---|
 | Category | **Productivity** |
 | Subcategory | (none) |
-| Privacy policy URL | `https://github.com/i3sam/OrbitDrop/blob/main/docs/PRIVACY.md` |
-| Website | `https://github.com/i3sam/OrbitDrop` |
-| Support contact info | `https://github.com/i3sam/OrbitDrop/issues` |
+| Privacy policy URL | `https://github.com/i3sam/Flipr/blob/main/docs/PRIVACY.md` |
+| Website | `https://github.com/i3sam/Flipr` |
+| Support contact info | `https://github.com/i3sam/Flipr/issues` |
 | Does this product access, collect, or transmit personal information? | **No** |
 | Product declarations | Leave all unticked, **except** "This app has been tested to meet accessibility guidelines" (leave unticked too, unless you've tested it). |
 | System requirements | Minimum: **Keyboard**, **Mouse**. Memory 4 GB. Architecture **x64**. |
@@ -36,7 +36,7 @@ Choose **"Utility, productivity, communication or other"** as the app type, then
 | Question | Answer |
 |---|---|
 | Violence, fear, sexuality, language, drugs, gambling | No to all |
-| Can users interact or exchange content with other users? | **No** (Share hands the file to Windows' own Share window; OrbitDrop has no messaging or accounts) |
+| Can users interact or exchange content with other users? | **No** (Share hands the file to Windows' own Share window; Flipr has no messaging or accounts) |
 | Does the app share the user's current physical location with other users? | **No** |
 | Does the app allow purchases of digital goods? | **No** |
 | Does the app contain unrestricted internet access (a browser)? | **No** |
@@ -45,10 +45,10 @@ Expected result: **3+ / Everyone**.
 
 ## 4. Packages
 
-Upload `artifacts\store\OrbitDrop-<version>-Store.msix`. Partner Center checks it. The identity must match exactly (already set in `build/store/AppxManifest.xml`):
+Upload `artifacts\store\Flipr-<version>-Store.msix`. Partner Center checks it. The identity must match exactly (already set in `build/store/AppxManifest.xml`):
 
-- Name: `MohammedEssam.OrbitDrop-DragConvert`
-- Publisher: `CN=FD78A452-347F-4CF8-BE72-9A808019B3D2`
+- Name: `MohammedEssam.Flipr-DragConvert`
+- Publisher: `CN=8E1BBDFF-944B-481D-AB78-42982E4EF6EE`
 - Publisher display name: `Mohammed Essam`
 
 Device families: tick **Windows 10/11 Desktop** only.
@@ -93,15 +93,15 @@ MADE TO FIT YOUR FLOW
 • Light and dark themes that follow Windows.
 
 PRIVATE BY DESIGN
-No account, no ads, no tracking, no telemetry. OrbitDrop works offline and only touches the files you choose.
+No account, no ads, no tracking, no telemetry. Flipr works offline and only touches the files you choose.
 
-Free and open source (MIT): github.com/i3sam/OrbitDrop
+Free and open source (MIT): github.com/i3sam/Flipr
 ```
 
 ### What's new in this version
 
 ```
-OrbitDrop 0.4.2: CorelDRAW files convert with nothing else installed (to PDF, SVG, PNG, JPG, WebP, TIFF, BMP). OrbitDrop 0.4: right-click files and choose OrbitDrop; Undo after every conversion (to the Recycle Bin); copy a screenshot or image and press Ctrl + Alt + Space to save or convert it; optional size estimates on the wheel and "last choice first". The wheel itself works exactly as before. Also new recently: SVG, PDF to Word, documents to PDF, WebP and JFIF.
+Flipr 0.4.2: CorelDRAW files convert with nothing else installed (to PDF, SVG, PNG, JPG, WebP, TIFF, BMP). Flipr 0.4: right-click files and choose Flipr; Undo after every conversion (to the Recycle Bin); copy a screenshot or image and press Ctrl + Alt + Space to save or convert it; optional size estimates on the wheel and "last choice first". The wheel itself works exactly as before. Also new recently: SVG, PDF to Word, documents to PDF, WebP and JFIF.
 ```
 
 ### Product features (one per box, up to 20)
@@ -164,10 +164,10 @@ remove metadata
 
 | Field | Value |
 |---|---|
-| Short title | OrbitDrop |
+| Short title | Flipr |
 | Short description | Convert, edit and manage files without opening an app. Drag, tap Shift, let go. |
 | Copyright and trademark info | © 2026 Mohammed Essam |
-| Additional license terms | MIT License: https://github.com/i3sam/OrbitDrop/blob/main/LICENSE |
+| Additional license terms | MIT License: https://github.com/i3sam/Flipr/blob/main/LICENSE |
 | Developed by | Mohammed Essam |
 
 ## 6. Submission options
@@ -177,7 +177,7 @@ remove metadata
 Partner Center asks why the app uses **runFullTrust**. Paste:
 
 ```
-OrbitDrop is a classic Win32 desktop app (WPF, .NET) packaged as MSIX. It needs full trust to:
+Flipr is a classic Win32 desktop app (WPF, .NET) packaged as MSIX. It needs full trust to:
 1. Notice the gesture system-wide: while the user drags files in File Explorer or on the desktop, it watches the mouse button (a low-level mouse hook) and the Shift key, then shows its wheel as a top-most window at the pointer, over other apps.
 2. Register a global keyboard shortcut (Ctrl + Alt + Space) and read the current File Explorer selection.
 3. Read the files the user chooses and write the results next to them, in any folder (the original is never changed).
@@ -187,10 +187,10 @@ No input is recorded, stored or sent anywhere; the app makes no network requests
 ### Notes for certification
 
 ```
-How to test: after installing, OrbitDrop opens its guide and sits in the notification area (system tray).
+How to test: after installing, Flipr opens its guide and sits in the notification area (system tray).
 1. In File Explorer, start dragging any image (keep holding the mouse button), tap Shift once, move onto "JPG" and let go. A JPG copy appears next to the original.
 2. Or select a file and press Ctrl + Alt + Space, then click an option.
-3. Settings: click the OrbitDrop icon in the notification area → Settings.
+3. Settings: click the Flipr icon in the notification area → Settings.
 No account or sign-in is needed.
 ```
 

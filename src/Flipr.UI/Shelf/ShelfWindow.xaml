@@ -1,0 +1,59 @@
+<Window x:Class="Flipr.UI.Shelf.ShelfWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" Topmost="True"
+        ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Title="Flipr Float"
+        UseLayoutRounding="True" FontFamily="{StaticResource Orbit.Font.Text}" AllowDrop="True">
+    <Grid x:Name="Root" Margin="16,12,16,20">
+        <Border CornerRadius="12" Background="{DynamicResource Orbit.Surface}">
+            <Border.Effect>
+                <DropShadowEffect x:Name="Shadow" BlurRadius="24" ShadowDepth="8" Direction="270" Opacity="0.16" />
+            </Border.Effect>
+        </Border>
+        <Border CornerRadius="12" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}" BorderThickness="1" Width="236">
+            <StackPanel>
+                <!-- Header: drag here to move the shelf; "drag all" grip; close -->
+                <DockPanel x:Name="Header" Margin="12,8,6,4" Background="Transparent" Cursor="SizeAll" MouseLeftButtonDown="OnHeaderDown">
+                    <Button DockPanel.Dock="Right" Style="{StaticResource Orbit.Button.Subtle}" Width="26" Height="26" MinHeight="0" Padding="0"
+                            Click="OnClose" ToolTip="Close (the files stay where they are)">
+                        <TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE711;" FontSize="10" />
+                    </Button>
+                    <Border x:Name="DragAll" DockPanel.Dock="Right" CornerRadius="4" Padding="8,3" Margin="0,0,4,0" Cursor="Hand"
+                            Background="{DynamicResource Orbit.SubtleFill}" ToolTip="Drag all the files out at once"
+                            MouseLeftButtonDown="OnItemDown" MouseMove="OnItemMove" Tag="*">
+                        <TextBlock Text="Drag all" Style="{StaticResource Orbit.Text.Caption}" Foreground="{DynamicResource Orbit.TextPrimary}" />
+                    </Border>
+                    <TextBlock x:Name="TitleText" Style="{StaticResource Orbit.Text.BodyStrong}" FontSize="13" VerticalAlignment="Center" Text="Float" />
+                </DockPanel>
+                <ItemsControl x:Name="Items" Margin="6,0,6,8">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="Chip" CornerRadius="6" Padding="6" Margin="0,1" Background="Transparent" Cursor="Hand"
+                                    Tag="{Binding Path}" ToolTip="{Binding Path}"
+                                    MouseLeftButtonDown="OnItemDown" MouseMove="OnItemMove">
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" Style="{StaticResource Orbit.Button.Subtle}" Width="22" Height="22" MinHeight="0" Padding="0"
+                                            Click="OnRemove" Tag="{Binding Path}" ToolTip="Remove from the shelf" VerticalAlignment="Center">
+                                        <TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE711;" FontSize="8" />
+                                    </Button>
+                                    <Image Source="{Binding Icon}" Width="32" Height="32" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality" />
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" Style="{StaticResource Orbit.Text.Body}" FontSize="12.5" TextTrimming="CharacterEllipsis" MaxWidth="140" />
+                                        <TextBlock Text="{Binding Detail}" Style="{StaticResource Orbit.Text.Caption}" FontSize="11" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <Trigger SourceName="Chip" Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Chip" Property="Background" Value="{DynamicResource Orbit.SubtleFill}" />
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Text="Drag files out to use them, or drop more here." Style="{StaticResource Orbit.Text.Caption}" FontSize="11"
+                           Margin="14,0,14,10" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

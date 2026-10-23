@@ -6,12 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
-    <Version>0.4.4-alpha</Version>
+    <Version>1.0.0-beta</Version>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <Product>OrbitDrop</Product>
-    <Company>OrbitDrop contributors</Company>
-    <Authors>OrbitDrop contributors</Authors>
-    <Copyright>© 2026 Mohammed Essam and OrbitDrop contributors · MIT License</Copyright>
+    <Product>Flipr</Product>
+    <Company>Ramesh Tiwari</Company>
+    <Authors>Ramesh Tiwari</Authors>
+    <Copyright>© 2026 Ramesh Tiwari · based on OrbitDrop © 2026 Mohammed Essam · MIT License</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <!-- WPF Fluent ThemeMode is marked experimental in .NET 10; usage is isolated in ThemeManager. -->
     <NoWarn>$(NoWarn);WPF0001</NoWarn>

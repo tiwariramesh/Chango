@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Flipr</AssemblyName>
+    <RootNamespace>Flipr.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\Flipr.UI\Assets\flipr.ico</ApplicationIcon>
+    <Description>Flipr: convert, edit and manage files without opening an app.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Flipr.Core/Flipr.Core.csproj" />
+    <ProjectReference Include="../Flipr.Infrastructure/Flipr.Infrastructure.csproj" />
+    <ProjectReference Include="../Flipr.Jobs/Flipr.Jobs.csproj" />
+    <ProjectReference Include="../Flipr.Conversion/Flipr.Conversion.csproj" />
+    <ProjectReference Include="../Flipr.Tools/Flipr.Tools.csproj" />
+    <ProjectReference Include="../Flipr.Windows/Flipr.Windows.csproj" />
+    <ProjectReference Include="../Flipr.UI/Flipr.UI.csproj" />
+  </ItemGroup>
+  <!-- SkiaSharp and HarfBuzzSharp ship native debug symbols (~100 MB) next to their DLLs; users never need them. -->
+  <Target Name="DropNativeDebugSymbols" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb'" />
+    </ItemGroup>
+  </Target>
+</Project>

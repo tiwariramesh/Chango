@@ -1,6 +1,6 @@
 # Third-party notices
 
-OrbitDrop is MIT-licensed (see `LICENSE`). This file lists everything a **release build** redistributes that isn't OrbitDrop's own code. It's updated whenever a dependency is added; each addition needs a licence review first (see `docs/research/00-initial-assessment.md` §6.2).
+Flipr is MIT-licensed (see `LICENSE`). This file lists everything a **release build** redistributes that isn't Flipr's own code. It's updated whenever a dependency is added; each addition needs a licence review first (see `docs/research/00-initial-assessment.md` §6.2).
 
 ## Redistributed in release builds
 
@@ -15,9 +15,9 @@ OrbitDrop is MIT-licensed (see `LICENSE`). This file lists everything a **releas
 | ExCSS | 4.3.1 | MIT, © Tyler Brinks | CSS inside SVG files |
 | HarfBuzzSharp, HarfBuzzSharp.NativeAssets.Win32 | 8.3.1.3 | MIT, © Microsoft Corporation (HarfBuzz: MIT, © HarfBuzz contributors) | Text inside SVG files |
 
-### In OrbitDropCdr.exe (the built-in CorelDRAW reader)
+### In FliprCdr.exe (the built-in CorelDRAW reader)
 
-Compiled from these unmodified upstream source releases by `build/cdr/build-cdr.ps1`, which pins each archive's SHA-256. Their licence texts ship in the `licenses` folder next to OrbitDrop.
+Compiled from these unmodified upstream source releases by `build/cdr/build-cdr.ps1`, which pins each archive's SHA-256. Their licence texts ship in the `licenses` folder next to Flipr.
 
 | Component | Version | Licence | Source |
 |---|---|---|---|
@@ -27,13 +27,13 @@ Compiled from these unmodified upstream source releases by `build/cdr/build-cdr.
 | zlib | 1.3.1 | zlib licence, © Jean-loup Gailly and Mark Adler | https://github.com/madler/zlib/releases/tag/v1.3.1 |
 | Boost (header-only parts) | 1.86.0 | Boost Software License 1.0 | https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.bz2 |
 
-The MPL 2.0 covered files are used as published; their source code is available at the links above. The reader's own code is `src/OrbitDrop.CdrReader` in this repository (MIT). Text-encoding support comes from the copy of ICU built into Windows (not redistributed).
+The MPL 2.0 covered files are used as published; their source code is available at the links above. The reader's own code is `src/Flipr.CdrReader` in this repository (MIT). Text-encoding support comes from the copy of ICU built into Windows (not redistributed).
 
 ## Used from Windows, not redistributed
 
 - **Windows Imaging Component (WIC):** image decoding and encoding.
 - **Windows Media Foundation:** video and audio transcoding (H.264/AAC, WMV/WMA, MP3, WAV). Codecs come from Windows; HEVC, VP9 and similar depend on the Microsoft Store video extensions the user has installed.
-- **Segoe UI Variable, Segoe Fluent Icons and Segoe MDL2 Assets fonts:** referenced by name and installed with Windows. OrbitDrop doesn't ship these fonts.
+- **Segoe UI Variable, Segoe Fluent Icons and Segoe MDL2 Assets fonts:** referenced by name and installed with Windows. Flipr doesn't ship these fonts.
 - **OLE drag-and-drop, Shell and DWM APIs:** documented Windows APIs.
 
 ## Development only (not shipped)
@@ -46,8 +46,8 @@ The MPL 2.0 covered files are used as published; their source code is available 
 
 ## Trademarks
 
-CorelDRAW is a trademark of Corel Corporation (Alludo). Microsoft Word, Excel, PowerPoint and Windows are trademarks of Microsoft. Adobe, Illustrator and Photoshop are trademarks of Adobe. OrbitDrop is an independent project: it isn't affiliated with, sponsored or endorsed by any of them, and it mentions their file formats only to say which files it can open.
+CorelDRAW is a trademark of Corel Corporation (Alludo). Microsoft Word, Excel, PowerPoint and Windows are trademarks of Microsoft. Adobe, Illustrator and Photoshop are trademarks of Adobe. Flipr is an independent project: it isn't affiliated with, sponsored or endorsed by any of them, and it mentions their file formats only to say which files it can open.
 
 ## Brand assets
 
-The OrbitDrop icon is original work generated from vectors by `tools/IconGen` and covered by this repository's MIT licence. No assets from Tangerine or any other product are used.
+The Flipr icon is original work generated from vectors by `tools/IconGen` and covered by this repository's MIT licence. No assets from Tangerine or any other product are used.

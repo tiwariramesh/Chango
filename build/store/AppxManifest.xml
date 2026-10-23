@@ -14,13 +14,13 @@
   IgnorableNamespaces="uap desktop rescap com desktop4 desktop5">
 
   <Identity
-    Name="MohammedEssam.OrbitDrop-DragConvert"
-    Publisher="CN=FD78A452-347F-4CF8-BE72-9A808019B3D2"
+    Name="MohammedEssam.Flipr-DragConvert"
+    Publisher="CN=8E1BBDFF-944B-481D-AB78-42982E4EF6EE"
     Version="{VERSION}"
     ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>OrbitDrop - Drag &amp; Convert</DisplayName>
+    <DisplayName>Flipr - Drag &amp; Convert</DisplayName>
     <PublisherDisplayName>Mohammed Essam</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
     <Description>Convert, edit and manage files without opening an app: drag a file, tap Shift, let go on what you want.</Description>
@@ -35,36 +35,36 @@
   </Resources>
 
   <Applications>
-    <Application Id="OrbitDrop" Executable="OrbitDrop.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="Flipr" Executable="Flipr.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="OrbitDrop - Drag &amp; Convert"
+        DisplayName="Flipr - Drag &amp; Convert"
         Description="Convert, edit and manage files right where they are."
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="OrbitDrop" />
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Flipr" />
       </uap:VisualElements>
       <Extensions>
-        <!-- "Start OrbitDrop when I sign in" (Settings → General); off until the user turns it on. -->
-        <desktop:Extension Category="windows.startupTask" Executable="OrbitDrop.exe" EntryPoint="Windows.FullTrustApplication">
-          <desktop:StartupTask TaskId="OrbitDropStartup" Enabled="false" DisplayName="OrbitDrop" />
+        <!-- "Start Flipr when I sign in" (Settings → General); off until the user turns it on. -->
+        <desktop:Extension Category="windows.startupTask" Executable="Flipr.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="FliprStartup" Enabled="false" DisplayName="Flipr" />
         </desktop:Extension>
-        <!-- "OrbitDrop" in File Explorer's right-click menu (Windows 11's main menu), for files and folders. The entry
-             is OrbitDropShell.dll (src/OrbitDrop.ShellMenu): it only hands the chosen paths to OrbitDrop. -->
+        <!-- "Flipr" in File Explorer's right-click menu (Windows 11's main menu), for files and folders. The entry
+             is FliprShell.dll (src/Flipr.ShellMenu): it only hands the chosen paths to Flipr. -->
         <desktop4:Extension Category="windows.fileExplorerContextMenus">
           <desktop4:FileExplorerContextMenus>
             <desktop5:ItemType Type="*">
-              <desktop5:Verb Id="OrbitDrop" Clsid="EF221BF9-D0CA-4698-95F2-5452942E7A5E" />
+              <desktop5:Verb Id="Flipr" Clsid="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" />
             </desktop5:ItemType>
             <desktop5:ItemType Type="Directory">
-              <desktop5:Verb Id="OrbitDrop" Clsid="EF221BF9-D0CA-4698-95F2-5452942E7A5E" />
+              <desktop5:Verb Id="Flipr" Clsid="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" />
             </desktop5:ItemType>
           </desktop4:FileExplorerContextMenus>
         </desktop4:Extension>
         <com:Extension Category="windows.comServer">
           <com:ComServer>
-            <com:SurrogateServer DisplayName="OrbitDrop right-click menu">
-              <com:Class Id="EF221BF9-D0CA-4698-95F2-5452942E7A5E" Path="OrbitDropShell.dll" ThreadingModel="STA" />
+            <com:SurrogateServer DisplayName="Flipr right-click menu">
+              <com:Class Id="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" Path="FliprShell.dll" ThreadingModel="STA" />
             </com:SurrogateServer>
           </com:ComServer>
         </com:Extension>

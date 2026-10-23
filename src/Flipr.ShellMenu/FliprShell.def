@@ -1,0 +1,4 @@
+LIBRARY FliprShell
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE
