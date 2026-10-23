@@ -1,0 +1,4 @@
+LIBRARY ChangoShell
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

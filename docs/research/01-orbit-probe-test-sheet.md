@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Purpose | Decide whether Flipr's signature interaction (drag in Explorer → tap Shift → radial wheel → release) works reliably on Windows, as Tangerine's does on macOS |
+| Purpose | Decide whether Chango's signature interaction (drag in Explorer → tap Shift → radial wheel → release) works reliably on Windows, as Tangerine's does on macOS |
 | Who runs it | You, with a **physical mouse and keyboard**. The probe flags any synthetic input in its statistics ("Physical input only"). |
 | Time needed | ~45 minutes for Blocks A–D, plus a short screen recording |
 | Build | `experiments/OrbitProbe` (Release) |
@@ -58,7 +58,7 @@ Click **Reset statistics** before starting Block A.
 | **A7** | Drag `a.jpg`, tap Shift, release over the **centre hub** | Nothing created. The drag tooltip near the cursor says *"Release to cancel"*, or no tooltip at all |
 | **A8** | Drag `a.jpg`, tap Shift, move **off** the wheel, then **back on**, release on **BMP** | Wheel **stays where it opened** while you're off it. `a.bmp` is created |
 | **A9** | Drag `a.jpg`, tap Shift, move off the wheel, release on **empty space in the same Explorer folder** | Wheel dismisses. Nothing created, nothing moved. Log: `all 1 source(s) still in place` |
-| **A10** | Drag `a.jpg`, tap Shift, then **press and hold Shift** while releasing on any segment | The operation runs, and **`a.jpg` is still there and unchanged** (`PASS source intact`). Shift normally means "move" in Explorer; this proves Flipr overrides that to copy |
+| **A10** | Drag `a.jpg`, tap Shift, then **press and hold Shift** while releasing on any segment | The operation runs, and **`a.jpg` is still there and unchanged** (`PASS source intact`). Shift normally means "move" in Explorer; this proves Chango overrides that to copy |
 | **A11** | **Without** Shift, Ctrl-drag `notes.txt` into the `LLL…` subfolder | Normal Explorer copy. **Wheel never appears** |
 | **A12** | Select some text in Notepad or a browser, drag it, tap Shift | Either no wheel, or a wheel showing **"No files"**. Nothing created, no crash |
 | **A13** | Drag `c.pdf`, tap Shift, look, then tap Shift twice more (→ Actions), release on **Copy name** | Convert and Tools show an **empty ring** with "Not supported". Actions works: clipboard = `c.pdf` |

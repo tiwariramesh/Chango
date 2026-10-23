@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Generates the Flipr brand icon from vectors. Usage: dotnet run (project) tools/IconGen [outputDir] -->
+  <!-- Generates the Chango brand icon from vectors. Usage: dotnet run (project) tools/IconGen [outputDir] -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>

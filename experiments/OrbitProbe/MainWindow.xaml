@@ -1,7 +1,7 @@
 <Window x:Class="OrbitProbe.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Orbit Probe — Flipr feasibility experiment"
+        Title="Orbit Probe — Chango feasibility experiment"
         Width="1180" Height="760" MinWidth="900" MinHeight="560"
         FontFamily="Segoe UI" FontSize="13">
     <Grid Margin="12">

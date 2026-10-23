@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Fixtures/**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <Using Include="System.IO" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Chango.Core/Chango.Core.csproj" />
+    <ProjectReference Include="../../src/Chango.Infrastructure/Chango.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Chango.Jobs/Chango.Jobs.csproj" />
+    <ProjectReference Include="../../src/Chango.Conversion/Chango.Conversion.csproj" />
+    <ProjectReference Include="../../src/Chango.Tools/Chango.Tools.csproj" />
+    <ProjectReference Include="../../src/Chango.Windows/Chango.Windows.csproj" />
+    <ProjectReference Include="../../src/Chango.UI/Chango.UI.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,19 +1,19 @@
-# Flipr Design System ("Orbit")
+# Chango Design System ("Orbit")
 
 | | |
 |---|---|
 | Version | 1.1 (monochrome rebrand) |
-| Source of truth | `src/Flipr.UI/Themes/Tokens.Light.xaml`, `Tokens.Dark.xaml`. This document describes them, and the code must match |
-| Review tool | `Flipr.exe --render-ui <folder>` renders every surface in light and dark at 100% and 150% |
+| Source of truth | `src/Chango.UI/Themes/Tokens.Light.xaml`, `Tokens.Dark.xaml`. This document describes them, and the code must match |
+| Review tool | `Chango.exe --render-ui <folder>` renders every surface in light and dark at 100% and 150% |
 
 ## 1. Personality
 
-**Minimal · precise · fast · elegant · friendly · professional.** Flipr should feel like part of Windows 11, with one memorable signature: the orbit.
+**Minimal · precise · fast · elegant · friendly · professional.** Chango should feel like part of Windows 11, with one memorable signature: the orbit.
 
 - **Native first.** Windows 11 typography, corner radii, Mica on windows, Fluent controls.
 - **One accent, used sparingly.** Colour means "this is what will happen". Everything else stays neutral.
 - **Motion with purpose.** Things bloom from where your attention already is (the cursor) and get out of the way instantly.
-- **Original identity.** Black and white, no brand hue, no Tangerine shapes or assets. The Flipr motif is a droplet in orbit.
+- **Original identity.** Black and white, no brand hue, no Tangerine shapes or assets. The Chango motif is a droplet in orbit.
 
 ## 2. Colour tokens
 
@@ -21,7 +21,7 @@ Every UI colour comes from a token. Tokens exist once per theme and are swapped 
 
 ### 2.1 Brand (monochrome)
 
-Flipr is black and white. Emphasis comes from contrast and weight, never from a brand hue. (Changed in v1.1: the original violet accent was retired.)
+Chango is black and white. Emphasis comes from contrast and weight, never from a brand hue. (Changed in v1.1: the original violet accent was retired.)
 
 | Token | Light | Dark | Use |
 |---|---|---|---|

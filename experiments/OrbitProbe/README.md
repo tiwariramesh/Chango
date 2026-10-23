@@ -1,6 +1,6 @@
 # Orbit Probe (throwaway experiment)
 
-Feasibility probe for Flipr's core gesture: drag files in Explorer → tap **Shift** → radial wheel → release on an option.
+Feasibility probe for Chango's core gesture: drag files in Explorer → tap **Shift** → radial wheel → release on an option.
 Not part of the product. See `docs/research/01-orbit-probe-test-sheet.md` for the manual test procedure.
 
 ```

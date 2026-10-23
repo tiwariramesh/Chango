@@ -19,10 +19,10 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Build
-        run: dotnet build Flipr.slnx -c Release
+        run: dotnet build Chango.slnx -c Release
 
       - name: Test
-        run: dotnet test tests/Flipr.Tests -c Release --no-build --logger "trx;LogFileName=results.trx"
+        run: dotnet test tests/Chango.Tests -c Release --no-build --logger "trx;LogFileName=results.trx"
 
       # Failed tests become annotations, which show on the run page (and in the public API) without opening logs.
       - name: Report failed tests
@@ -51,7 +51,7 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          $p = Start-Process src/Flipr.App/bin/Release/net10.0-windows10.0.19041.0/Flipr.exe -ArgumentList '--render-ui', "$env:RUNNER_TEMP/ui-review" -Wait -PassThru
+          $p = Start-Process src/Chango.App/bin/Release/net10.0-windows10.0.19041.0/Chango.exe -ArgumentList '--render-ui', "$env:RUNNER_TEMP/ui-review" -Wait -PassThru
           exit $p.ExitCode
 
       - uses: actions/upload-artifact@v4
@@ -65,5 +65,5 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: tests/Flipr.Tests/TestResults
+          path: tests/Chango.Tests/TestResults
           if-no-files-found: ignore

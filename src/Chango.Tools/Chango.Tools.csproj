@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Chango.Core/Chango.Core.csproj" />
+    <ProjectReference Include="../Chango.Conversion/Chango.Conversion.csproj" />
+  </ItemGroup>
+</Project>

@@ -30,10 +30,10 @@ jobs:
       # are marked as pre-releases, so nothing unfinished is ever presented as a stable release.
       - uses: softprops/action-gh-release@v2
         with:
-          name: Flipr ${{ github.ref_name }}
+          name: Chango ${{ github.ref_name }}
           prerelease: ${{ contains(github.ref_name, '-') }}
           body_path: build/release-notes.md
           files: |
-            artifacts/Flipr-Setup.exe
-            artifacts/Flipr-Portable.zip
+            artifacts/Chango-Setup.exe
+            artifacts/Chango-Portable.zip
             artifacts/SHA256SUMS.txt

@@ -1,4 +1,4 @@
-# Flipr Feasibility Report (Step 4)
+# Chango Feasibility Report (Step 4)
 
 | | |
 |---|---|
@@ -77,7 +77,7 @@ The gesture is **not** declared production-ready until these are done. The produ
 |---|---|---|
 | **A6** Esc while the wheel is open | G6 | The Esc path hasn't been exercised |
 | **A10** Shift *held* at release | G2 | R10 is strong but indirect |
-| **A11** normal drags/copies without Shift | — | Confirms Flipr is invisible otherwise (the log implies it; needs explicit confirmation) |
+| **A11** normal drags/copies without Shift | — | Confirms Chango is invisible otherwise (the log implies it; needs explicit confirmation) |
 | **A12** non-file drag (text) + Shift | G6 | Behaviour with non-file data objects |
 | **A15** 20 consecutive runs | **G3** | 15 drops so far, not a formal consecutive run |
 | **B1–B4** drag thumbnail and tooltip visibility | H-5/H-6 (polish, not gating) | Decides z-order handling |

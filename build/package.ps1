@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  Builds an Flipr release: tests, self-contained single-file exe, portable zip, installer and checksums.
+  Builds an Chango release: tests, self-contained single-file exe, portable zip, installer and checksums.
 
 .EXAMPLE
   ./build/package.ps1                      # version from build/Common.props
@@ -23,7 +23,7 @@ if (-not $Version) {
     $Version = ([xml](Get-Content (Join-Path $root "build\Common.props"))).Project.PropertyGroup.Version | Select-Object -First 1
 }
 $numeric = ($Version -split '-')[0] + ".0"
-Write-Host "Flipr $Version ($Runtime)" -ForegroundColor Cyan
+Write-Host "Chango $Version ($Runtime)" -ForegroundColor Cyan
 
 if (Test-Path $publish) { Remove-Item $publish -Recurse -Force }
 New-Item -ItemType Directory -Force $artifacts | Out-Null
@@ -35,12 +35,12 @@ Write-Host "> Right-click menu and CorelDRAW reader (C++)"
 
 if (-not $SkipTests) {
     Write-Host "> Tests"
-    dotnet test (Join-Path $root "tests\Flipr.Tests") -c Release --nologo
+    dotnet test (Join-Path $root "tests\Chango.Tests") -c Release --nologo
     if ($LASTEXITCODE -ne 0) { throw "Tests failed" }
 }
 
 Write-Host "> Publish (self-contained, single file)"
-dotnet publish (Join-Path $root "src\Flipr.App\Flipr.App.csproj") -c Release -r $Runtime --self-contained true `
+dotnet publish (Join-Path $root "src\Chango.App\Chango.App.csproj") -c Release -r $Runtime --self-contained true `
     -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true `
     -p:DebugType=none -p:Version=$Version -o $publish --nologo
 if ($LASTEXITCODE -ne 0) { throw "Publish failed" }
@@ -49,12 +49,13 @@ Copy-Item (Join-Path $root "LICENSE") (Join-Path $publish "LICENSE.txt")
 Copy-Item (Join-Path $root "THIRD-PARTY-NOTICES.md") (Join-Path $publish "THIRD-PARTY-NOTICES.md")
 
 # A new name per version: File Explorer keeps the loaded DLL open, and updates must never need to replace it.
-Copy-Item (Join-Path $root "artifacts\shell\FliprShell.dll") (Join-Path $publish "FliprShell-$(($Version -split '-')[0]).dll")
-Copy-Item (Join-Path $root "artifacts\cdr\FliprCdr.exe") $publish
-Copy-Item (Join-Path $root "artifacts\cdr\licenses") (Join-Path $publish "licenses") -Recurse
+Copy-Item (Join-Path $root "artifacts\shell\ChangoShell.dll") (Join-Path $publish "ChangoShell-$(($Version -split '-')[0]).dll")
+Copy-Item (Join-Path $root "artifacts\cdr\ChangoCdr.exe") $publish
+Copy-Item (Join-Path $root "licenses") (Join-Path $publish "licenses") -Recurse            # third-party licence texts
+Copy-Item (Join-Path $root "artifacts\cdr\licenses\*") (Join-Path $publish "licenses") -Recurse -Force # and the CorelDRAW reader's
 
 Write-Host "> Portable zip"
-$zip = Join-Path $artifacts "Flipr-$Version-$Runtime-portable.zip"
+$zip = Join-Path $artifacts "Chango-$Version-$Runtime-portable.zip"
 if (Test-Path $zip) { Remove-Item $zip -Force }
 Compress-Archive -Path (Join-Path $publish "*") -DestinationPath $zip
 
@@ -65,17 +66,17 @@ if (-not $SkipInstaller) {
         Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
     if (-not $iscc) { throw "Inno Setup 6 not found. Install it (winget install JRSoftware.InnoSetup) or set `$env:ISCC." }
     & $iscc /Q "/DAppVersion=$Version" "/DNumericVersion=$numeric" "/DSourceDir=$publish" "/DOutputDir=$artifacts" `
-        (Join-Path $root "build\installer\Flipr.iss")
+        (Join-Path $root "build\installer\Chango.iss")
     if ($LASTEXITCODE -ne 0) { throw "Installer build failed" }
-    $outputs += Join-Path $artifacts "Flipr-$Version-$Runtime-setup.exe"
+    $outputs += Join-Path $artifacts "Chango-$Version-$Runtime-setup.exe"
 }
 
-# Stable names for one-click download links (README -> releases/download/<tag>/Flipr-Setup.exe)
-Copy-Item $zip (Join-Path $artifacts "Flipr-Portable.zip") -Force
-$outputs += Join-Path $artifacts "Flipr-Portable.zip"
+# Stable names for one-click download links (README -> releases/download/<tag>/Chango-Setup.exe)
+Copy-Item $zip (Join-Path $artifacts "Chango-Portable.zip") -Force
+$outputs += Join-Path $artifacts "Chango-Portable.zip"
 if (-not $SkipInstaller) {
-    Copy-Item (Join-Path $artifacts "Flipr-$Version-$Runtime-setup.exe") (Join-Path $artifacts "Flipr-Setup.exe") -Force
-    $outputs += Join-Path $artifacts "Flipr-Setup.exe"
+    Copy-Item (Join-Path $artifacts "Chango-$Version-$Runtime-setup.exe") (Join-Path $artifacts "Chango-Setup.exe") -Force
+    $outputs += Join-Path $artifacts "Chango-Setup.exe"
 }
 
 Write-Host "> Checksums"

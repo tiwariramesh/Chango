@@ -42,18 +42,18 @@
 
 1. Run the remaining feasibility tests on the production build → **formal GO**.
 2. Fallback C hotkey + full keyboard navigation of the wheel (accessibility).
-3. `Flipr.Worker` process isolation + Job Objects.
+3. `Chango.Worker` process isolation + Job Objects.
 4. Magick.NET engine (licence review first): WebP, HEIC, AVIF, auto-orient; resize, compress and strip-metadata tools.
 5. `.lnk` target resolution; memory profiling.
 6. Then M3: the **crop editor** with multi-image and Apply to All, as in the reference video.
 
 ## 4. Manual smoke test for the product owner (~10 minutes)
 
-Install `artifacts/Flipr-0.1.0-alpha-win-x64-setup.exe` (or run the portable exe). Keep `C:\OrbitTest` from the probe run.
+Install `artifacts/Chango-0.1.0-alpha-win-x64-setup.exe` (or run the portable exe). Keep `C:\OrbitTest` from the probe run.
 
 | # | Do | Expect |
 |---|---|---|
-| S1 | Install, leave "Start Flipr now" ticked | The welcome guide opens; the Flipr icon is in the notification area (it may be in the overflow ^) |
+| S1 | Install, leave "Start Chango now" ticked | The welcome guide opens; the Chango icon is in the notification area (it may be in the overflow ^) |
 | S2 | Finish the guide. Drag `a.jpg`, tap Shift, release on **PNG** | The frosted wheel blooms at the pointer; the drag tooltip says "Convert to PNG"; a toast "Saved a (N).png"; **Show** opens Explorer on it |
 | S3 | Drag 3 images, tap Shift ×2 (Tools), release on **Rotate right** | Hub says "3 files"; toast shows progress, then "3 files saved" |
 | S4 | Drag `c.pdf`, tap Shift, then tap twice more, release on **Copy path** | Convert shows "No conversions yet · Tap Shift for more"; Actions works; toast "Copy path" |

@@ -1,8 +1,8 @@
-# Microsoft Store submission: Flipr
+# Microsoft Store submission: Chango
 
-Everything to paste into Partner Center, section by section. Make the package with `./build/store/package-store.ps1` and the artwork with `Flipr.exe --render-store <folder>`.
+Everything to paste into Partner Center, section by section. Make the package with `./build/store/package-store.ps1` and the artwork with `Chango.exe --render-store <folder>`.
 
-Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview> → **Flipr** → **Start your submission**.
+Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview> → **Chango** → **Start your submission**.
 
 ---
 
@@ -22,9 +22,9 @@ Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview
 |---|---|
 | Category | **Productivity** |
 | Subcategory | (none) |
-| Privacy policy URL | `{PRIVACY_POLICY_URL}` (host docs/PRIVACY.md where it has a public address) |
-| Website | `{WEBSITE_URL}` |
-| Support contact info | `{SUPPORT_CONTACT}` |
+| Privacy policy URL | `https://github.com/tiwariramesh/Chango/blob/main/docs/PRIVACY.md` (docs/PRIVACY.md in the public repository) |
+| Website | `https://github.com/tiwariramesh/Chango` |
+| Support contact info | `ramestiwarii@gmail.com` |
 | Does this product access, collect, or transmit personal information? | **No** |
 | Product declarations | Leave all unticked, **except** "This app has been tested to meet accessibility guidelines" (leave unticked too, unless you've tested it). |
 | System requirements | Minimum: **Keyboard**, **Mouse**. Memory 4 GB. Architecture **x64**. |
@@ -36,7 +36,7 @@ Choose **"Utility, productivity, communication or other"** as the app type, then
 | Question | Answer |
 |---|---|
 | Violence, fear, sexuality, language, drugs, gambling | No to all |
-| Can users interact or exchange content with other users? | **No** (Share hands the file to Windows' own Share window; Flipr has no messaging or accounts) |
+| Can users interact or exchange content with other users? | **No** (Share hands the file to Windows' own Share window; Chango has no messaging or accounts) |
 | Does the app share the user's current physical location with other users? | **No** |
 | Does the app allow purchases of digital goods? | **No** |
 | Does the app contain unrestricted internet access (a browser)? | **No** |
@@ -45,11 +45,11 @@ Expected result: **3+ / Everyone**.
 
 ## 4. Packages
 
-Upload `artifacts\store\Flipr-<version>-Store.msix`. Partner Center checks it. The identity must match exactly (already set in `build/store/AppxManifest.xml`):
+Upload `artifacts\store\Chango-<version>-Store.msix`. Partner Center checks it. The identity must match exactly (already set in `build/store/AppxManifest.xml`):
 
 - Name: `{IDENTITY_NAME}` (Partner Center → Product identity → Package/Identity/Name)
 - Publisher: `{PUBLISHER_ID}` (Package/Identity/Publisher, starts with `CN=`)
-- Publisher display name: `{PUBLISHER_DISPLAY_NAME}`
+- Publisher display name: `Ramesh Tiwari`
 
 Device families: tick **Windows 10/11 Desktop** only.
 
@@ -58,9 +58,9 @@ Device families: tick **Windows 10/11 Desktop** only.
 ### Description
 
 ```
-Flip any file into the format you need, without opening an app.
+Change any file into the format you need, without opening an app.
 
-Drag a file in File Explorer, on the desktop or in VS Code, tap Shift, and the Flipr wheel opens under your pointer. Let go on a format and the new file lands right beside the original. Your original is never changed and nothing is uploaded: everything happens on your PC.
+Drag a file in File Explorer, on the desktop or in VS Code, tap Shift, and the Chango wheel opens under your pointer. Let go on a format and the new file lands right beside the original. Your original is never changed and nothing is uploaded: everything happens on your PC.
 
 DOCUMENTS AND PDF
 • PDF to Word, PowerPoint (a slide per page), Excel (tables rebuilt as real cells), text or Markdown.
@@ -82,21 +82,21 @@ TOOLS AND ACTIONS
 • Copy or move to a folder, share, float files on a shelf, set a wallpaper.
 
 YOUR WAY
-• Tap Shift again to flip between the Convert, Tools and Actions wheels.
+• Tap Shift again to switch between the Convert, Tools and Actions wheels.
 • Rather click? Select files and press Ctrl + Alt + Space.
 • Hide the slices you never use and put favourites first.
 • A short tour with a hands-on practice gets you going in a minute.
 
 PRIVATE BY DESIGN
-No account, no ads, no tracking, no telemetry. Flipr works offline and only touches the files you choose.
+No account, no ads, no tracking, no telemetry. Chango works offline and only touches the files you choose.
 
-Free and open source (MIT): {WEBSITE_URL}
+Free and open source (MIT): https://github.com/tiwariramesh/Chango
 ```
 
 ### What's new in this version
 
 ```
-Flipr 1.0: PDF to Word, PowerPoint, Excel, text and Markdown; Word, Markdown, spreadsheet and slide conversions; subtitles; MKV, WebM, MOV, AVI, OGG, Opus and AIFF with FFmpeg; 7Z and RAR archives; and a brand-new look.
+Chango 1.0: PDF to Word, PowerPoint, Excel, text and Markdown; Word, Markdown, spreadsheet and slide conversions; subtitles; MKV, WebM, MOV, AVI, OGG, Opus and AIFF with FFmpeg; 7Z and RAR archives; and a brand-new look.
 ```
 
 ### Product features (one per box, up to 20)
@@ -123,7 +123,7 @@ Light and dark themes
 
 Upload in this order, from the art folder. Use the light set; the dark set can replace it if you prefer:
 
-1. `screenshot-01-convert.png`: Flip files into any format.
+1. `screenshot-01-convert.png`: Change files into any format.
 2. `screenshot-02-result.png`: The new file lands right beside the old one.
 3. `screenshot-03-tools.png`: More choices, one + away.
 4. `screenshot-07-editor.png`: Quick edits, built in.
@@ -158,11 +158,11 @@ compress images
 
 | Field | Value |
 |---|---|
-| Short title | Flipr |
-| Short description | Flip files into PDF, Word, Excel, JPG, MP3 and more. Drag, tap Shift, let go. |
-| Copyright and trademark info | © 2026 {PUBLISHER_DISPLAY_NAME}. Includes OrbitDrop © 2026 Mohammed Essam (MIT). |
-| Additional license terms | MIT License: {WEBSITE_URL}/blob/main/LICENSE |
-| Developed by | {PUBLISHER_DISPLAY_NAME} |
+| Short title | Chango |
+| Short description | Change files into PDF, Word, Excel, JPG, MP3 and more. Drag, tap Shift, let go. |
+| Copyright and trademark info | © 2026 Ramesh Tiwari. Includes OrbitDrop © 2026 Mohammed Essam (MIT). |
+| Additional license terms | MIT License: https://github.com/tiwariramesh/Chango/blob/main/LICENSE |
+| Developed by | Ramesh Tiwari |
 
 ## 6. Submission options
 
@@ -171,7 +171,7 @@ compress images
 Partner Center asks why the app uses **runFullTrust**. Paste:
 
 ```
-Flipr is a classic Win32 desktop app (WPF, .NET) packaged as MSIX. It needs full trust to:
+Chango is a classic Win32 desktop app (WPF, .NET) packaged as MSIX. It needs full trust to:
 1. Notice the gesture system-wide: while the user drags files in File Explorer or on the desktop, it watches the mouse button (a low-level mouse hook) and the Shift key, then shows its wheel as a top-most window at the pointer, over other apps.
 2. Register a global keyboard shortcut (Ctrl + Alt + Space) and read the current File Explorer selection.
 3. Read the files the user chooses and write the results next to them, in any folder (the original is never changed).
@@ -181,10 +181,10 @@ No input is recorded, stored or sent anywhere; the app makes no network requests
 ### Notes for certification
 
 ```
-How to test: after installing, Flipr opens its guide and sits in the notification area (system tray).
+How to test: after installing, Chango opens its guide and sits in the notification area (system tray).
 1. In File Explorer, start dragging any image (keep holding the mouse button), tap Shift once, move onto "JPG" and let go. A JPG copy appears next to the original.
 2. Or select a file and press Ctrl + Alt + Space, then click an option.
-3. Settings: click the Flipr icon in the notification area → Settings.
+3. Settings: click the Chango icon in the notification area → Settings.
 No account or sign-in is needed.
 ```
 

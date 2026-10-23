@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(OrbitWindowsTfm)</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Chango</AssemblyName>
+    <RootNamespace>Chango.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\Chango.UI\Assets\chango.ico</ApplicationIcon>
+    <Description>Chango: convert, edit and manage files without opening an app.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Chango.Core/Chango.Core.csproj" />
+    <ProjectReference Include="../Chango.Infrastructure/Chango.Infrastructure.csproj" />
+    <ProjectReference Include="../Chango.Jobs/Chango.Jobs.csproj" />
+    <ProjectReference Include="../Chango.Conversion/Chango.Conversion.csproj" />
+    <ProjectReference Include="../Chango.Tools/Chango.Tools.csproj" />
+    <ProjectReference Include="../Chango.Windows/Chango.Windows.csproj" />
+    <ProjectReference Include="../Chango.UI/Chango.UI.csproj" />
+  </ItemGroup>
+  <!-- SkiaSharp and HarfBuzzSharp ship native debug symbols (~100 MB) next to their DLLs; users never need them. -->
+  <Target Name="DropNativeDebugSymbols" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)" Condition="'%(Extension)' == '.pdb'" />
+    </ItemGroup>
+  </Target>
+</Project>

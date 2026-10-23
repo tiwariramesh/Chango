@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Microsoft Store (MSIX) manifest. Identity values come from Partner Center → Product identity and must match it
-  exactly: replace {IDENTITY_NAME}, {PUBLISHER_ID} and {PUBLISHER_DISPLAY_NAME} with yours (package-store.ps1
+  exactly: replace {IDENTITY_NAME} and {PUBLISHER_ID} with the values Partner Center shows (package-store.ps1
   refuses to build until they are). {VERSION} is filled in by build/store/package-store.ps1 (Store versions end in .0).
 -->
 <Package
@@ -21,10 +21,10 @@
     ProcessorArchitecture="x64" />
 
   <Properties>
-    <DisplayName>Flipr</DisplayName>
-    <PublisherDisplayName>{PUBLISHER_DISPLAY_NAME}</PublisherDisplayName>
+    <DisplayName>Chango</DisplayName>
+    <PublisherDisplayName>Ramesh Tiwari</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
-    <Description>Drag a file, tap Shift and flip it into PDF, Word, Excel, JPG, MP3 and more, right where it is.</Description>
+    <Description>Drag a file, tap Shift and change it into PDF, Word, Excel, JPG, MP3 and more, right where it is.</Description>
   </Properties>
 
   <Dependencies>
@@ -36,36 +36,36 @@
   </Resources>
 
   <Applications>
-    <Application Id="Flipr" Executable="Flipr.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="Chango" Executable="Chango.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-        DisplayName="Flipr"
-        Description="Flip files into the format you need, right where they are."
+        DisplayName="Chango"
+        Description="Change files into the format you need, right where they are."
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Flipr" />
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Chango" />
       </uap:VisualElements>
       <Extensions>
-        <!-- "Start Flipr when I sign in" (Settings → General); off until the user turns it on. -->
-        <desktop:Extension Category="windows.startupTask" Executable="Flipr.exe" EntryPoint="Windows.FullTrustApplication">
-          <desktop:StartupTask TaskId="FliprStartup" Enabled="false" DisplayName="Flipr" />
+        <!-- "Start Chango when I sign in" (Settings → General); off until the user turns it on. -->
+        <desktop:Extension Category="windows.startupTask" Executable="Chango.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="ChangoStartup" Enabled="false" DisplayName="Chango" />
         </desktop:Extension>
-        <!-- "Flipr" in File Explorer's right-click menu (Windows 11's main menu), for files and folders. The entry
-             is FliprShell.dll (src/Flipr.ShellMenu): it only hands the chosen paths to Flipr. -->
+        <!-- "Chango" in File Explorer's right-click menu (Windows 11's main menu), for files and folders. The entry
+             is ChangoShell.dll (src/Chango.ShellMenu): it only hands the chosen paths to Chango. -->
         <desktop4:Extension Category="windows.fileExplorerContextMenus">
           <desktop4:FileExplorerContextMenus>
             <desktop5:ItemType Type="*">
-              <desktop5:Verb Id="Flipr" Clsid="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" />
+              <desktop5:Verb Id="Chango" Clsid="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" />
             </desktop5:ItemType>
             <desktop5:ItemType Type="Directory">
-              <desktop5:Verb Id="Flipr" Clsid="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" />
+              <desktop5:Verb Id="Chango" Clsid="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" />
             </desktop5:ItemType>
           </desktop4:FileExplorerContextMenus>
         </desktop4:Extension>
         <com:Extension Category="windows.comServer">
           <com:ComServer>
-            <com:SurrogateServer DisplayName="Flipr right-click menu">
-              <com:Class Id="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" Path="FliprShell.dll" ThreadingModel="STA" />
+            <com:SurrogateServer DisplayName="Chango right-click menu">
+              <com:Class Id="29BADCB7-5BF2-4D63-84F8-67D64C5194F5" Path="ChangoShell.dll" ThreadingModel="STA" />
             </com:SurrogateServer>
           </com:ComServer>
         </com:Extension>

@@ -82,7 +82,7 @@ public static class SelfTest
             try { SafeOutput.WriteBeside(P("a.jpg"), ".png", "x", s => s.WriteByte(1), _ => "forced validation failure"); }
             catch (IOException) { threw = true; }
             Check(threw && Directory.GetFiles(dir).Length == before, "Failed validation → exception, no output, no temp file");
-            Check(!SafeOutput.LeftoverTemps(dir).Any(), "No leftover .flipr-*.tmp files");
+            Check(!SafeOutput.LeftoverTemps(dir).Any(), "No leftover .chango-*.tmp files");
 
             // --- originals untouched ---
             bool intact = originals.All(kv => File.Exists(kv.Key) && SafeOutput.Sha256(kv.Key) == kv.Value);

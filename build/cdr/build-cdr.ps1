@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-  Builds FliprCdr.exe, Flipr's built-in CorelDRAW reader (src/Flipr.CdrReader), x64.
+  Builds ChangoCdr.exe, Chango's built-in CorelDRAW reader (src/Chango.CdrReader), x64.
 .DESCRIPTION
   Downloads the exact upstream source releases below (each checked against its SHA-256, so the build is always the
   same code), and compiles them with the reader into one self-contained exe (static C runtime; ICU comes from
-  Windows). Nothing is installed. Sources are cached in artifacts\cdr-src. Output: artifacts\cdr\FliprCdr.exe
+  Windows). Nothing is installed. Sources are cached in artifacts\cdr-src. Output: artifacts\cdr\ChangoCdr.exe
 
   libcdr 0.1.9, librevenge 0.0.6  MPL 2.0          The Document Foundation (librevenge is used under its MPL option)
   lcms2 2.16                      MIT              Marti Maria
@@ -49,7 +49,7 @@ $env:PATH = "$installer;$env:PATH"
 
 $cdr = Join-Path $cache 'libcdr-0.1.9'; $rvng = Join-Path $cache 'librevenge-0.0.6'
 $lcms = Join-Path $cache 'lcms2-2.16'; $zlib = Join-Path $cache 'zlib-1.3.1'; $boost = Join-Path $cache 'boost_1_86_0'
-$src = Join-Path $root 'src\Flipr.CdrReader'
+$src = Join-Path $root 'src\Chango.CdrReader'
 $obj = Join-Path $OutDir 'obj'
 if (Test-Path $obj) { Remove-Item $obj -Recurse -Force }
 New-Item -ItemType Directory -Force $obj | Out-Null
@@ -57,7 +57,7 @@ New-Item -ItemType Directory -Force $obj | Out-Null
 # librevenge's "folder as a document" stream (POSIX-only, and never used for drawings) is left out.
 $cpp = @(Get-ChildItem (Join-Path $cdr 'src\lib') -Filter *.cpp) +
     @(Get-ChildItem (Join-Path $rvng 'src\lib') -Filter *.cpp | Where-Object Name -ne 'RVNGDirectoryStream.cpp') +
-    @(Get-Item (Join-Path $src 'FliprCdr.cpp'))
+    @(Get-Item (Join-Path $src 'ChangoCdr.cpp'))
 $c = @(Get-ChildItem (Join-Path $lcms 'src') -Filter *.c) + @(Get-ChildItem $zlib -Filter *.c)
 $includes = @("$src\icu-shim", "$cdr\inc", "$cdr\src\lib", "$rvng\inc", "$rvng\src\lib", "$lcms\include", $zlib, $boost) | ForEach-Object { "/I""$_""" }
 $defines = '/DWIN32 /D_WINDOWS /DNDEBUG /DNOMINMAX /D_USE_MATH_DEFINES /DBOOST_ALL_NO_LIB /D_CRT_SECURE_NO_WARNINGS /D_CRT_NONSTDC_NO_DEPRECATE /D_SCL_SECURE_NO_WARNINGS'
@@ -72,7 +72,7 @@ Write-Host "  compiling $($cpp.Count + $c.Count) files"
 cmd /c """$vcvars"" >nul && cl @""$cRsp"" >""$obj\c.log"" 2>&1 && cl @""$cppRsp"" >""$obj\cpp.log"" 2>&1"
 if ($LASTEXITCODE -ne 0) { Get-Content "$obj\c.log", "$obj\cpp.log" -ErrorAction SilentlyContinue | Select-String 'error' | Select-Object -First 20 | ForEach-Object { Write-Host $_ }; throw 'Compiling the CorelDRAW reader failed.' }
 
-$exe = Join-Path $OutDir 'FliprCdr.exe'
+$exe = Join-Path $OutDir 'ChangoCdr.exe'
 $objs = Get-ChildItem $obj -Filter *.obj | ForEach-Object { """$($_.FullName)""" }
 Set-Content $linkRsp -Encoding ASCII -Value ("/nologo /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /OUT:""$exe"" " + ($objs -join ' ') + ' icu.lib')
 cmd /c """$vcvars"" >nul && link @""$linkRsp"" >""$obj\link.log"" 2>&1"

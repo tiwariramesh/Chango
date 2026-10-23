@@ -1,4 +1,4 @@
-# Flipr — Initial Assessment (Steps 1–2 of the Master Brief)
+# Chango — Initial Assessment (Steps 1–2 of the Master Brief)
 
 | | |
 |---|---|
@@ -13,13 +13,13 @@ This document is the "first required agent response" from section 15 of the brie
 
 ## 1. Understanding of the product
 
-Flipr is a **tray-resident Windows utility whose whole product is one gesture**:
+Chango is a **tray-resident Windows utility whose whole product is one gesture**:
 
 > Start dragging files in Explorer or on the desktop → press a key → a radial menu blooms under the cursor → release over an option → the result appears next to the original.
 
 Things that follow from that:
 
-- **The interaction is the product.** A converter with 300 formats behind a normal window is the existing [File Converter](https://github.com/Tichau/FileConverter), not Flipr. Format count is secondary.
+- **The interaction is the product.** A converter with 300 formats behind a normal window is the existing [File Converter](https://github.com/Tichau/FileConverter), not Chango. Format count is secondary.
 - **The UI is out of the way by default.** There's no main window. The surfaces are the wheel, a progress pill or toast, small parameter editors (crop, compress), settings, and the tray menu.
 - **Trust is a feature.** Originals are never touched. Nothing overwrites anything. Nothing leaves the machine. Failures are reported per file.
 - **Extensibility is structural.** Adding a converter or tool means adding a provider. It never means editing the wheel or the core.
@@ -67,7 +67,7 @@ I extracted the 19-second demo at 2 fps and 10 fps and analysed it frame by fram
 - Hover state = solid accent fill with white label. Every other segment stays frosted.
 - The diameter is about 2.5× a desktop icon (≈ 260 logical px on the Retina capture).
 
-### 2.3 What Flipr should do differently (originality, not copying)
+### 2.3 What Chango should do differently (originality, not copying)
 
 - **Accent:** default to the **Windows accent colour** (user-configurable), not Tangerine's orange.
 - **Icons, illustrations, motion curves, logo and toasts** are designed fresh. Only the *interaction pattern* is shared.
@@ -83,7 +83,7 @@ The brief is right that a background process **cannot read another process's in-
 
 During `DoDragDrop`, OLE hit-tests the window under the cursor on every mouse move or key-state change. If that window is registered with `RegisterDragDrop`, OLE marshals Explorer's `IDataObject` to it **across processes** and calls `DragEnter` / `DragOver` / `Drop`.
 
-So Flipr doesn't *intercept* the drag. It **becomes the drop target** by putting a registered, topmost window under the cursor at the right moment. This is the documented, supported mechanism. It needs no injection, no hooks into Explorer and no admin rights.
+So Chango doesn't *intercept* the drag. It **becomes the drop target** by putting a registered, topmost window under the cursor at the right moment. This is the documented, supported mechanism. It needs no injection, no hooks into Explorer and no admin rights.
 
 That reframes the risk into four narrower questions, which the PoC answers:
 
@@ -115,9 +115,9 @@ DragLeave → keep the wheel anchored until the drag ends (user may come back)
 WinEvent: drag end / LButton up / Escape → dismiss
 ```
 
-**Why no global keyboard hook:** a `WH_KEYBOARD_LL` hook is what keyloggers use. AV and anti-cheat software flag it, and Windows silently removes it if the UI thread stalls. Polling two key states **only during an active drag** costs nothing, and it gives us a strong privacy statement: *Flipr only looks at modifier keys while you're dragging a file.* If H-3(a/b) fail, the fallback is a `WH_MOUSE_LL` hook, which is still no keyboard hook.
+**Why no global keyboard hook:** a `WH_KEYBOARD_LL` hook is what keyloggers use. AV and anti-cheat software flag it, and Windows silently removes it if the UI thread stalls. Polling two key states **only during an active drag** costs nothing, and it gives us a strong privacy statement: *Chango only looks at modifier keys while you're dragging a file.* If H-3(a/b) fail, the fallback is a `WH_MOUSE_LL` hook, which is still no keyboard hook.
 
-**Must-not-run-elevated:** UIPI blocks drag-and-drop from a medium-integrity Explorer into a high-integrity process. Flipr must run as the normal user. This aligns with the brief's least-privilege rule.
+**Must-not-run-elevated:** UIPI blocks drag-and-drop from a medium-integrity Explorer into a high-integrity process. Chango must run as the normal user. This aligns with the brief's least-privilege rule.
 
 ### 3.3 Known Windows constraints (documented up front)
 
@@ -149,26 +149,26 @@ DLL injection into Explorer, hooking `DoDragDrop`, `SetWindowsHookEx` with in-pr
 
 ```
                     ┌──────────────────┐
-                    │  Flipr.App   │  composition root, tray, lifecycle, DI, single-instance
+                    │  Chango.App   │  composition root, tray, lifecycle, DI, single-instance
                     └──┬──┬──┬──┬──┬───┘
         ┌──────────────┘  │  │  │  └──────────────┐
         ▼                 ▼  │  ▼                 ▼
- Flipr.UI   Flipr.Windows  Flipr.Jobs  Flipr.Infrastructure
+ Chango.UI   Chango.Windows  Chango.Jobs  Chango.Infrastructure
  (wheel, editors, (drag detection,  (queue, progress, (settings, logging,
   toasts, settings) IDropTarget,     cancellation,     safe file output,
         │          DPI, hotkey,      worker processes)  localization)
         │          Explorer selection)   │                 │
         └────────────┬───────────┴───────┴─────────────────┘
                      ▼
-              Flipr.Core     ← no dependencies: FileSet, FileKind, OperationDescriptor,
+              Chango.Core     ← no dependencies: FileSet, FileKind, OperationDescriptor,
                      ▲              IOperationProvider, ICapabilityRegistry, OutputPlan, Result types
         ┌────────────┴────────────┐
- Flipr.Conversion      Flipr.Tools      ← providers (plugins); reference Core only
+ Chango.Conversion      Chango.Tools      ← providers (plugins); reference Core only
  (engines: Magick, FFmpeg,  (crop, compress, resize,
   PdfSharp, WIC, LibreOffice…) merge, split, actions)
                      │
-              Flipr.Worker   ← separate process that actually runs engines (crash isolation)
-              Flipr.Tests
+              Chango.Worker   ← separate process that actually runs engines (crash isolation)
+              Chango.Tests
 ```
 
 Rules:
@@ -215,13 +215,13 @@ OLE Drop ─▶ [App] OperationRequest ─▶ (EditorId? [UI] editor ─▶ para
 ### 4.4 Reliability and safety design
 
 - **Output pipeline:**
-  1. Write `.flipr-<guid>.tmp` (hidden) **in the destination folder** (same volume).
+  1. Write `.chango-<guid>.tmp` (hidden) **in the destination folder** (same volume).
   2. Validate the output: non-empty, decodes or probes correctly, and page or frame count is plausible.
   3. `MoveFileEx` **without** `REPLACE_EXISTING` to the collision-safe name. On a race, retry with the next ` (n)` suffix.
 
   A failure at any step deletes the temp file, so no partial outputs are ever visible.
-- **Crash isolation:** native codecs parsing untrusted files run in `Flipr.Worker.exe`, not in the tray process. A malformed HEIC can't take down Flipr.
-- **No orphaned processes:** every worker and ffmpeg child is placed in a **Win32 Job Object** with `KILL_ON_JOB_CLOSE`. Cancel kills the whole tree, and so does a crash of Flipr.
+- **Crash isolation:** native codecs parsing untrusted files run in `Chango.Worker.exe`, not in the tray process. A malformed HEIC can't take down Chango.
+- **No orphaned processes:** every worker and ffmpeg child is placed in a **Win32 Job Object** with `KILL_ON_JOB_CLOSE`. Cancel kills the whole tree, and so does a crash of Chango.
 - **Concurrency:** a bounded channel with a default of `min(cores/2, 4)`. Video jobs are serialised by default.
 - **Input validation:** resolve and canonicalise every path, reject device paths and ADS (`:`), and pass arguments with `ProcessStartInfo.ArgumentList` (never string concatenation). Archive extraction guards against zip-slip and symlinks.
 - **UI thread** only renders. The wheel never waits on I/O. `DragEnter` classifies by extension and does cheap header sniffing only if needed.
@@ -264,7 +264,7 @@ Setup: `C:\OrbitTest\` containing `a.jpg`, `b.png`, `c.pdf`, `ü nicode 名前.j
 | T5 | Open the wheel, move off it, release over empty space in the **same** folder *(corrected: releasing on the desktop from another folder is a normal Explorer move; see feasibility report F4)* | Nothing created, wheel dismissed, file *not* moved |
 | T6 | Open the wheel, move off it and back, release on JPG | Conversion succeeds (wheel stayed anchored) |
 | T7 | Tap Shift while over another Explorer folder, open the wheel, release on the wheel | Source **not moved** despite Shift = "move" semantics |
-| T8 | Drag *without* tapping Shift into another folder | Normal Explorer behaviour, Flipr invisible |
+| T8 | Drag *without* tapping Shift into another folder | Normal Explorer behaviour, Chango invisible |
 | T9 | Drag text from a browser or VS Code and tap Shift | Wheel either doesn't appear or shows "no file operations" and dismisses safely |
 | T10 | Drag image visibility over the wheel, for variants A and B | Record which variant keeps the image above the wheel |
 | T11 | Repeat T1 at **150%** display scaling (and on a 2nd monitor if available) | Wheel centred on the cursor and correctly sized, hit-testing accurate |
@@ -287,7 +287,7 @@ You record a short screen capture of T1, T3 and T4. That's the brief's "real scr
 | No reliable drag-start signal (H-3) | Medium | High | Three candidate signals tested; mouse-hook heuristic as backup; Fallback A |
 | Drag image hidden behind the wheel (H-5) | Medium | Medium (looks wrong) | `IDropTargetHelper` and z-order insertion |
 | Shift/Ctrl semantics confuse users | Medium | Medium | Always `COPY` on our target; configurable trigger; Shift-tap cycles modes |
-| Flipr launched elevated → drops blocked by UIPI | Low | High | `asInvoker` manifest; detect and warn |
+| Chango launched elevated → drops blocked by UIPI | Low | High | `asInvoker` manifest; detect and warn |
 | AV flags hooks or behaviour | Low–Med | Medium | No keyboard hook; signed builds; transparent README |
 | Windows 11 updates change Explorer drag behaviour | Low | High | Only documented OLE contracts used; probe kept as a regression tool |
 | Native codec crashes on malicious files | Medium | Medium | Out-of-process worker, Job Objects, timeouts |
@@ -313,7 +313,7 @@ Strategy: **the core distribution contains only MIT, Apache, BSD and LGPL (dynam
 
 ### 6.3 Other
 
-- **Name / trademark:** "Flipr" still needs a USPTO/EUIPO search plus GitHub, domain and winget-ID checks. The video file `m2-res_1080p.mp4` is Tangerine's material: **it must never be committed** (excluded in `.gitignore`).
+- **Name / trademark:** "Chango" still needs a USPTO/EUIPO search plus GitHub, domain and winget-ID checks. The video file `m2-res_1080p.mp4` is Tangerine's material: **it must never be committed** (excluded in `.gitignore`).
 - **Code signing:** unsigned builds trigger SmartScreen. Options: **SignPath Foundation** (free for OSS) or **Azure Trusted Signing** (low monthly cost). The decision is needed before v1.0, and also before the Windows 11 top-level context menu (Fallback B) is possible.
 
 ---

@@ -9,7 +9,7 @@ namespace OrbitProbe;
 /// </summary>
 public static class SafeOutput
 {
-    public const string TempPrefix = ".flipr-";
+    public const string TempPrefix = ".chango-";
 
     /// <param name="source">Original file (never opened for writing).</param>
     /// <param name="newExtension">Extension incl. dot; null keeps the source extension.</param>

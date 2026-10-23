@@ -1,6 +1,6 @@
 # Third-party notices
 
-Flipr is MIT-licensed (see `LICENSE`). This file lists everything a **release build** redistributes that isn't Flipr's own code. It's updated whenever a dependency is added; each addition needs a licence review first (see `docs/research/00-initial-assessment.md` §6.2).
+Chango is MIT-licensed (see `LICENSE`). This file lists everything a **release build** redistributes that isn't Chango's own code. It's updated whenever a dependency is added; each addition needs a licence review first (see `docs/research/00-initial-assessment.md` §6.2). The full licence texts are in `licenses/`, which ships next to `Chango.exe`.
 
 ## Redistributed in release builds
 
@@ -14,14 +14,14 @@ Flipr is MIT-licensed (see `LICENSE`). This file lists everything a **release bu
 | Svg.Custom | 4.9.1 | MS-PL (Microsoft Public License), © SVG.NET contributors | The SVG parser Svg.Skia builds on (a build of SVG.NET). Source: https://github.com/svg-net/SVG |
 | ExCSS | 4.3.1 | MIT, © Tyler Brinks | CSS inside SVG files |
 | HarfBuzzSharp, HarfBuzzSharp.NativeAssets.Win32 | 8.3.1.3 | MIT, © Microsoft Corporation (HarfBuzz: MIT, © HarfBuzz contributors) | Text inside SVG files |
-| OrbitDrop | 0.4.4-alpha (commit 15bcafe) | MIT, © 2026 Mohammed Essam | The application Flipr is built from. Source: https://github.com/i3sam/OrbitDrop |
+| OrbitDrop | 0.4.4-alpha (commit 15bcafe) | MIT, © 2026 Mohammed Essam | The application Chango is built from. Source: https://github.com/i3sam/OrbitDrop |
 | PdfPig | 0.1.16 | Apache-2.0, © UglyToad (Eliot Jones) and contributors | Reading a PDF's text layer: PDF to TXT, Markdown and Excel. Source: https://github.com/UglyToad/PdfPig |
 | DocumentFormat.OpenXml (Open XML SDK) | 3.5.1 | MIT, © Microsoft Corporation | Word to Markdown; writing PowerPoint and Excel files from PDFs. Source: https://github.com/dotnet/Open-XML-SDK |
 | Markdig | 1.4.2 | BSD-2-Clause, © Alexandre Mutel | Markdown to HTML, DOCX, PDF and text. Source: https://github.com/xoofx/markdig |
 
-### In FliprCdr.exe (the built-in CorelDRAW reader)
+### In ChangoCdr.exe (the built-in CorelDRAW reader)
 
-Compiled from these unmodified upstream source releases by `build/cdr/build-cdr.ps1`, which pins each archive's SHA-256. Their licence texts ship in the `licenses` folder next to Flipr.
+Compiled from these unmodified upstream source releases by `build/cdr/build-cdr.ps1`, which pins each archive's SHA-256. Their licence texts ship in the `licenses` folder next to Chango.
 
 | Component | Version | Licence | Source |
 |---|---|---|---|
@@ -31,19 +31,19 @@ Compiled from these unmodified upstream source releases by `build/cdr/build-cdr.
 | zlib | 1.3.1 | zlib licence, © Jean-loup Gailly and Mark Adler | https://github.com/madler/zlib/releases/tag/v1.3.1 |
 | Boost (header-only parts) | 1.86.0 | Boost Software License 1.0 | https://archives.boost.io/release/1.86.0/source/boost_1_86_0.tar.bz2 |
 
-The MPL 2.0 covered files are used as published; their source code is available at the links above. The reader's own code is `src/Flipr.CdrReader` in this repository (MIT). Text-encoding support comes from the copy of ICU built into Windows (not redistributed).
+The MPL 2.0 covered files are used as published; their source code is available at the links above. The reader's own code is `src/Chango.CdrReader` in this repository (MIT). Text-encoding support comes from the copy of ICU built into Windows (not redistributed).
 
 ## Used from Windows, not redistributed
 
 - **Windows Imaging Component (WIC):** image decoding and encoding.
 - **Windows Media Foundation:** video and audio transcoding (H.264/AAC, WMV/WMA, MP3, WAV). Codecs come from Windows; HEVC, VP9 and similar depend on the Microsoft Store video extensions the user has installed.
-- **Segoe UI Variable, Segoe Fluent Icons and Segoe MDL2 Assets fonts:** referenced by name and installed with Windows. Flipr doesn't ship these fonts.
+- **Segoe UI Variable, Segoe Fluent Icons and Segoe MDL2 Assets fonts:** referenced by name and installed with Windows. Chango doesn't ship these fonts.
 - **OLE drag-and-drop, Shell and DWM APIs:** documented Windows APIs.
 - **tar.exe (bsdtar / libarchive, BSD-2-Clause):** ships with Windows 10 1803 and later. Used to extract 7Z, RAR, TAR.XZ, TAR.BZ2, CAB and ISO, and to make 7Z and TAR.GZ archives.
 
 ## Used when the user has installed them, not redistributed
 
-- **FFmpeg** (LGPL/GPL, depending on the build the user installs): MKV, WebM, MOV, AVI, OGG, Opus and AIFF, run as a separate program. Flipr doesn't bundle or link it.
+- **FFmpeg** (LGPL/GPL, depending on the build the user installs): MKV, WebM, MOV, AVI, OGG, Opus and AIFF, run as a separate program. Chango doesn't bundle or link it.
 - **Microsoft Office** (Word, Excel, PowerPoint) or **LibreOffice** (MPL 2.0): document layout and conversion, driven through COM or the command line.
 
 ## Development only (not shipped)
@@ -56,8 +56,8 @@ The MPL 2.0 covered files are used as published; their source code is available 
 
 ## Trademarks
 
-CorelDRAW is a trademark of Corel Corporation (Alludo). Microsoft Word, Excel, PowerPoint and Windows are trademarks of Microsoft. Adobe, Illustrator and Photoshop are trademarks of Adobe. Flipr is an independent project: it isn't affiliated with, sponsored or endorsed by any of them, and it mentions their file formats only to say which files it can open.
+CorelDRAW is a trademark of Corel Corporation (Alludo). Microsoft Word, Excel, PowerPoint and Windows are trademarks of Microsoft. Adobe, Illustrator and Photoshop are trademarks of Adobe. Chango is an independent project: it isn't affiliated with, sponsored or endorsed by any of them, and it mentions their file formats only to say which files it can open.
 
 ## Brand assets
 
-The Flipr icon is original work generated from vectors by `tools/IconGen` and covered by this repository's MIT licence. No assets from Tangerine or any other product are used.
+The Chango icon is original work generated from vectors by `tools/IconGen` and covered by this repository's MIT licence. No assets from Tangerine or any other product are used.

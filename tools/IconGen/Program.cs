@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-// Flipr brand mark: a white file card flipping over another, with a curved flip arrow, on a Flip Teal (#0EA5A4)
+// Chango brand mark: a white file card flipping over another, with a curved flip arrow, on a Chango Teal (#0EA5A4)
 // squircle tile. Depth comes from the tile gradient + top sheen + rim light and a soft shadow under the front card.
 // At 16–24 px the mark simplifies (two flat cards, no arrow or lines) so it stays crisp in the notification area.
 
@@ -19,8 +19,8 @@ internal static class Program
             // Profile pictures (Instagram, TikTok, X …): full-bleed, so the round crop shows the mark, not a tile corner.
             string dir = args.Length > 1 ? args[1] : "assets/brand";
             Directory.CreateDirectory(dir);
-            File.WriteAllBytes(Path.Combine(dir, "pfp-flipr.png"), Png(RenderAvatar(1080, glow: false)));
-            File.WriteAllBytes(Path.Combine(dir, "pfp-flipr-glow.png"), Png(RenderAvatar(1080, glow: true)));
+            File.WriteAllBytes(Path.Combine(dir, "pfp-chango.png"), Png(RenderAvatar(1080, glow: false)));
+            File.WriteAllBytes(Path.Combine(dir, "pfp-chango-glow.png"), Png(RenderAvatar(1080, glow: true)));
             Console.WriteLine($"Wrote profile pictures to {Path.GetFullPath(dir)}");
             return 0;
         }
@@ -30,9 +30,9 @@ internal static class Program
 
         int[] icoSizes = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256];
         var pngs = icoSizes.Select(s => (Size: s, Data: Png(Render(s)))).ToList();
-        File.WriteAllBytes(Path.Combine(outDir, "flipr.ico"), Ico(pngs));
+        File.WriteAllBytes(Path.Combine(outDir, "chango.ico"), Ico(pngs));
         foreach (int s in new[] { 32, 64, 256, 512, 1024 })
-            File.WriteAllBytes(Path.Combine(outDir, $"flipr-{s}.png"), Png(Render(s)));
+            File.WriteAllBytes(Path.Combine(outDir, $"chango-{s}.png"), Png(Render(s)));
 
         Console.WriteLine($"Wrote icon set to {Path.GetFullPath(outDir)}");
         return 0;
@@ -96,8 +96,8 @@ internal static class Program
     }
 
     /// <summary>
-    /// The Flipr mark for an <paramref name="s"/>-pixel square: a file card flipping over another (the one behind is
-    /// tilted, mid-turn) with a curved arrow showing the flip. The front card's folded corner is Flip Teal.
+    /// The Chango mark for an <paramref name="s"/>-pixel square: a file card flipping over another (the one behind is
+    /// tilted, mid-turn) with a curved arrow showing the flip. The front card's folded corner is Chango Teal.
     /// </summary>
     private static void DrawMark(DrawingContext dc, double s, bool small)
     {

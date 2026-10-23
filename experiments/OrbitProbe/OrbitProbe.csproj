@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!--
-    Orbit Probe: throwaway feasibility experiment for Flipr (Master Brief, Step 3).
+    Orbit Probe: throwaway feasibility experiment for Chango (Master Brief, Step 3).
     NOT part of the product solution. No third-party dependencies by design.
   -->
   <PropertyGroup>

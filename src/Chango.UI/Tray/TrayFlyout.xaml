@@ -1,0 +1,56 @@
+<Window x:Class="Chango.UI.Tray.TrayFlyout"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" Topmost="True"
+        ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight" Title="Chango menu"
+        UseLayoutRounding="True" FontFamily="{StaticResource Orbit.Font.Text}">
+    <Grid x:Name="Root" Margin="16,12,16,20" Width="268">
+        <Border CornerRadius="14" Background="{DynamicResource Orbit.Surface}">
+            <Border.Effect>
+                <DropShadowEffect x:Name="Shadow" BlurRadius="24" ShadowDepth="8" Direction="270" Opacity="0.14" />
+            </Border.Effect>
+        </Border>
+        <Border CornerRadius="14" Background="{DynamicResource Orbit.Surface}" BorderBrush="{DynamicResource Orbit.Stroke}" BorderThickness="1" Padding="0,6,0,6">
+            <StackPanel>
+                <!-- Header: Chango on its teal band -->
+                <Border Background="{DynamicResource Orbit.AccentSubtle}" CornerRadius="10" Margin="6,0,6,6" Padding="10,10">
+                <DockPanel>
+                    <Image Source="pack://application:,,,/Chango.UI;component/Assets/chango-64.png" Width="36" Height="36" Margin="0,0,12,0" />
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Chango" Style="{StaticResource Orbit.Text.BodyStrong}" />
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse x:Name="StatusDot" Width="7" Height="7" Margin="0,1,6,0" VerticalAlignment="Center" />
+                            <TextBlock x:Name="StatusText" Style="{StaticResource Orbit.Text.Caption}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+                </Border>
+
+                <Button x:Name="PauseButton" Style="{StaticResource Orbit.Button.MenuRow}" Click="OnPause">
+                    <DockPanel><TextBlock x:Name="PauseGlyph" Style="{StaticResource Orbit.Glyph}" Foreground="{DynamicResource Orbit.AccentText}" Width="20" Margin="0,0,12,0" /><TextBlock x:Name="PauseText" Style="{StaticResource Orbit.Text.Body}" VerticalAlignment="Center" /></DockPanel>
+                </Button>
+                <Button Style="{StaticResource Orbit.Button.MenuRow}" Click="OnSettings">
+                    <DockPanel><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE713;" Foreground="{DynamicResource Orbit.AccentText}" Width="20" Margin="0,0,12,0" /><TextBlock Text="Settings" Style="{StaticResource Orbit.Text.Body}" VerticalAlignment="Center" /></DockPanel>
+                </Button>
+                <Button Style="{StaticResource Orbit.Button.MenuRow}" Click="OnHelp">
+                    <DockPanel><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE897;" Foreground="{DynamicResource Orbit.AccentText}" Width="20" Margin="0,0,12,0" /><TextBlock Text="How to use Chango" Style="{StaticResource Orbit.Text.Body}" VerticalAlignment="Center" /></DockPanel>
+                </Button>
+                <Button Style="{StaticResource Orbit.Button.MenuRow}" Click="OnUpdate">
+                    <DockPanel>
+                        <TextBlock x:Name="UpdateGlyph" Style="{StaticResource Orbit.Glyph}" Foreground="{DynamicResource Orbit.AccentText}" Width="20" Margin="0,0,12,0" />
+                        <Ellipse x:Name="UpdateDot" DockPanel.Dock="Right" Width="7" Height="7" Margin="8,0,2,0" VerticalAlignment="Center"
+                                 Fill="{DynamicResource Orbit.Accent}" Visibility="Collapsed" />
+                        <TextBlock x:Name="UpdateText" Style="{StaticResource Orbit.Text.Body}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    </DockPanel>
+                </Button>
+                <Button Style="{StaticResource Orbit.Button.MenuRow}" Click="OnAbout">
+                    <DockPanel><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE946;" Foreground="{DynamicResource Orbit.AccentText}" Width="20" Margin="0,0,12,0" /><TextBlock Text="About" Style="{StaticResource Orbit.Text.Body}" VerticalAlignment="Center" /></DockPanel>
+                </Button>
+                <Border Height="1" Background="{DynamicResource Orbit.Stroke}" Margin="0,4" />
+                <Button Style="{StaticResource Orbit.Button.MenuRow}" Click="OnExit">
+                    <DockPanel><TextBlock Style="{StaticResource Orbit.Glyph}" Text="&#xE7E8;" Foreground="{DynamicResource Orbit.AccentText}" Width="20" Margin="0,0,12,0" /><TextBlock Text="Quit Chango" Style="{StaticResource Orbit.Text.Body}" VerticalAlignment="Center" /></DockPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
