@@ -72,7 +72,11 @@ foreach ($t in 16, 20, 24, 30, 32, 36, 40, 48, 60, 64, 72, 80, 96, 256) {
 $master.Dispose()
 
 Write-Host '> Manifest and resources'
-(Get-Content (Join-Path $PSScriptRoot 'AppxManifest.xml') -Raw).Replace('{VERSION}', $storeVersion) |
+$manifestText = Get-Content (Join-Path $PSScriptRoot 'AppxManifest.xml') -Raw
+if ($manifestText -match '\{(IDENTITY_NAME|PUBLISHER_ID|PUBLISHER_DISPLAY_NAME)\}') {
+    throw "Fill in your Partner Center identity in build/store/AppxManifest.xml first ($($Matches[0]) is still a placeholder)."
+}
+$manifestText.Replace('{VERSION}', $storeVersion) |
     Set-Content (Join-Path $layout 'AppxManifest.xml') -Encoding utf8
 $priconfig = Join-Path $out 'priconfig.xml'
 & $makepri createconfig /cf $priconfig /dq en-US /o | Out-Null

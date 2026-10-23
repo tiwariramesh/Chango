@@ -1,8 +1,8 @@
-# Microsoft Store submission: Flipr - Drag & Convert
+# Microsoft Store submission: Flipr
 
 Everything to paste into Partner Center, section by section. Make the package with `./build/store/package-store.ps1` and the artwork with `Flipr.exe --render-store <folder>`.
 
-Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview> → **Flipr - Drag & Convert** → **Start your submission**.
+Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview> → **Flipr** → **Start your submission**.
 
 ---
 
@@ -22,9 +22,9 @@ Partner Center: <https://partner.microsoft.com/dashboard/apps-and-games/overview
 |---|---|
 | Category | **Productivity** |
 | Subcategory | (none) |
-| Privacy policy URL | `https://github.com/i3sam/Flipr/blob/main/docs/PRIVACY.md` |
-| Website | `https://github.com/i3sam/Flipr` |
-| Support contact info | `https://github.com/i3sam/Flipr/issues` |
+| Privacy policy URL | `{PRIVACY_POLICY_URL}` (host docs/PRIVACY.md where it has a public address) |
+| Website | `{WEBSITE_URL}` |
+| Support contact info | `{SUPPORT_CONTACT}` |
 | Does this product access, collect, or transmit personal information? | **No** |
 | Product declarations | Leave all unticked, **except** "This app has been tested to meet accessibility guidelines" (leave unticked too, unless you've tested it). |
 | System requirements | Minimum: **Keyboard**, **Mouse**. Memory 4 GB. Architecture **x64**. |
@@ -47,9 +47,9 @@ Expected result: **3+ / Everyone**.
 
 Upload `artifacts\store\Flipr-<version>-Store.msix`. Partner Center checks it. The identity must match exactly (already set in `build/store/AppxManifest.xml`):
 
-- Name: `MohammedEssam.Flipr-DragConvert`
-- Publisher: `CN=8E1BBDFF-944B-481D-AB78-42982E4EF6EE`
-- Publisher display name: `Mohammed Essam`
+- Name: `{IDENTITY_NAME}` (Partner Center → Product identity → Package/Identity/Name)
+- Publisher: `{PUBLISHER_ID}` (Package/Identity/Publisher, starts with `CN=`)
+- Publisher display name: `{PUBLISHER_DISPLAY_NAME}`
 
 Device families: tick **Windows 10/11 Desktop** only.
 
@@ -58,68 +58,62 @@ Device families: tick **Windows 10/11 Desktop** only.
 ### Description
 
 ```
-Convert, edit and manage files without opening an app.
+Flip any file into the format you need, without opening an app.
 
-Drag any file in File Explorer, on the desktop or in VS Code, tap Shift, and a wheel of choices opens right under your pointer. Let go on what you want: the result appears next to the original. Your original is never changed, and nothing is ever uploaded. Everything happens on your PC.
+Drag a file in File Explorer, on the desktop or in VS Code, tap Shift, and the Flipr wheel opens under your pointer. Let go on a format and the new file lands right beside the original. Your original is never changed and nothing is uploaded: everything happens on your PC.
 
-CONVERT
-• Images to JPG, PNG, WebP, JFIF, GIF, BMP, TIFF or PDF, including SVG drawings. Also reads HEIC, AVIF, JPEG XL and camera RAW when Windows has the codec.
-• Several images into one PDF, or PDF pages into PNG or JPG.
-• Video to MP4 or WMV; audio to MP3, M4A, WAV, WMA or FLAC; the soundtrack out of a video.
-• Word, Excel and PowerPoint files to PDF, when Microsoft Office or LibreOffice is installed.
-• CorelDRAW (.cdr, .cmx) to PDF, SVG, PNG, JPG, WebP, TIFF or BMP. Built in: nothing else to install.
+DOCUMENTS AND PDF
+• PDF to Word, PowerPoint (a slide per page), Excel (tables rebuilt as real cells), text or Markdown.
+• Word to PDF, text, Markdown, HTML, RTF or ODT. Markdown and text to PDF, Word or HTML.
+• Spreadsheets to PDF, XLSX, CSV, TSV or ODS. Slides to PDF, or to an image per slide.
+• Merge, split, compress and rotate PDFs. Combine images into one PDF.
+(Word, Excel and PowerPoint conversions use Microsoft Office or LibreOffice on your PC. PDF to PowerPoint, Excel, text and Markdown are built in.)
 
-TOOLS
-• A built-in photo editor: crop, adjust brightness, contrast, saturation and warmth, mark up with pen, arrows, boxes and text, and redact.
-• Compress photos to half the size or under 1 MB, 500 KB or 200 KB. Compress videos to 1080p, 720p or 480p.
-• PDF tools: merge several PDFs into one, split into pages, compress, rotate pages.
-• Resize, rotate, flip and grayscale.
-• Copy the text out of an image (offline text recognition).
-• Trim video and audio, join clips, make a GIF from a video, take a snapshot.
-• Normalize quiet recordings, switch audio to mono or stereo.
-• See and edit file details, or remove all metadata or just the GPS location from photos.
+IMAGES, VIDEO AND AUDIO
+• Images to JPG, PNG, WebP, JFIF, GIF, BMP, TIFF or PDF, including SVG; reads HEIC, AVIF, JPEG XL and RAW with Windows' codecs.
+• Video to MP4, WMV or GIF; audio to MP3, M4A, WAV, WMA or FLAC.
+• With the free FFmpeg installed: MKV, WebM, MOV, AVI, OGG, Opus and AIFF too.
+• Subtitles: SRT and VTT both ways, or a plain-text transcript.
 
-ACTIONS
-• Copy to or move to a folder, share, zip or extract, open a terminal here, copy the path or name.
-• Float: park files on a small always-on-top shelf and drag them out later.
-• Set a photo as your wallpaper.
+TOOLS AND ACTIONS
+• Edit photos (crop, adjust, mark up, redact), compress to a target size, resize, rotate, copy text out of images.
+• Trim and join clips, normalize audio, remove metadata or GPS location.
+• Archive as ZIP, 7Z or TAR.GZ; extract ZIP, 7Z, RAR, TAR and more.
+• Copy or move to a folder, share, float files on a shelf, set a wallpaper.
 
-MADE TO FIT YOUR FLOW
-• Tap Shift again to switch between Convert, Tools and Actions.
-• Options with dots open into more choices when you rest on them.
-• No dragging needed: select files and press Ctrl + Alt + Space.
-• Make the wheel yours: hide what you don't use and drag slices into your own order.
-• A guided tour with animations and a hands-on practice shows you everything in a minute.
-• Light and dark themes that follow Windows.
+YOUR WAY
+• Tap Shift again to flip between the Convert, Tools and Actions wheels.
+• Rather click? Select files and press Ctrl + Alt + Space.
+• Hide the slices you never use and put favourites first.
+• A short tour with a hands-on practice gets you going in a minute.
 
 PRIVATE BY DESIGN
 No account, no ads, no tracking, no telemetry. Flipr works offline and only touches the files you choose.
 
-Free and open source (MIT): github.com/i3sam/Flipr
+Free and open source (MIT): {WEBSITE_URL}
 ```
 
 ### What's new in this version
 
 ```
-Flipr 0.4.2: CorelDRAW files convert with nothing else installed (to PDF, SVG, PNG, JPG, WebP, TIFF, BMP). Flipr 0.4: right-click files and choose Flipr; Undo after every conversion (to the Recycle Bin); copy a screenshot or image and press Ctrl + Alt + Space to save or convert it; optional size estimates on the wheel and "last choice first". The wheel itself works exactly as before. Also new recently: SVG, PDF to Word, documents to PDF, WebP and JFIF.
+Flipr 1.0: PDF to Word, PowerPoint, Excel, text and Markdown; Word, Markdown, spreadsheet and slide conversions; subtitles; MKV, WebM, MOV, AVI, OGG, Opus and AIFF with FFmpeg; 7Z and RAR archives; and a brand-new look.
 ```
 
 ### Product features (one per box, up to 20)
 
 ```
-Drag a file, tap Shift, let go on what you want
-Results appear next to the original; the original is never changed
+Drag a file, tap Shift, let go on a format
+The new file lands beside the original; the original is never changed
 Works offline; nothing is uploaded
-Convert images to JPG, PNG, WebP, JFIF, GIF, BMP, TIFF or PDF
+PDF to Word, PowerPoint, Excel, text or Markdown
+Word to PDF, text, Markdown, HTML, RTF or ODT
+Spreadsheets to PDF, XLSX, CSV, TSV or ODS
+Images to JPG, PNG, WebP, GIF, TIFF or PDF
+Video and audio to MP4, MP3, M4A, WAV, FLAC and more
+Subtitles: SRT and VTT both ways
 Merge, split and compress PDFs
 Built-in photo editor: crop, adjust, mark up, redact
-Compress photos to a target size like 1 MB or 200 KB
-Compress, trim and join videos; make GIFs
-Convert audio to MP3, M4A, WAV or FLAC; normalize volume
-Copy text out of images
-Remove location or all metadata from photos
-Copy, move, share, zip and extract in one gesture
-Float files on an always-on-top shelf
+Archive as ZIP, 7Z or TAR.GZ; extract RAR and 7Z
 Ctrl + Alt + Space: use it without dragging
 Customize the wheel: hide options and reorder them
 Light and dark themes
@@ -129,13 +123,13 @@ Light and dark themes
 
 Upload in this order, from the art folder. Use the light set; the dark set can replace it if you prefer:
 
-1. `screenshot-01-convert.png`: Convert files without opening an app.
-2. `screenshot-02-result.png`: The result lands next to the original.
-3. `screenshot-03-tools.png`: Compress, resize, edit and more.
-4. `screenshot-07-editor.png`: A photo editor, built in.
-5. `screenshot-04-modes.png`: Convert. Tools. Actions.
-6. `screenshot-05-keyboard.png`: No dragging needed.
-7. `screenshot-06-customize.png`: Make the wheel yours.
+1. `screenshot-01-convert.png`: Flip files into any format.
+2. `screenshot-02-result.png`: The new file lands right beside the old one.
+3. `screenshot-03-tools.png`: More choices, one + away.
+4. `screenshot-07-editor.png`: Quick edits, built in.
+5. `screenshot-04-modes.png`: Three wheels: Convert, Tools, Actions.
+6. `screenshot-05-keyboard.png`: Rather click? Press Ctrl + Alt + Space.
+7. `screenshot-06-customize.png`: Your wheel, your way.
 
 Optional caption for each: the text after the colon.
 
@@ -152,12 +146,12 @@ Optional caption for each: the text after the colon.
 
 ```
 file converter
+pdf to word
+word to pdf
 image converter
-compress images
-photo editor
+pdf to excel
 drag and drop
-radial menu
-remove metadata
+compress images
 ```
 
 ### Other fields
@@ -165,10 +159,10 @@ remove metadata
 | Field | Value |
 |---|---|
 | Short title | Flipr |
-| Short description | Convert, edit and manage files without opening an app. Drag, tap Shift, let go. |
-| Copyright and trademark info | © 2026 Mohammed Essam |
-| Additional license terms | MIT License: https://github.com/i3sam/Flipr/blob/main/LICENSE |
-| Developed by | Mohammed Essam |
+| Short description | Flip files into PDF, Word, Excel, JPG, MP3 and more. Drag, tap Shift, let go. |
+| Copyright and trademark info | © 2026 {PUBLISHER_DISPLAY_NAME}. Includes OrbitDrop © 2026 Mohammed Essam (MIT). |
+| Additional license terms | MIT License: {WEBSITE_URL}/blob/main/LICENSE |
+| Developed by | {PUBLISHER_DISPLAY_NAME} |
 
 ## 6. Submission options
 

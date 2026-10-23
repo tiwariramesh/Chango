@@ -23,12 +23,12 @@ internal static class StoreArt
 
     private static readonly Shot[] Shots =
     [
-        new("01-convert", "Convert files without opening an app.", "Drag any file, tap Shift, and let go on what you want. Right where your files are.", GuideScene.Release, 1.3),
-        new("02-result", "The result lands next to the original.", "Your original is never changed, and nothing is ever uploaded.", GuideScene.Release, 2.9),
-        new("03-tools", "Compress, resize, edit and more.", "Options with dots open into more choices. Rest on one, pick what you need.", GuideScene.Groups, 2.75),
-        new("04-modes", "Convert. Tools. Actions.", "Tap Shift again to switch: formats, quick edits, and copy, share or zip.", GuideScene.Modes, 2.6, Pointer: false),
-        new("05-keyboard", "No dragging needed.", "Select files and press Ctrl + Alt + Space. Click the centre for Tools and Actions.", GuideScene.Keyboard, 3.05, Pointer: false),
-        new("06-customize", "Make the wheel yours.", "Hide what you don't use and drag slices into your own order.", GuideScene.Customize, 7.6),
+        new("01-convert", "Flip files into any format.", "Drag a file, tap Shift, let go on PDF, Word, JPG, MP3 and more.", GuideScene.Release, 1.3),
+        new("02-result", "The new file lands right beside the old one.", "Flipr never changes your original and never uploads anything.", GuideScene.Release, 2.9),
+        new("03-tools", "More choices, one + away.", "Pause on a slice marked + and its options fan out.", GuideScene.Groups, 2.75),
+        new("04-modes", "Three wheels: Convert, Tools, Actions.", "Each tap of Shift flips to the next wheel.", GuideScene.Modes, 2.6, Pointer: false),
+        new("05-keyboard", "Rather click? Press Ctrl + Alt + Space.", "Select files, press the shortcut and pick a format.", GuideScene.Keyboard, 3.05, Pointer: false),
+        new("06-customize", "Your wheel, your way.", "Hide slices you never use and put your favourites first.", GuideScene.Customize, 7.6),
     ];
 
     public static int Run(string dir, OperationRegistry registry)
@@ -60,7 +60,7 @@ internal static class StoreArt
             ]);
             var window = RenderWindow((FrameworkElement)editor.Content, 1120, 780);
             editor.Close();
-            Save(Compose("A photo editor, built in.", "Crop, adjust, mark up and redact. Your original is never changed.", window, 1240), Path.Combine(dir, $"screenshot-07-editor{suffix}.png"));
+            Save(Compose("Quick edits, built in.", "Crop, adjust, mark up and redact before you share.", window, 1240), Path.Combine(dir, $"screenshot-07-editor{suffix}.png"));
             assets.Dispose();
         }
 

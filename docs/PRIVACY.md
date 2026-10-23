@@ -40,4 +40,4 @@ If this policy changes, the new version will be published here with a new date.
 
 ## Contact
 
-Questions? Open an issue at <https://github.com/i3sam/Flipr/issues>.
+Questions? Contact {SUPPORT_CONTACT}.
