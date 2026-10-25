@@ -7,7 +7,7 @@
     <RootNamespace>Chango.App</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\Chango.UI\Assets\chango.ico</ApplicationIcon>
-    <Description>Chango: convert, edit and manage files without opening an app.</Description>
+    <Description>Chango: drag-and-drop file converter and manager for Windows.</Description>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../Chango.Core/Chango.Core.csproj" />

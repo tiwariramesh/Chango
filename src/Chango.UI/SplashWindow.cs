@@ -8,7 +8,7 @@ namespace Chango.UI;
 
 /// <summary>
 /// The launch animation: a frosted card in the middle of the screen where the logo assembles itself (the Lottie
-/// intro), then "Chango" and the tagline rise in, and the card fades away. About two seconds; never takes focus; a
+/// intro), then "Chango", what it is and the tagline rise in, and the card fades away. About two seconds; never takes focus; a
 /// click dismisses it. Reduced motion shows the finished logo briefly instead.
 /// </summary>
 public sealed class SplashWindow : Window
@@ -42,11 +42,15 @@ public sealed class SplashWindow : Window
 
         var name = new TextBlock { Text = "Chango", FontSize = 30, HorizontalAlignment = HorizontalAlignment.Center };
         name.SetResourceReference(StyleProperty, "Chango.Text.Title");
+        var subtitle = new TextBlock { Text = Infrastructure.Brand.Subtitle, TextWrapping = TextWrapping.NoWrap, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 2, 0, 6) };
+        subtitle.SetResourceReference(StyleProperty, "Chango.Text.Body");
+        subtitle.SetResourceReference(TextBlock.ForegroundProperty, "Chango.TextSecondary");
         var tagline = new TextBlock { Text = Infrastructure.Brand.Tagline, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center };
         tagline.SetResourceReference(StyleProperty, "Chango.Text.Body");
         tagline.SetResourceReference(TextBlock.ForegroundProperty, "Chango.AccentText");
         _words = new StackPanel { Opacity = 0, RenderTransform = _rise, Margin = new Thickness(0, 4, 0, 0) };
         _words.Children.Add(name);
+        _words.Children.Add(subtitle);
         _words.Children.Add(tagline);
 
         var stack = new StackPanel { Margin = new Thickness(40, 28, 40, 30) };

@@ -44,7 +44,8 @@ even past the rim, so aiming is forgiving while dragging.
 ## Voice
 
 Short, warm and plain: "Drop it on the format you want", "Beauty! You made photo.jpg". Say what happens to the
-user's files (a new file beside the original; nothing uploaded). Tagline: **Drag. Tap. Chango.**
+user's files (a new file beside the original; nothing uploaded). Subtitle (what it is, under the name wherever there is room): **Drag-and-drop file converter and manager**.
+Tagline (the catchy line): **Drag. Tap. Chango.**
 
 ## Logo and motion
 

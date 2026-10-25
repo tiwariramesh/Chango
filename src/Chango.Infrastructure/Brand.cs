@@ -9,6 +9,9 @@ public static class Brand
     public const string Name = "Chango";
     public const string Tagline = "Drag. Tap. Chango.";
 
+    /// <summary>What Chango is, in a few words: shown under the name wherever there is room for it.</summary>
+    public const string Subtitle = "Drag-and-drop file converter and manager";
+
     /// <summary>The colour every Chango surface is built around (Chango Teal).</summary>
     public const string AccentHex = "#0EA5A4";
 

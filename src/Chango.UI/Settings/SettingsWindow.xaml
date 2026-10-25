@@ -473,6 +473,7 @@
                                            FallbackSource="pack://application:,,,/Chango.UI;component/Assets/chango-256.png" />
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="{x:Static brand:Brand.Name}" Style="{StaticResource Chango.Text.Title}" />
+                                <TextBlock Text="{x:Static brand:Brand.Subtitle}" Style="{StaticResource Chango.Text.Body}" Foreground="{DynamicResource Chango.TextSecondary}" Margin="0,0,0,2" />
                                 <TextBlock Text="{x:Static brand:Brand.Tagline}" Style="{StaticResource Chango.Text.Body}" Foreground="{DynamicResource Chango.AccentText}" FontWeight="SemiBold" />
                                 <TextBlock Style="{StaticResource Chango.Text.Caption}" Margin="0,6,0,0">
                                     <Run Text="{Binding VersionText, Mode=OneWay}" /><Run Text=" · Made by " /><Run Text="{x:Static brand:Brand.Author}" /><Run Text=", " /><Run Text="{x:Static brand:Brand.AuthorLocation}" />

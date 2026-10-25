@@ -158,7 +158,7 @@ internal static class UiReview
 
             // --- launch animation (its last frame)
             var splash = new SplashWindow();
-            RenderElement(splash.ShowStill(), 340, double.NaN, Brushes.Transparent, dir, $"splash-{t}", ref count);
+            RenderElement(splash.ShowStill(), 420, double.NaN, Brushes.Transparent, dir, $"splash-{t}", ref count);
             splash.Close();
 
             // --- tray flyout

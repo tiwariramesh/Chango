@@ -157,7 +157,7 @@ internal static class StoreArt
                 {
                     var ink = new SolidColorBrush(ThemeManager.Token("TextPrimary"));
                     var title = Text("Chango", iconSize * 0.36, FontWeights.SemiBold, ink, w);
-                    var sub = Text("Drag. Tap. Chango.", iconSize * 0.13, FontWeights.Normal, new SolidColorBrush(ThemeManager.Token("TextSecondary")), w);
+                    var sub = Text(Brand.Subtitle, iconSize * 0.13, FontWeights.Normal, new SolidColorBrush(ThemeManager.Token("TextSecondary")), w);
                     dc.DrawText(title, new Point((w - title.Width) / 2, r.Bottom + iconSize * 0.18));
                     dc.DrawText(sub, new Point((w - sub.Width) / 2, r.Bottom + iconSize * 0.18 + title.Height + iconSize * 0.04));
                 }

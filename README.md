@@ -1,6 +1,7 @@
 <p align="center"><img src="src/Chango.UI/Assets/chango-256.png" width="96" alt="Chango icon"></p>
 
 <h1 align="center">Chango</h1>
+<h3 align="center">Drag-and-drop file converter and manager for Windows</h3>
 <p align="center"><b>Drag. Tap. Chango.</b><br>Convert, edit and manage files without opening an app. For Windows 10 (19041+) and 11.</p>
 
 Chango is a drag-and-drop file converter for Windows. Drag files, tap **Shift**, and let go on the format you want. The result appears next to the original, and the original is never changed.

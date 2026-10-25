@@ -159,7 +159,7 @@ compress images
 | Field | Value |
 |---|---|
 | Short title | Chango |
-| Short description | Change files into PDF, Word, Excel, JPG, MP3 and more. Drag, tap Shift, let go. |
+| Short description | Drag-and-drop file converter and manager. Change files into PDF, Word, Excel, JPG, MP3 and more. Drag, tap Shift, let go. |
 | Copyright and trademark info | © 2026 Ramesh Tiwari |
 | Additional license terms | MIT License: https://github.com/tiwariramesh/Chango/blob/main/LICENSE |
 | Developed by | Ramesh Tiwari |
