@@ -23,3 +23,5 @@ ui-review/
 # The website's own videos (our app renders and our film; nothing third-party)
 !website/assets/*.mp4
 !website/assets/demo/*.mp4
+
+.fake
