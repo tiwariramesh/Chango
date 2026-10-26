@@ -1,6 +1,6 @@
 # Chango design system
 
-Chango should feel like part of Windows 11, with one clear identity: the logo's palette (deep blue, teal, mint) as a
+Chango should feel like part of Windows 11, with one clear identity: a palette of deep blue, teal and mint as a
 soft wash behind **frosted glass** panels, **Chango Teal** kept for small accents, soft rounded shapes, and friendly,
 plain wording. Every colour is a token in `src/Chango.UI/Themes/Tokens.Light.xaml` and
 `Tokens.Dark.xaml`; control styles are in `Styles.xaml`. Change colours there only, never in a window.
@@ -14,7 +14,7 @@ plain wording. Every colour is a token in `src/Chango.UI/Themes/Tokens.Light.xam
 | `AccentText` | `#0A7C7B` | `#2DD4CF` | Teal text on the window background (links, labels, icons) |
 | `AccentSubtle` | `#DFF5F4` | `#133A3A` | Teal tint, used sparingly (selected file in the tour's demo) |
 | `AccentHover` / `AccentPressed` | `#14B8B6` / `#0C9493` | same | Button states |
-| `Deep` / `Mint` | `#115469` / `#94EAE3` | same | The logo's other colours: the wash behind glass, the title underline |
+| `Deep` / `Mint` | `#115469` / `#94EAE3` | same | The palette's other colours: the wash behind glass, the title underline |
 | `Glass` / `GlassStrong` | 65 % / 90 % white | 55 % / 80 % charcoal | Frosted panels and the selected item |
 | `GlassStroke` | bright top edge fading out | same, dimmer | The edge light on every glass surface |
 | `Ambient` | base + washes | base + deeper washes | Window background behind glass (Settings, tour, launch card) |
@@ -49,14 +49,21 @@ Tagline (the catchy line): **Drag. Tap. Chango.**
 
 ## Logo and motion
 
-The logo is eight rounded segments (deep blue, teal and mint) around a "C" drawn as a refresh arrow: the Chango
-wheel itself. Sources are in `assets/brand/new-logo`:
+The logo is a "C" of six segments radiating from its centre, each with a notch cut in it, in logo teal `#0097B2` on
+a transparent background. Sources are in `assets/brand/new-logo`:
 
-- `chango-background.svg` (on charcoal): the app icon, tray icon and tile images.
-- `chango-transparent.svg`: the bare mark, for glass surfaces.
-- `chango-lottie.json`: the intro, where each piece pops in (fade, grow with a small overshoot), about 0.9 s.
+- `chango-mark.svg`: the mark alone, on a square canvas. It's the app icon, tray icon, tile images and launch
+  animation, and the logo everywhere from now on.
+- `chango-logo-stacked.svg`: the mark above the "Chango" wordmark, on white (the file the mark was cropped from).
+- `chango-logo-horizontal.svg`: the mark with the wordmark beside it, for the website header.
 
-`dotnet run --project tools/IconGen` regenerates `chango.ico`, `chango-<size>.png`, `chango-mark-<size>.png` and
-`chango-intro.json` in `src/Chango.UI/Assets` from those files. `LottieView` plays the intro with Skottie: on the
-launch card (about 2 s, never at sign-in, off in Settings → General → Startup animation), in the tour panel and
-on About. Reduced motion shows the finished logo instead.
+`dotnet run --project tools/IconGen` regenerates `src/Chango.UI/Assets` from `chango-mark.svg`:
+
+- `chango.ico`: 16–256 px, for the exe, taskbar, tray, window title bars and the installer.
+- `chango-<size>.png` at 16, 24, 32, 48, 64, 128, 256, 512 and 1024 px. Each surface uses the smallest size that's
+  still sharp at 200% scaling (the tray flyout and Settings header use 64, the README 256, Store art 1024).
+- `chango-intro.json`: the launch animation, built from the mark's own segments. Starting at the top right and going
+  anticlockwise, each segment fades in and grows with a small overshoot, about 1 s in all.
+
+`LottieView` plays the intro with Skottie: on the launch card (about 2 s, never at sign-in, off in Settings →
+General → Startup animation), in the tour panel and on About. Reduced motion shows the finished logo instead.

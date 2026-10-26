@@ -151,8 +151,7 @@ internal static class StoreArt
             {
                 Background(dc, new Rect(0, 0, w, h));
                 var r = new Rect((w - iconSize) / 2, y, iconSize, iconSize);
-                Shadow(dc, new Rect(r.X + iconSize * 0.06, r.Y + iconSize * 0.06, iconSize * 0.88, iconSize * 0.88), iconSize * 0.2);
-                dc.DrawImage(icon, r);
+                dc.DrawImage(icon, r); // the mark has no tile, so no shadow under it
                 if (wordmark)
                 {
                     var ink = new SolidColorBrush(ThemeManager.Token("TextPrimary"));

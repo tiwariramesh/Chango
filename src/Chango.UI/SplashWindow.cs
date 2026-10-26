@@ -35,7 +35,7 @@ public sealed class SplashWindow : Window
         _logo = new LottieView
         {
             AnimationSource = "pack://application:,,,/Chango.UI;component/Assets/chango-intro.json",
-            FallbackSource = "pack://application:,,,/Chango.UI;component/Assets/chango-mark-256.png",
+            FallbackSource = "pack://application:,,,/Chango.UI;component/Assets/chango-256.png",
             Width = 168, Height = 168, PlayOnLoad = false, HorizontalAlignment = HorizontalAlignment.Center,
         };
         _logo.Completed += OnLogoDone;
