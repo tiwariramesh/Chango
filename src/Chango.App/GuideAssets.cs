@@ -19,11 +19,13 @@ internal sealed class GuideAssets(OperationRegistry registry, double scale = 2.0
     private double Scale { get; } = scale;
     private RadialWheel? _wheel;
     private ImageSource? _backdrop;
+    private bool _backdropDark;
 
     public WheelImage Wheel(WheelShot shot)
     {
         _wheel ??= new RadialWheel();
-        _backdrop ??= Backdrop();
+        // Re-made when the theme changes, so the glass blurs the current background.
+        if (_backdrop is null || _backdropDark != ThemeManager.Current.IsDark) { _backdrop = Backdrop(); _backdropDark = ThemeManager.Current.IsDark; }
         var files = new FileSet(shot.Files.Select(f => Path.Combine(Path.GetTempPath(), f)));
         var flat = WheelOrder.Apply(WheelFilter.Apply(registry.Query(files, shot.Mode), new HashSet<string>(shot.Hidden ?? [], StringComparer.Ordinal)), shot.Order ?? []);
         var items = shot.Group is null ? OperationMenu.TopLevel(flat) : OperationMenu.Members(flat, shot.Group);

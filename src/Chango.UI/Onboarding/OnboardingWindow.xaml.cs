@@ -13,7 +13,7 @@ namespace Chango.UI.Onboarding;
 
 /// <summary>
 /// The Chango tour: a teal brand panel listing the chapters, and beside it animated demonstrations of each part of the
-/// gesture (built from the real wheel and notification), ending in a hands-on practice with a real photo that the
+/// gesture (built from the real wheel and notification), ending in a hands-on practice with a real file that the
 /// user drags, changes to JPG and sees appear.
 /// </summary>
 public partial class OnboardingWindow : Window
@@ -53,7 +53,7 @@ public partial class OnboardingWindow : Window
             new(GuideScene.Customize, "Your wheel", "TIP", "Shape the wheel around you",
                 "In Settings → Wheel, click a slice to hide it (click again to bring it back) and drag one to a new spot, then Save. Reset puts everything back the way it was."),
             new(null, "Try it", "PRACTICE", "Your turn: give it a go",
-                $"Drag the practice photo a little way, tap {triggerKey} while you're still holding it, and drop it on JPG. It's a sample file, so nothing of yours changes."),
+                $"Drag the practice file a little way, tap {triggerKey} while you're still holding it, and drop it on JPG. It's a sample file, so nothing of yours changes."),
         ];
         Step2Title.Text = $"Tap {triggerKey}";
         foreach (var step in _steps) Dots.Children.Add(ChapterRow(step.Chapter));
@@ -63,11 +63,13 @@ public partial class OnboardingWindow : Window
             _stage = new GuideStage(assets, triggerKey);
             StageHost.Content = _stage;
         }
-        PracticeThumb.ImageSource = GuideStage.Photo(400);
+        PracticeIcon.Content = GuideStage.FileIcon("png", 132);
+        PracticeName.Text = GuideStage.SampleName("png");
         _frame.Tick += (_, _) => Tick();
         // Size to the content once, then stay put: the window must not jump between steps.
         Loaded += (_, _) => { SizeToContent = SizeToContent.Manual; ShowStep(_step); };
-        Closed += (_, _) => _frame.Stop();
+        ThemeManager.Current.Changed += OnThemeChanged;
+        Closed += (_, _) => { _frame.Stop(); ThemeManager.Current.Changed -= OnThemeChanged; };
         PreviewKeyDown += (_, e) =>
         {
             if (e.Key == Key.Right) { OnNext(this, new RoutedEventArgs()); e.Handled = true; }
@@ -172,6 +174,16 @@ public partial class OnboardingWindow : Window
         GuideScene.Groups => 2.7, GuideScene.Customize => 4.3, _ => 3.0,
     };
 
+    /// <summary>Light / dark / system changed while the tour is open: re-make the demo's renders and repaint this frame.</summary>
+    private void OnThemeChanged()
+    {
+        if (_stage is null) return;
+        _stage.RefreshTheme();
+        if (_steps[_step].Scene is not { } scene) return;
+        if (_frame.IsEnabled) Tick();
+        else _stage.Apply(scene, KeyFrame(scene));
+    }
+
     private void Tick()
     {
         if (_stage is null || _steps[_step].Scene is not { } scene) return;
@@ -181,9 +193,26 @@ public partial class OnboardingWindow : Window
 
     // ------------------------------------------------------------------ practice
 
-    private string PracticeFile => System.IO.Path.Combine(_practiceFolder, "Try me.png");
+    private string PracticeFile => System.IO.Path.Combine(_practiceFolder, GuideStage.SampleName("png"));
 
-    /// <summary>A fresh sample photo in a folder of its own, and a reset checklist.</summary>
+    /// <summary>The practice file's picture: the Chango mark on white (white, so the JPG it becomes looks the same).</summary>
+    private static BitmapSource PracticeImage(int size)
+    {
+        var mark = new BitmapImage(new Uri("pack://application:,,,/Chango.UI;component/Assets/chango-512.png"));
+        var v = new DrawingVisual();
+        using (var dc = v.RenderOpen())
+        {
+            dc.DrawRectangle(Brushes.White, null, new Rect(0, 0, size, size));
+            double side = size * 0.6;
+            dc.DrawImage(mark, new Rect((size - side) / 2, (size - side) / 2, side, side));
+        }
+        var bmp = new RenderTargetBitmap(size, size, 96, 96, PixelFormats.Pbgra32);
+        bmp.Render(v);
+        bmp.Freeze();
+        return bmp;
+    }
+
+    /// <summary>A fresh sample file in a folder of its own, and a reset checklist.</summary>
     private void PreparePractice()
     {
         try
@@ -197,7 +226,7 @@ public partial class OnboardingWindow : Window
             if (!File.Exists(PracticeFile))
             {
                 var enc = new PngBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(GuideStage.Photo(800)));
+                enc.Frames.Add(BitmapFrame.Create(PracticeImage(800)));
                 using var fs = File.Create(PracticeFile);
                 enc.Save(fs);
             }
@@ -205,7 +234,7 @@ public partial class OnboardingWindow : Window
         catch { /* the practice still works if the file already exists */ }
         _practiceResult = null;
         SetCheck(1, false); SetCheck(2, false); SetCheck(3, false);
-        Check3Hint.Text = "A JPG copy appears next to the photo.";
+        Check3Hint.Text = "A JPG copy appears next to the original.";
         ShowResultButton.Visibility = Visibility.Collapsed;
         if (!ThemeManager.Current.ReduceMotion)
             PracticeBob.BeginAnimation(TranslateTransform.YProperty,

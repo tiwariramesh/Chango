@@ -11,7 +11,7 @@ namespace Chango.UI.Onboarding;
 public enum GuideScene { Hero, Drag, Release, Modes, Groups, Keyboard, Customize }
 
 /// <summary>
-/// The guide's animated demonstrations: a little desktop with a Pictures window, a pointer, the real Chango
+/// The guide's animated demonstrations: a plain Pictures folder holding a Chango file, a pointer, the real Chango
 /// wheel and notification (rendered by the app), and the keys being pressed. Every scene is a pure function of time
 /// (<see cref="Apply"/>), so it plays live in the guide and exports frame-exact GIFs for the README.
 /// </summary>
@@ -21,8 +21,13 @@ public sealed class GuideStage : Canvas
     private const double WheelSize = 236;
     private static readonly Point Center = new(430, 150), Rest = new(320, 300), TileA = new(90, 106);
 
+    /// <summary>The demo file's name, without its extension: our own file, not a stock photo.</summary>
+    public const string SampleStem = "chango-original";
+
     private readonly IGuideAssets _assets;
     private readonly string _triggerKey;
+    private readonly bool _flatBackground;
+    private readonly Border _background;
     private readonly Canvas _content = new() { Width = W, Height = H };
     private readonly Border _window, _settings, _save;
     private readonly Settings.WheelEditor _editor = new() { Width = EditorSize, Height = EditorSize, IsHitTestVisible = false };
@@ -60,65 +65,47 @@ public sealed class GuideStage : Canvas
         Height = H;
         ClipToBounds = true;
 
-        var bg = new Border
-        {
-            Width = W, Height = H, CornerRadius = new CornerRadius(12),
-            Background = flatBackground
-                ? new SolidColorBrush(ThemeManager.Token("SurfaceAlt"))
-                : new LinearGradientBrush(ThemeManager.Token("SurfaceAlt"), ThemeManager.Token("StageTint"), 30),
-        };
-        Children.Add(bg);
+        _flatBackground = flatBackground;
+        _background = new Border { Width = W, Height = H, CornerRadius = new CornerRadius(12) };
+        PaintBackground();
+        Children.Add(_background);
         Children.Add(_content);
 
-        // A small File Explorer-like "Pictures" window.
-        _window = new Border
-        {
-            Width = 252, Height = 270, CornerRadius = new CornerRadius(10),
-            Background = (Brush)Application.Current.FindResource("Chango.Surface"),
-            BorderBrush = (Brush)Application.Current.FindResource("Chango.Stroke"), BorderThickness = new Thickness(1),
-            Effect = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 4, Direction = 270, Opacity = 0.12 },
-        };
-        var bar = new DockPanel { Margin = new Thickness(12, 10, 12, 0), Height = 18 };
-        var dots = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 10, 0) };
-        foreach (var _ in Enumerable.Range(0, 3))
-            dots.Children.Add(new System.Windows.Shapes.Ellipse { Width = 8, Height = 8, Margin = new Thickness(0, 0, 5, 0), Fill = (Brush)Application.Current.FindResource("Chango.StrokeStrong") });
-        bar.Children.Add(dots);
-        bar.Children.Add(new TextBlock { Text = "Pictures", FontSize = 11.5, FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center,
-            Foreground = (Brush)Application.Current.FindResource("Chango.TextPrimary") });
+        // A plain folder window: a folder glyph and "Pictures", nothing else. Every colour below is a theme
+        // reference, so the stage repaints itself when light / dark / system changes while the tour is open.
+        _window = Panel();
+        var bar = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(14, 12, 12, 0) };
+        bar.Children.Add(Themed(new TextBlock { Text = "\uE8B7", FontFamily = (FontFamily)Application.Current.FindResource("Chango.Font.Icons"), FontSize = 13,
+            VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 1, 8, 0) }, TextBlock.ForegroundProperty, "Chango.AccentText"));
+        bar.Children.Add(Themed(new TextBlock { Text = "Pictures", FontSize = 11.5, FontWeight = FontWeights.SemiBold, VerticalAlignment = VerticalAlignment.Center },
+            TextBlock.ForegroundProperty, "Chango.TextPrimary"));
         _window.Child = new StackPanel { Children = { bar } };
         Place(_window, 22, 24);
         _content.Children.Add(_window);
 
         // A mini Settings → Wheel page for the customization scene: the real wheel editor, plus Save.
         var panel = new Canvas { Width = 252, Height = 270 };
-        var title = new TextBlock { Text = "Settings  ›  Wheel", FontSize = 12, FontWeight = FontWeights.SemiBold,
-            Foreground = (Brush)Application.Current.FindResource("Chango.TextPrimary") };
+        var title = Themed(new TextBlock { Text = "Settings  ›  Wheel", FontSize = 12, FontWeight = FontWeights.SemiBold }, TextBlock.ForegroundProperty, "Chango.TextPrimary");
         Place(title, 16, 14);
         panel.Children.Add(title);
         Place(_editor, (252 - EditorSize) / 2, 36);
         panel.Children.Add(_editor);
-        _save = new Border
+        _save = Themed(new Border
         {
             Width = 96, Height = 28, CornerRadius = new CornerRadius(6),
-            Background = (Brush)Application.Current.FindResource("Chango.Accent"),
-            Child = new TextBlock { Text = "Save", FontSize = 12, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center, Foreground = (Brush)Application.Current.FindResource("Chango.OnAccent") },
-        };
+            Child = Themed(new TextBlock { Text = "Save", FontSize = 12, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center }, TextBlock.ForegroundProperty, "Chango.OnAccent"),
+        }, Border.BackgroundProperty, "Chango.Accent");
         Place(_save, 252 - 96 - 16, 270 - 28 - 14);
         panel.Children.Add(_save);
-        _settings = new Border
-        {
-            Width = 252, Height = 270, CornerRadius = new CornerRadius(10), Child = panel,
-            Background = (Brush)Application.Current.FindResource("Chango.Surface"),
-            BorderBrush = (Brush)Application.Current.FindResource("Chango.Stroke"), BorderThickness = new Thickness(1),
-            Effect = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 4, Direction = 270, Opacity = 0.12 },
-        };
+        _settings = Panel();
+        _settings.Child = panel;
         Place(_settings, 22, 24);
         _content.Children.Add(_settings);
 
-        _tileA = Tile("photo.png", out _);
-        _tileB = Tile("photo.jpg", out _tileBName);
-        _tileC = Tile("photo (compressed).jpg", out _tileCName);
+        _tileA = Tile(SampleName("png"), out _);
+        _tileB = Tile(SampleName("jpg"), out _tileBName);
+        _tileC = Tile(SampleName("jpg", " (compressed)"), out _tileCName);
         Place(_tileA, 40, 58);
         Place(_tileB, 148, 58);
         Place(_tileC, 40, 170);
@@ -132,7 +119,7 @@ public sealed class GuideStage : Canvas
         _content.Children.Add(_wheel);
 
         // The drag image floats above everything, like Windows' own.
-        _ghost = Tile("photo.png", out _, ghost: true);
+        _ghost = Tile(SampleName("png"), out _, ghost: true);
         _content.Children.Add(_ghost);
 
         _toast.RenderTransform = _toastSlide;
@@ -148,14 +135,13 @@ public sealed class GuideStage : Canvas
         _content.Children.Add(_keys);
 
         // A caption chip above the wheel that says what the next click does (keyboard scene).
-        _caption.Background = (Brush)Application.Current.FindResource("Chango.Accent");
-        _captionText.Foreground = (Brush)Application.Current.FindResource("Chango.OnAccent");
+        _caption.SetResourceReference(Border.BackgroundProperty, "Chango.Accent");
+        _captionText.SetResourceReference(TextBlock.ForegroundProperty, "Chango.OnAccent");
         _caption.Child = _captionText;
         _content.Children.Add(_caption);
 
-        var accent = (Brush)Application.Current.FindResource("Chango.Accent");
-        _ripple.Stroke = accent;
-        _dwell.Stroke = accent;
+        _ripple.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "Chango.Accent");
+        _dwell.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "Chango.Accent");
         _content.Children.Add(_ripple);
         _content.Children.Add(_dwell);
 
@@ -170,6 +156,21 @@ public sealed class GuideStage : Canvas
         _content.Children.Add(_cursor);
     }
 
+    /// <summary>
+    /// After a theme change: the background and the rendered wheels and notifications are re-made in the new theme
+    /// (everything else follows by itself). Call <see cref="Apply"/> afterwards to repaint the current frame.
+    /// </summary>
+    public void RefreshTheme()
+    {
+        _shots.Clear();
+        _toasts.Clear();
+        PaintBackground();
+    }
+
+    private void PaintBackground() => _background.Background = _flatBackground
+        ? new SolidColorBrush(ThemeManager.Token("SurfaceAlt"))
+        : new LinearGradientBrush(ThemeManager.Token("SurfaceAlt"), ThemeManager.Token("StageTint"), 30);
+
     public static double DurationOf(GuideScene s) => s switch
     {
         GuideScene.Hero => 9.4, GuideScene.Drag => 5.4, GuideScene.Release => 6.2,
@@ -180,27 +181,99 @@ public sealed class GuideStage : Canvas
 
     private static void Place(UIElement e, double x, double y) { SetLeft(e, x); SetTop(e, y); }
 
+    /// <summary>Points <paramref name="property"/> at a theme brush, so it follows light / dark live.</summary>
+    private static T Themed<T>(T element, DependencyProperty property, string key) where T : FrameworkElement
+    {
+        element.SetResourceReference(property, key);
+        return element;
+    }
+
+    /// <summary>A window-sized card (the Pictures folder, the mini Settings page): flat surface, hairline edge, soft shadow.</summary>
+    private static Border Panel()
+    {
+        var b = new Border
+        {
+            Width = 252, Height = 270, CornerRadius = new CornerRadius(12), BorderThickness = new Thickness(1),
+            Effect = new DropShadowEffect { BlurRadius = 16, ShadowDepth = 3, Direction = 270, Opacity = 0.08 },
+        };
+        b.SetResourceReference(Border.BackgroundProperty, "Chango.Surface");
+        b.SetResourceReference(Border.BorderBrushProperty, "Chango.Stroke");
+        return b;
+    }
+
+    public static string SampleName(string extension, string suffix = "") => $"{SampleStem}{suffix}.{extension}";
+
     private static Border Tile(string name, out TextBlock label, bool ghost = false)
     {
-        label = new TextBlock
+        label = Themed(new TextBlock
         {
             Text = name, FontSize = 10.5, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, MaxWidth = 96,
-            Foreground = (Brush)Application.Current.FindResource("Chango.TextPrimary"), Margin = new Thickness(0, 5, 0, 0),
-        };
-        var thumb = new Border
-        {
-            Width = ghost ? 40 : 60, Height = ghost ? 40 : 60, CornerRadius = new CornerRadius(6), HorizontalAlignment = HorizontalAlignment.Center,
-            Background = new ImageBrush(SamplePhoto.Value) { Stretch = Stretch.UniformToFill },
-            BorderBrush = new SolidColorBrush(Color.FromArgb(0x30, 0, 0, 0)), BorderThickness = new Thickness(1),
-        };
+            Margin = new Thickness(0, 6, 0, 0),
+        }, TextBlock.ForegroundProperty, "Chango.TextPrimary");
+        var icon = FileIcon(System.IO.Path.GetExtension(name).TrimStart('.'), ghost ? 44 : 60);
+        icon.HorizontalAlignment = HorizontalAlignment.Center;
         return new Border
         {
             CornerRadius = new CornerRadius(8),
-            Child = ghost ? thumb : new StackPanel { Children = { thumb, label } },
+            Child = ghost ? icon : new StackPanel { Children = { icon, label } },
             Padding = ghost ? new Thickness(0) : new Thickness(4, 6, 4, 6), Width = ghost ? double.NaN : 104,
             RenderTransformOrigin = new Point(0.5, 0.5), RenderTransform = new ScaleTransform(),
             Effect = ghost ? new DropShadowEffect { BlurRadius = 14, ShadowDepth = 4, Opacity = 0.25 } : null,
         };
+    }
+
+    private static readonly Lazy<BitmapImage> Mark = new(() =>
+    {
+        var img = new BitmapImage(new Uri("pack://application:,,,/Chango.UI;component/Assets/chango-128.png"));
+        img.Freeze();
+        return img;
+    });
+
+    /// <summary>
+    /// Chango's file icon: a page with a folded corner, the Chango mark on it and the format on a teal tag
+    /// (PNG, JPG…), so converting shows as the tag changing. Theme brushes throughout, so it reads in light and dark.
+    /// </summary>
+    public static FrameworkElement FileIcon(string extension, double height)
+    {
+        double w = Math.Round(height * 0.8), fold = height * 0.24, r = height * 0.09;
+        var outline = new PathFigure { StartPoint = new Point(r, 0), IsClosed = true };
+        outline.Segments.Add(new LineSegment(new Point(w - fold, 0), true));
+        outline.Segments.Add(new LineSegment(new Point(w, fold), true));
+        outline.Segments.Add(new LineSegment(new Point(w, height - r), true));
+        outline.Segments.Add(new ArcSegment(new Point(w - r, height), new Size(r, r), 0, false, SweepDirection.Clockwise, true));
+        outline.Segments.Add(new LineSegment(new Point(r, height), true));
+        outline.Segments.Add(new ArcSegment(new Point(0, height - r), new Size(r, r), 0, false, SweepDirection.Clockwise, true));
+        outline.Segments.Add(new LineSegment(new Point(0, r), true));
+        outline.Segments.Add(new ArcSegment(new Point(r, 0), new Size(r, r), 0, false, SweepDirection.Clockwise, true));
+        var page = new System.Windows.Shapes.Path { Data = new PathGeometry([outline]), StrokeThickness = 1, StrokeLineJoin = PenLineJoin.Round };
+        page.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, "Chango.Surface");
+        page.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "Chango.StrokeStrong");
+
+        var flap = new PathFigure { StartPoint = new Point(w - fold, 0), IsClosed = true };
+        flap.Segments.Add(new LineSegment(new Point(w - fold, fold - r * 0.6), true));
+        flap.Segments.Add(new ArcSegment(new Point(w - fold + r * 0.6, fold), new Size(r * 0.6, r * 0.6), 0, false, SweepDirection.Counterclockwise, true));
+        flap.Segments.Add(new LineSegment(new Point(w, fold), true));
+        var corner = new System.Windows.Shapes.Path { Data = new PathGeometry([flap]), StrokeThickness = 1, StrokeLineJoin = PenLineJoin.Round };
+        corner.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, "Chango.SurfaceAlt");
+        corner.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "Chango.StrokeStrong");
+
+        var mark = new Image
+        {
+            Source = Mark.Value, Width = w * 0.52, Height = w * 0.52, HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, height * 0.2, 0, 0),
+        };
+        RenderOptions.SetBitmapScalingMode(mark, BitmapScalingMode.HighQuality);
+
+        var tag = Themed(new Border
+        {
+            CornerRadius = new CornerRadius(height * 0.05), Padding = new Thickness(height * 0.06, height * 0.012, height * 0.06, height * 0.022),
+            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Bottom,
+            Margin = new Thickness(height * 0.09, 0, 0, height * 0.09),
+            Child = Themed(new TextBlock { Text = extension.ToUpperInvariant(), FontSize = Math.Max(7, height * 0.135), FontWeight = FontWeights.Bold },
+                TextBlock.ForegroundProperty, "Chango.OnAccent"),
+        }, Border.BackgroundProperty, "Chango.Accent");
+
+        return new Grid { Width = w, Height = height, Children = { page, corner, mark, tag } };
     }
 
     private static Border KeyCap(string text) => new()
@@ -211,9 +284,7 @@ public sealed class GuideStage : Canvas
             HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 12, 0) },
     };
 
-    private static readonly Lazy<BitmapSource> SamplePhoto = new(() => Photo(120));
-
-    /// <summary>A sunset "photo" for the demo files and the practice step (drawn, so nothing is bundled).</summary>
+    /// <summary>A sunset "photo" for Store artwork (drawn, so nothing is bundled).</summary>
     public static BitmapSource Photo(int size)
     {
         double k = size / 120.0;
@@ -245,18 +316,18 @@ public sealed class GuideStage : Canvas
         return img;
     }
 
-    private static readonly string[] PhotoFiles = ["photo.png"];
-    private WheelImage ConvertIdle => Shot("ci", new(OperationMode.Convert, PhotoFiles, WheelGeometry.HitOutside, "2.4 MB", "photo.png"));
-    private WheelImage ConvertJpg => Shot("cj", new(OperationMode.Convert, PhotoFiles, IndexOf(ConvertIdle, "JPG"), "JPG", "Convert to JPG"));
-    private WheelImage ToolsIdle => Shot("ti", new(OperationMode.Tools, PhotoFiles, WheelGeometry.HitOutside, "2.4 MB", "photo.png"));
-    private WheelImage ToolsCompress => Shot("tc", new(OperationMode.Tools, PhotoFiles, IndexOf(ToolsIdle, "Compress"), "Compress", "Hold for options"));
-    private WheelImage CompressGroup => Shot("cg", new(OperationMode.Tools, PhotoFiles, WheelGeometry.HitOutside, "Compress", "Rest on the centre to go back", "image.compress"));
-    private WheelImage Compress1Mb => Shot("c1", new(OperationMode.Tools, PhotoFiles, IndexOf(CompressGroup, "1 MB"), "1 MB", "Compress to under 1 MB", "image.compress"));
-    private WheelImage ActionsIdle => Shot("ai", new(OperationMode.Actions, PhotoFiles, WheelGeometry.HitOutside, "2.4 MB", "photo.png"));
+    private static readonly string[] SampleFiles = [SampleName("png")];
+    private WheelImage ConvertIdle => Shot("ci", new(OperationMode.Convert, SampleFiles, WheelGeometry.HitOutside, "2.4 MB", SampleFiles[0]));
+    private WheelImage ConvertJpg => Shot("cj", new(OperationMode.Convert, SampleFiles, IndexOf(ConvertIdle, "JPG"), "JPG", "Convert to JPG"));
+    private WheelImage ToolsIdle => Shot("ti", new(OperationMode.Tools, SampleFiles, WheelGeometry.HitOutside, "2.4 MB", SampleFiles[0]));
+    private WheelImage ToolsCompress => Shot("tc", new(OperationMode.Tools, SampleFiles, IndexOf(ToolsIdle, "Compress"), "Compress", "Hold for options"));
+    private WheelImage CompressGroup => Shot("cg", new(OperationMode.Tools, SampleFiles, WheelGeometry.HitOutside, "Compress", "Rest on the centre to go back", "image.compress"));
+    private WheelImage Compress1Mb => Shot("c1", new(OperationMode.Tools, SampleFiles, IndexOf(CompressGroup, "1 MB"), "1 MB", "Compress to under 1 MB", "image.compress"));
+    private WheelImage ActionsIdle => Shot("ai", new(OperationMode.Actions, SampleFiles, WheelGeometry.HitOutside, "2.4 MB", SampleFiles[0]));
     // Keyboard flow: the centre says where a click leads.
-    private WheelImage ConvertClick => Shot("kc", new(OperationMode.Convert, PhotoFiles, WheelGeometry.HitHub, "2.4 MB", "Click for Tools"));
-    private WheelImage ToolsClick => Shot("kt", new(OperationMode.Tools, PhotoFiles, WheelGeometry.HitHub, "2.4 MB", "Click for Actions"));
-    private WheelImage ActionsClick => Shot("ka", new(OperationMode.Actions, PhotoFiles, WheelGeometry.HitHub, "2.4 MB", "Click for Convert"));
+    private WheelImage ConvertClick => Shot("kc", new(OperationMode.Convert, SampleFiles, WheelGeometry.HitHub, "2.4 MB", "Click for Tools"));
+    private WheelImage ToolsClick => Shot("kt", new(OperationMode.Tools, SampleFiles, WheelGeometry.HitHub, "2.4 MB", "Click for Actions"));
+    private WheelImage ActionsClick => Shot("ka", new(OperationMode.Actions, SampleFiles, WheelGeometry.HitHub, "2.4 MB", "Click for Convert"));
 
     private static int IndexOf(WheelImage w, string label) => Math.Max(0, w.Labels.ToList().IndexOf(label));
 
@@ -408,7 +479,7 @@ public sealed class GuideStage : Canvas
         }
     }
 
-    /// <summary>Pick up the photo, carry it, tap the trigger key: the wheel opens around the pointer.</summary>
+    /// <summary>Pick up the file, carry it, tap the trigger key: the wheel opens around the pointer.</summary>
     private void DragScene(double t, bool fade)
     {
         Keys([_triggerKey]);
@@ -423,7 +494,7 @@ public sealed class GuideStage : Canvas
         if (fade) FadeOut(t, 4.9, 5.4);
     }
 
-    /// <summary>Move onto JPG, let go: the wheel closes, photo.jpg appears next to the original, a notification confirms.</summary>
+    /// <summary>Move onto JPG, let go: the wheel closes, the JPG appears next to the original, a notification confirms.</summary>
     private void ReleaseScene(double t)
     {
         var target = SegmentPoint(ConvertIdle, "JPG");
@@ -435,7 +506,7 @@ public sealed class GuideStage : Canvas
         WheelState(t >= 0.85 ? ConvertJpg : ConvertIdle, 1 - pop, 1 + 0.05 * pop, 0);
         Ghost(held ? 1 : 0, p);
         Tile(_tileB, Seg(t, 1.9, 2.25));
-        ToastState(ToastImage("Saved photo.jpg", "In Pictures"), Seg(t, 2.1, 2.45));
+        ToastState(ToastImage($"Saved {SampleName("jpg")}", "In Pictures"), Seg(t, 2.1, 2.45));
         FadeOut(t, 5.7, 6.2);
     }
 
@@ -473,13 +544,13 @@ public sealed class GuideStage : Canvas
             double k = Seg(t, 1.7, 1.9);
             WheelState(t >= 2.6 ? Compress1Mb : CompressGroup, (0.4 + 0.6 * k) * (1 - pop), 1 + 0.05 * pop, -14 * (1 - Ease(k)));
         }
-        _tileCName.Text = "photo (compressed).jpg";
+        _tileCName.Text = SampleName("jpg", " (compressed)");
         Tile(_tileC, Seg(t, 3.6, 3.95));
-        ToastState(ToastImage("Saved photo (compressed).jpg", "In Pictures"), Seg(t, 3.8, 4.15));
+        ToastState(ToastImage($"Saved {SampleName("jpg", " (compressed)")}", "In Pictures"), Seg(t, 3.8, 4.15));
         FadeOut(t, 6.7, 7.2);
     }
 
-    /// <summary>No drag: select the photo, press Ctrl+Alt+Space, click an option.</summary>
+    /// <summary>No drag: select the file, press Ctrl+Alt+Space, click an option.</summary>
     private void KeyboardScene(double t)
     {
         Keys(["Ctrl", "Alt", "Space"]);
@@ -517,7 +588,7 @@ public sealed class GuideStage : Canvas
             _ => "Then click an option",
         });
         Tile(_tileB, Seg(t, pick + 0.4, pick + 0.75));
-        ToastState(ToastImage("Saved photo.jpg", "In Pictures"), Seg(t, pick + 0.6, pick + 0.95));
+        ToastState(ToastImage($"Saved {SampleName("jpg")}", "In Pictures"), Seg(t, pick + 0.6, pick + 0.95));
         FadeOut(t, 10.1, 10.6);
     }
 
@@ -530,7 +601,7 @@ public sealed class GuideStage : Canvas
         _window.Visibility = _tileA.Visibility = _tileB.Visibility = _tileC.Visibility = Visibility.Collapsed;
         _settings.Visibility = Visibility.Visible;
 
-        // The editor shows the same slices as the photo's Convert wheel: hide BMP and TIFF, drag PDF to the top, Save.
+        // The editor shows the same slices as the file's Convert wheel: hide BMP and TIFF, drag PDF to the top, Save.
         var full = ConvertIdle;
         string Key(string label) => $"convert.image.{label.ToLowerInvariant()}";
         var entries = full.Labels.Select(l => new Settings.WheelEntry(new Settings.WheelChoice(Key(l), l, null), [])).ToList();
@@ -569,7 +640,7 @@ public sealed class GuideStage : Canvas
         // The real wheel changes only once saved.
         bool saved = t >= save + 0.1;
         string[] order = moved ? entries.Select(e => e.Choice.Key).ToArray() : [];
-        var wheel = saved ? Shot("cz", new(OperationMode.Convert, PhotoFiles, WheelGeometry.HitOutside, "2.4 MB", "photo.png", Hidden: hidden, Order: order)) : full;
+        var wheel = saved ? Shot("cz", new(OperationMode.Convert, SampleFiles, WheelGeometry.HitOutside, "2.4 MB", SampleFiles[0], Hidden: hidden, Order: order)) : full;
         double since = saved ? Seg(t, save + 0.1, save + 0.35) : 1;
         double open = Seg(t, 0.1, 0.4);
         WheelState(wheel, open * (0.5 + 0.5 * since), (0.4 + 0.6 * Back(open)) * (0.96 + 0.04 * Ease(since)), -10 * (1 - Ease(since)));
