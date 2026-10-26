@@ -1,4 +1,4 @@
-# Third-party reference material (Tangerine demo video) — never commit
+# Third-party reference material (demo videos) — never commit
 *.mp4
 *.mov
 reference/

@@ -50,18 +50,18 @@ Tagline (the catchy line): **Drag. Tap. Chango.**
 ## Logo and motion
 
 The logo is a "C" of six segments radiating from its centre, each with a notch cut in it, in logo teal `#0097B2` on
-a transparent background. Sources are in `assets/brand/new-logo`:
+a transparent background. Sources are in `assets/brand/logo`:
 
-- `chango-mark.svg`: the mark alone, on a square canvas. It's the app icon, tray icon, tile images and launch
-  animation, and the logo everywhere from now on.
-- `chango-logo-stacked.svg`: the mark above the "Chango" wordmark, on white (the file the mark was cropped from).
+- `chango-mark.svg`: the mark alone, on a square canvas: the source of the app icon, tray icon, tile images and
+  launch animation.
+- `chango-logo-stacked.svg`: the mark above the "Chango" wordmark, on white.
 - `chango-logo-horizontal.svg`: the mark with the wordmark beside it, for the website header.
 
 `dotnet run --project tools/IconGen` regenerates `src/Chango.UI/Assets` from `chango-mark.svg`:
 
 - `chango.ico`: 16–256 px, for the exe, taskbar, tray, window title bars and the installer.
 - `chango-<size>.png` at 16, 24, 32, 48, 64, 128, 256, 512 and 1024 px. Each surface uses the smallest size that's
-  still sharp at 200% scaling (the tray flyout and Settings header use 64, the README 256, Store art 1024).
+  still sharp at 200% scaling (the tray flyout and Settings header use 64, Store art 1024).
 - `chango-intro.json`: the launch animation, built from the mark's own segments. Starting at the top right and going
   anticlockwise, each segment fades in and grows with a small overshoot, about 1 s in all.
 

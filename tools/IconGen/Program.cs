@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using SkiaSharp;
 using Svg.Skia;
 
-// Chango brand assets from the logo source in assets/brand/new-logo:
+// Chango brand assets from the logo source in assets/brand/logo:
 //   chango-mark.svg → the app icon (chango.ico), the PNG set (chango-<size>.png, one per size so each surface loads
 //                      the smallest image that's still sharp) and the launch animation (chango-intro.json), in which
 //                      each segment of the mark pops in
@@ -16,7 +16,7 @@ internal static class Program
 {
     private static int Main(string[] args)
     {
-        string source = args.Length > 0 ? args[0] : Path.Combine("assets", "brand", "new-logo");
+        string source = args.Length > 0 ? args[0] : Path.Combine("assets", "brand", "logo");
         string output = args.Length > 1 ? args[1] : Path.Combine("src", "Chango.UI", "Assets");
         Directory.CreateDirectory(output);
 

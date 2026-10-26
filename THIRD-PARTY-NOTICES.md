@@ -60,4 +60,4 @@ CorelDRAW is a trademark of Corel Corporation (Alludo). Microsoft Word, Excel, P
 
 ## Brand assets
 
-The Chango icon is original work generated from vectors by `tools/IconGen` and covered by this repository's MIT licence. No assets from Tangerine or any other product are used.
+The Chango name and logo (`assets/brand/logo`, and the icons and launch animation `tools/IconGen` makes from it) are reserved by Ramesh Tiwari and aren't covered by the MIT licence: see [assets/brand/README.md](assets/brand/README.md). No other product's assets are used.
