@@ -147,9 +147,7 @@ Tests that need Word, Excel, PowerPoint or FFmpeg skip themselves when those are
 
 ## Credits
 
-Chango is built on **[OrbitDrop](https://github.com/i3sam/OrbitDrop)** by **[Mohammed Essam](https://github.com/i3sam)**. The radial wheel that opens while you drag a file, and the code behind it, began as his work, shared under the MIT License. Chango adds its own converters, tools, design and tour on top.
-
-Thank you, Mohammed, for building OrbitDrop and sharing it openly, and for your kind encouragement to release Chango as its own app.
+Chango is built on **[OrbitDrop](https://github.com/i3sam/OrbitDrop)** by Mohammed Essam. The radial wheel that opens while you drag a file, and the code behind it, is based on Orbit's work, shared under the MIT License. Chango adds its own converters, tools, design and tour on top.
 
 Chango also stands on open-source libraries including PDFsharp, PdfPig, the Open XML SDK, SkiaSharp, Svg.Skia and Markdig. Every one is listed, with its licence, in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
