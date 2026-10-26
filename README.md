@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/brand/new-logo/chango-mark.svg" width="112" height="112" alt="Chango logo">
+  <img src="assets/brand/logo/chango-mark.svg" width="112" height="112" alt="Chango logo">
 </p>
 
 <h1 align="center">Chango</h1>
@@ -17,7 +17,7 @@
 
 <p align="center">
   <!-- When chango.rameshtiwari.com is live, point this button at its download page. -->
-  <a href="https://github.com/tiwariramesh/Chango/releases"><img src="https://img.shields.io/badge/Download%20for%20Windows-1.0.0%20beta-0097B2?style=for-the-badge" alt="Download Chango 1.0.0 beta for Windows" height="34"></a>
+  <a href="https://github.com/tiwariramesh/Chango/releases/latest"><img src="https://img.shields.io/github/v/release/tiwariramesh/Chango?style=for-the-badge&label=Download%20for%20Windows&color=0097B2" alt="Download the latest Chango for Windows" height="34"></a>
   <!-- Store listing pending: when Partner Center gives the product ID, swap this for Microsoft's official badge:
        <a href="https://apps.microsoft.com/detail/<STORE_ID>"><img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft" height="34"></a> -->
   <img src="https://img.shields.io/badge/Microsoft%20Store-coming%20soon-3A3F47?style=for-the-badge" alt="Microsoft Store: coming soon" height="34">
@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/tiwariramesh/Chango/releases">Releases</a> ·
+  <a href="https://github.com/tiwariramesh/Chango/releases/latest">Latest release</a> ·
   <a href="#install">Install</a> ·
   <a href="#what-it-converts">What it converts</a> ·
   <a href="#build-from-source">Build from source</a> ·
@@ -41,13 +41,11 @@ Converting a file is basic computer work, so it shouldn't mean uploading it to s
 
 **Chango is available for Windows 10 (19041+) and 11. A native macOS version is in development.**
 
-> **1.0.0 beta is the first public release.** Download it from [Releases](https://github.com/tiwariramesh/Chango/releases), try it on your own files and tell me what you think: [open an issue](https://github.com/tiwariramesh/Chango/issues) or email ramestiwarii@gmail.com.
-
 ## How it works
 
 1. **Drag a file, then tap Shift.** Start dragging one or more files in File Explorer or on the desktop and keep holding. Tap Shift once and the wheel opens around the pointer.
 2. **Let go on what you want.** The result appears **next to the original**. Let go on the centre or press **Esc** to cancel.
-3. **Tap Shift again for more.** Each tap switches between **Convert**, **Tools** and **Actions**. Slices with dots (like **More** or **Compress**) open into more choices when you rest on them.
+3. **Tap Shift again for more.** Each tap switches between **Convert**, **Tools** and **Actions**. Slices marked **+** (like **More** or **Compress**) open into more choices when you rest on them.
 
 **No dragging?** Select files, press **Ctrl + Alt + Space** and click an option. **Or right-click** files or folders in File Explorer and choose **Chango**. Every result can be **undone** for a few seconds (it goes to the Recycle Bin).
 
@@ -76,15 +74,15 @@ Converting a file is basic computer work, so it shouldn't mean uploading it to s
 
 | Platform | How to get it | Status |
 |---|---|---|
-| **Windows 10 (19041+) and 11**, x64 | From [GitHub Releases](https://github.com/tiwariramesh/Chango/releases): `Chango-Setup.exe` (installer) or `Chango-Portable.zip` (no install) | Beta |
+| **Windows 10 (19041+) and 11**, x64 | [`Chango-Setup.exe`](https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Setup.exe) (installer) or [`Chango-Portable.zip`](https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Portable.zip) (no install), from the [latest release](https://github.com/tiwariramesh/Chango/releases/latest) | Available |
 | **Windows**, Microsoft Store | Automatic updates and a one-click install | Coming soon |
 | **Website** | [chango.rameshtiwari.com](https://chango.rameshtiwari.com), with downloads and a guide | Coming soon |
 | **macOS** | A native Mac app with the same drag, tap and let-go wheel | In development |
 
-**Installer:** run `Chango-Setup.exe`. It installs for your account only, so it doesn't need administrator rights, and adds Chango to the Start menu. Uninstall it from Settings → Apps.
-**Portable:** unzip `Chango-Portable.zip` anywhere and run `Chango.exe`.
+- **Installer:** run `Chango-Setup.exe`. It installs for your account only, so it doesn't need administrator rights, and adds Chango to the Start menu. It keeps itself up to date (see [Privacy](#privacy)). Uninstall it from Settings → Apps.
+- **Portable:** unzip `Chango-Portable.zip` anywhere and run `Chango.exe`. It tells you when a new version is out.
 
-Chango then waits in the notification area. Drag a file, tap **Shift**, and the tour shows you the rest.
+The first time Chango starts, a short tour shows you the gesture and lets you try it on a sample file. After that Chango waits quietly in the notification area; the tour is in its menu whenever you want it again.
 
 Each release includes `SHA256SUMS.txt`, so you can check the download is intact (`Get-FileHash Chango-Setup.exe` in PowerShell). Releases aren't code-signed yet, so Windows SmartScreen may warn the first time you run Chango. Choose **More info → Run anyway**.
 
@@ -95,7 +93,7 @@ Each release includes `SHA256SUMS.txt`, so you can check the download is intact 
 
 ## Privacy
 
-Everything runs locally. There are no uploads, no account and no telemetry. Update checks stay off until Chango has its own releases repository (`Brand.ReleasesRepo`). See the full [privacy policy](docs/PRIVACY.md).
+Everything runs locally. There are no uploads, no account and no telemetry. The one network request is the update check: every few hours Chango asks GitHub whether a newer version exists, sending nothing about you or your files. Turn it off in Settings → About. See the full [privacy policy](docs/PRIVACY.md).
 
 ## Roadmap
 
@@ -124,7 +122,7 @@ Tests that need Word, Excel, PowerPoint or FFmpeg skip themselves when those are
 | | |
 |---|---|
 | Name | Chango, the drag-and-drop file converter and manager. Tagline: **Drag. Tap. Chango.** |
-| Logo | A "C" of six notched segments radiating from its centre, in logo teal `#0097B2`. The source is [`assets/brand/new-logo/chango-mark.svg`](assets/brand/new-logo/chango-mark.svg), with wordmark versions beside it |
+| Logo | A "C" of six notched segments radiating from its centre, in logo teal `#0097B2`. The source is [`assets/brand/logo/chango-mark.svg`](assets/brand/logo/chango-mark.svg), with wordmark versions beside it |
 | Icon sizes | `tools/IconGen` builds `chango.ico` and `chango-<size>.png` (16 to 1024 px) in `src/Chango.UI/Assets`, plus the launch animation, so each surface loads the smallest sharp image |
 | Palette | UI accent Chango Teal `#0EA5A4` with ink `#011F1E` (5.7:1); deep blue `#115469`, teal `#20B4A6` and mint `#94EAE3` for the wash behind glass |
 | Look | Frosted glass panels over a soft wash of the palette; teal only for small accents |
@@ -142,7 +140,7 @@ Tests that need Word, Excel, PowerPoint or FFmpeg skip themselves when those are
 | `src/Chango.Conversion` | Converters: images, PDF (`Pdf/`), documents (`Documents/`), media (`Media/`, FFmpeg included), subtitles |
 | `src/Chango.Tools` | Tools and actions: image tools, archives, metadata, file actions |
 | `src/Chango.Jobs` / `Infrastructure` | Background jobs, settings, brand, local logs |
-| `assets/brand` | Logo sources |
+| `assets/brand` | Logo sources (not MIT: see [assets/brand/README.md](assets/brand/README.md)) |
 | `docs/` | Privacy policy, design system, build guide |
 
 ## Credits
@@ -153,6 +151,8 @@ Chango also stands on open-source libraries including PDFsharp, PdfPig, the Open
 
 ## License
 
-MIT, © 2026 Ramesh Tiwari and © 2026 Mohammed Essam (OrbitDrop). See [LICENSE](LICENSE), [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) and the full licence texts in [licenses/](licenses/).
+The code is MIT, © 2026 Ramesh Tiwari and © 2026 Mohammed Essam (OrbitDrop). See [LICENSE](LICENSE), [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) and the full licence texts in [licenses/](licenses/).
 
-Made by Ramesh Tiwari in Perth, Australia · [chango.rameshtiwari.com](https://chango.rameshtiwari.com) · ramestiwarii@gmail.com
+The Chango name and logo aren't covered by the MIT licence: a fork needs its own. See [assets/brand/README.md](assets/brand/README.md).
+
+Made by Ramesh Tiwari · [chango.rameshtiwari.com](https://chango.rameshtiwari.com) · ramestiwarii@gmail.com

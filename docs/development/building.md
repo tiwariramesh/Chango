@@ -23,13 +23,19 @@ Command-line switches for `Chango.exe`:
 | Switch | Effect |
 |---|---|
 | `--background` | Start silently (used by "launch at sign-in"): no welcome toast or guide |
-| `--render-ui <folder>` | Render every surface (wheel, toasts, Settings pages, guide, tray menu) in light and dark at 100% and 150% to PNG. No screen capture; settings untouched. Can run alongside a live instance |
+| `--render-ui <folder>` | Render every surface (wheel, toasts, Settings pages, guide, tray menu) in light and dark at 100% and 150% to PNG. No screen capture; settings untouched. Can run alongside a live instance. CI runs it for design review |
+| `--render-store <folder>` | The Microsoft Store artwork: screenshots, box art, poster, hero and Store logo (see `build/store/LISTING.md`) |
+| `--render-guide <folder>` | The tour's demonstrations as looping GIFs, light and dark, for the README and docs |
+| `--render-guide-frames <folder>` | The same demonstrations as PNG frames (2×, 30 fps), to encode into looping web videos for the website |
+| `--render-film <folder>` | The real UI states the launch film is made from, at 3× on transparent backgrounds |
+
+The `--render-*` switches run offscreen alongside a live Chango and never touch settings or the screen.
 
 ## 3. Release packaging
 
 ```powershell
 ./build/package.ps1                         # version from build/Common.props
-./build/package.ps1 -Version 0.1.1-alpha    # override
+./build/package.ps1 -Version 1.0.1          # override
 ./build/package.ps1 -SkipTests -SkipInstaller
 ```
 
@@ -56,16 +62,26 @@ Verified locally on 2026-10-18: silent install → files, shortcut and uninstall
 
 ## 4. Continuous integration
 
-- `.github/workflows/ci.yml` runs on push and PR: build, tests, the probe self-test, and the UI renders (uploaded as the `ui-review` artifact so reviewers see light **and** dark for every change).
-- `.github/workflows/release.yml` runs on a `v*` tag: `package.ps1`, then a **draft** GitHub Release (pre-release when the tag contains `-`). A maintainer reviews and publishes it.
+- `.github/workflows/ci.yml` runs on push and PR: build, tests and the UI renders (uploaded as the `ui-review` artifact so reviewers see light **and** dark for every change).
+- `.github/workflows/release.yml` runs on a `v*` tag: `package.ps1`, then publishes the GitHub Release with `build/release-notes.md` as its text (a pre-release when the tag contains `-`, such as `v1.1.0-beta`).
 
 ## 5. Brand assets
 
-`tools/IconGen` regenerates the icon set from vectors:
+`tools/IconGen` regenerates the icons and launch animation in `src/Chango.UI/Assets` from `assets/brand/logo/chango-mark.svg`:
 ```powershell
-dotnet run --project tools/IconGen -- src/Chango.UI/Assets
+dotnet run --project tools/IconGen
 ```
+The name and logo aren't MIT-licensed: see `assets/brand/README.md`.
 
-## 6. Signing (planned for 1.0)
+## 6. Signing
 
-Builds are currently unsigned, so Windows SmartScreen will warn on first run. Code signing (SignPath Foundation or Azure Trusted Signing) is scheduled for milestone M6.
+Releases are unsigned for now, so Windows SmartScreen warns the first time someone runs the installer. The options, cheapest first:
+
+| Option | Cost | Notes |
+|---|---|---|
+| **Microsoft Store (MSIX)** | Free | Microsoft signs the package; Store installs show no SmartScreen warning. Individual developer accounts are free. `build/store/package-store.ps1` and `LISTING.md` are ready. |
+| **SignPath Foundation** | Free for open source | Signs GitHub release builds from CI. Needs an OSI licence, a public repo, an automated build, and a code-signing policy page; the certificate is in SignPath Foundation's name. |
+| **Azure Artifact Signing** | About US$10 a month | Individuals in the USA and Canada only (organisations also in the EU and UK). |
+| **OV certificate** (Certum, Sectigo …) | About US$50–300 a year | Worldwide; the key lives on a hardware token or cloud HSM. |
+
+No certificate removes the warning straight away any more (EV lost that in 2024): SmartScreen trusts a publisher once its signed downloads build up reputation.

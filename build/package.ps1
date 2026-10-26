@@ -4,7 +4,7 @@
 
 .EXAMPLE
   ./build/package.ps1                      # version from build/Common.props
-  ./build/package.ps1 -Version 0.1.0-alpha -SkipTests
+  ./build/package.ps1 -Version 1.0.1 -SkipTests
 #>
 [CmdletBinding()]
 param(
