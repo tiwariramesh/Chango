@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Chango.Windows.Interop;
 
@@ -79,8 +78,6 @@ public partial class OnboardingWindow : Window
         ShowStep(0);
     }
 
-    /// <summary>Raised when the user finishes or skips the guide.</summary>
-    public event Action? Completed;
 
     /// <summary>The content root, for offscreen design-review renders.</summary>
     public FrameworkElement ContentRoot => Root;
@@ -294,16 +291,10 @@ public partial class OnboardingWindow : Window
     private void OnNext(object sender, RoutedEventArgs e)
     {
         if (_step < _steps.Length - 1) ShowStep(_step + 1);
-        else Finish();
+        else Close();
     }
 
     private void OnBack(object sender, RoutedEventArgs e) { if (_step > 0) ShowStep(_step - 1); }
 
-    private void OnSkip(object sender, RoutedEventArgs e) => Finish();
-
-    private void Finish()
-    {
-        Completed?.Invoke();
-        Close();
-    }
+    private void OnSkip(object sender, RoutedEventArgs e) => Close();
 }

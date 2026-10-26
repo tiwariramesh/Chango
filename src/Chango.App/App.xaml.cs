@@ -177,14 +177,20 @@ public partial class App : Application, ISettingsHost, ITrayCommands
 
         ApplyHotkey();
         ApplyContextMenu();
-        _instance.ListenForActivation(() => Dispatcher.BeginInvoke(() => OpenSettings()));
+        // Opening Chango again while it runs: Settings, or the tour if this is still the user's first time (the
+        // first run may have been a quiet one at sign-in).
+        _instance.ListenForActivation(() => Dispatcher.BeginInvoke(() =>
+        {
+            if (_settings.OnboardingCompleted) OpenSettings();
+            else ShowFirstRunTour();
+        }));
 
         // The silent installer relaunches with --updated after an in-app update.
         bool updated = args.Contains("--updated");
         bool background = args.Contains("--background") || updated || AppPackage.LaunchedAtSignIn;
         if (updated)
             _toasts.ShowMessage(ToastKind.Success, "Chango updated", $"You're now on version {UpdateManager.Current}. Your settings were kept.", ScreenInfo.CursorPosition);
-        else if (!_settings.OnboardingCompleted && !background) ShowOnboarding();
+        else if (!_settings.OnboardingCompleted && !background) ShowFirstRunTour();
         else if (!background)
             _toasts.ShowMessage(ToastKind.Info, "Chango is running",
                 $"Drag files and tap {TriggerKeyName}. Find Chango in the notification area.", ScreenInfo.CursorPosition);
@@ -250,12 +256,22 @@ public partial class App : Application, ISettingsHost, ITrayCommands
         _settingsWindow.Activate();
     }
 
+    /// <summary>
+    /// The tour on the user's first time only: it counts as seen as soon as it opens, however it's then closed
+    /// (Finish, Skip, Esc, the window's X or quitting Chango), so it never comes back on its own. The tray menu and
+    /// Settings still open it any time.
+    /// </summary>
+    private void ShowFirstRunTour()
+    {
+        Update(s => s.OnboardingCompleted = true);
+        ShowOnboarding();
+    }
+
     public void ShowOnboarding()
     {
         if (_onboarding is not null) { _onboarding.Activate(); return; }
         var assets = new GuideAssets(_registry);
         _onboarding = new OnboardingWindow(TriggerKeyName, assets, Path.Combine(_paths.LocalDirectory, "Guide"));
-        _onboarding.Completed += () => Update(s => s.OnboardingCompleted = true);
         _onboarding.ShowResultRequested += path => _shell.Reveal([path]);
         void OnJob(IReadOnlyList<string> sources, IReadOnlyList<string> outputs) => _onboarding?.OnJobFinished(sources, outputs);
         if (_interaction is not null) _interaction.JobFinished += OnJob;
