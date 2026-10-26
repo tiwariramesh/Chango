@@ -1,8 +1,8 @@
 # Chango privacy policy
 
-_Last updated: 23 October 2026_
+_Last updated: 26 October 2026_
 
-Chango is an offline file utility for Windows. In short: **your files never leave your PC, and Chango collects no personal data.**
+Chango is a file utility for Windows that does all its work on your PC. In short: **your files never leave your PC, and Chango collects no personal data.** Its only network request is an update check, which you can turn off (see [Network access](#network-access)).
 
 ## What Chango does with your files
 
@@ -25,7 +25,15 @@ Uninstalling Chango removes the app. You can delete the folders above to remove 
 
 ## Network access
 
-Chango makes **no network requests**. The Microsoft Store version is kept up to date by the Microsoft Store. If a future version downloaded from GitHub checks for updates, this policy will be updated first to say exactly what that request contains, and it will be possible to turn it off.
+Chango never sends your files, their names or anything about you anywhere. The only network request it makes is the update check, and only in the version downloaded from GitHub:
+
+- **What:** at most once every 6 hours while Chango is running, an anonymous request to GitHub's public list of Chango releases (`api.github.com/repos/tiwariramesh/Chango/releases`, or the public `releases.atom` feed if GitHub is busy) to see whether a newer version exists. The request says it comes from "Chango" and which version, and nothing else. Like any website, GitHub sees your IP address; [GitHub's privacy statement](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement) covers what it does with it.
+- **Updates:** a new version is downloaded from that release on GitHub and checked against its published SHA-256 checksum before it's installed. If you installed Chango with its installer, it installs the update when you're not using Chango; otherwise it asks first.
+- **Turning it off:** Settings → About → **Check for updates automatically** stops the checks, and **Install updates automatically** makes Chango ask before installing. "Check now" checks only when you press it.
+
+The Microsoft Store version makes no requests of its own: the Microsoft Store keeps it up to date.
+
+Buttons such as **Website**, **Star on GitHub** and **Email** open your browser or mail app only when you click them.
 
 Chango has no accounts, ads, analytics, tracking or telemetry, and it doesn't sell or share any data.
 

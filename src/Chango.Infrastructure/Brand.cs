@@ -18,14 +18,20 @@ public static class Brand
     public const string Author = "Ramesh Tiwari";
     public const string AuthorLocation = "Perth, Australia";
     public const string SupportEmail = "ramestiwarii@gmail.com";
-    public const string WebsiteUrl = "https://chango.rameshtiwari.com";
     public const string SourceUrl = "https://github.com/tiwariramesh/Chango";
 
     /// <summary>
-    /// GitHub "owner/repo" that publishes Chango releases. Null until that repository has releases, which keeps the
-    /// updater and the "star" prompt switched off: Chango makes no network requests until then.
+    /// Where About → Website goes. The GitHub page until chango.rameshtiwari.com is live; then set this to the
+    /// website.
     /// </summary>
-    public static readonly string? ReleasesRepo = null;
+    public const string WebsiteUrl = SourceUrl;
+
+    /// <summary>
+    /// GitHub "owner/repo" that publishes Chango releases: the GitHub version's updater checks it (see docs/PRIVACY.md,
+    /// "Network access"), and the "star" prompt links to it. Null switches both off, and Chango then makes no network
+    /// requests at all.
+    /// </summary>
+    public static readonly string? ReleasesRepo = "tiwariramesh/Chango";
 
     public static string? HomepageUrl => ReleasesRepo is null ? null : $"https://github.com/{ReleasesRepo}";
 }

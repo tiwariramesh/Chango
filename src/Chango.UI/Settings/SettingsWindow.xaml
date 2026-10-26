@@ -560,7 +560,7 @@
                             <Border Style="{StaticResource Chango.IconBadge}"><TextBlock Style="{StaticResource RowGlyph}" Text="&#xE72E;" /></Border>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="Private by design" Style="{StaticResource RowTitle}" />
-                                <TextBlock Text="Everything runs on this PC. Chango never uploads files, needs no account, and collects no telemetry. It makes no network requests." Style="{StaticResource RowHint}" />
+                                <TextBlock Text="Everything runs on this PC. Chango never uploads files, needs no account, and collects no telemetry. The only thing it asks the internet is whether a new version exists." Style="{StaticResource RowHint}" />
                             </StackPanel>
                         </DockPanel>
                     </Border>
