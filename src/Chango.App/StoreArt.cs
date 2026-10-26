@@ -49,7 +49,7 @@ internal static class StoreArt
             }
 
             // The photo editor, as a real window.
-            var photo = GuideStageExtras.SamplePhoto(1600);
+            var photo = GuideStage.Photo(1600);
             var editor = new Chango.UI.Editor.PhotoEditorWindow(photo, "Sunset.jpg");
             double k = photo.PixelWidth / 356.0;
             editor.ReviewState("Markup",
@@ -201,10 +201,4 @@ internal static class StoreArt
         using var fs = File.Create(path);
         enc.Save(fs);
     }
-}
-
-/// <summary>Small helpers shared with the guide's drawing.</summary>
-internal static class GuideStageExtras
-{
-    public static BitmapSource SamplePhoto(int size) => GuideStage.Photo(size);
 }

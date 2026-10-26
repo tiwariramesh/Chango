@@ -1,8 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using Chango.Core;
-using System.Windows.Media;
 using Microsoft.Win32;
 
 namespace Chango.UI.Settings;

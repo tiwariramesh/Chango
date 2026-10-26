@@ -85,7 +85,8 @@ public static class WicImageCodec
         catch (Exception ex) when (ex is NotSupportedException or FileFormatException)
         {
             // No Windows codec for it (WebP without the Store extension): Skia reads it, or it really isn't an image.
-            return WebpCodec.TryDecode(path) ?? throw ex;
+            if (WebpCodec.TryDecode(path) is { } webp) return webp;
+            throw;
         }
         if (decoder.Frames.Count == 0) throw new InvalidDataException("The image contains no frames.");
         var frame = decoder.Frames[0];

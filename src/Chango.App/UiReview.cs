@@ -232,7 +232,7 @@ internal static class UiReview
         public bool LaunchAtStartup { get; set; } = true;
         public bool AccentFallbackActive => false;
         public IEnumerable<(string Category, string Detail)> Capabilities => registry.Providers.SelectMany(p => p.DescribeCapabilities());
-        public string VersionText => "Version 0.1.0-alpha (design review)";
+        public string VersionText => $"Version {UpdateManager.Current} (design review)";
         public string SettingsPath => @"C:\Users\You\AppData\Roaming\Chango\settings.json";
         public string LogsPath => @"C:\Users\You\AppData\Local\Chango\logs";
         public string? LicensePath => "LICENSE.txt";

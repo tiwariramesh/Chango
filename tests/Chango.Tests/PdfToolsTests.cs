@@ -62,7 +62,7 @@ public class PdfToolsTests
         var o = Assert.Single(await Runner.Run(new PdfToolsProvider(), "tool.pdf.split", pdf));
         Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message);
         Assert.Equal(t.File("report (pages)"), o.Output);
-        var pages = Directory.GetFiles(o.Output!).Select(Path.GetFileName).Order().ToArray();
+        var pages = Directory.GetFiles(o.Output!).Select(f => Path.GetFileName(f)!).Order().ToArray();
         Assert.Equal(["Page 1.pdf", "Page 2.pdf", "Page 3.pdf"], pages);
         Assert.All(Directory.GetFiles(o.Output!), p => Assert.Equal(1, PageCount(p)));
     }

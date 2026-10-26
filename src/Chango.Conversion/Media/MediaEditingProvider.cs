@@ -3,7 +3,6 @@ using System.Windows.Media.Imaging;
 using Chango.Conversion.Imaging;
 using Chango.Core;
 using Windows.Media.Editing;
-using Windows.Media.MediaProperties;
 using Windows.Media.Transcoding;
 using Windows.Storage;
 

@@ -18,7 +18,7 @@ public static class DocxToMarkdown
         using var doc = WordprocessingDocument.Open(docx, false);
         var main = doc.MainDocumentPart ?? throw new InvalidDataException("The document has no body.");
         var writer = new Writer(main);
-        foreach (var element in main.Document.Body?.ChildElements ?? Enumerable.Empty<OpenXmlElement>())
+        foreach (var element in main.Document?.Body?.ChildElements ?? Enumerable.Empty<OpenXmlElement>())
         {
             switch (element)
             {

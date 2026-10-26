@@ -301,7 +301,7 @@ public class OfficeFormatTests
     {
         using var t = new TempFolder();
         string src = t.File("deck.pptx");
-        await Chango.Conversion.StaWorker.RunAsync(() =>
+        await Chango.Conversion.StaWorker.RunAsync(() => Chango.Conversion.Documents.DocumentEngines.WithPowerPoint(() =>
         {
             dynamic pp = Activator.CreateInstance(Type.GetTypeFromProgID("PowerPoint.Application")!)!;
             dynamic deck = pp.Presentations.Add(0);
@@ -310,7 +310,7 @@ public class OfficeFormatTests
             deck.SaveAs(src, 24);
             deck.Close();
             if (pp.Presentations.Count == 0) pp.Quit();
-        });
+        }));
         var png = Assert.Single(await Runner.Run(new DocumentProvider(), "convert.document.png", src));
         Assert.True(png.Status == OutcomeStatus.Succeeded, png.Message);
         Assert.Equal(t.File("deck (PNG)"), png.Output);

@@ -109,7 +109,24 @@ public sealed class DocumentEngines : IDisposable
 
     // ------------------------------------------------------------------ Microsoft Office (late-bound COM, on an STA thread)
 
+    private static readonly object PowerPointGate = new();
+
+    /// <summary>
+    /// Runs <paramref name="work"/> with PowerPoint to itself. Word and Excel start a fresh copy for each conversion,
+    /// but PowerPoint is one shared instance: two jobs at once would quit it under each other.
+    /// </summary>
+    public static void WithPowerPoint(Action work)
+    {
+        lock (PowerPointGate) work();
+    }
+
     private static void ConvertWithOffice(string progId, DocumentKind kind, string file, string output)
+    {
+        if (kind == DocumentKind.Slides) WithPowerPoint(() => ConvertWithOfficeApp(progId, kind, file, output));
+        else ConvertWithOfficeApp(progId, kind, file, output);
+    }
+
+    private static void ConvertWithOfficeApp(string progId, DocumentKind kind, string file, string output)
     {
         string ext = Path.GetExtension(output).ToLowerInvariant();
         // PowerPoint runs as one shared instance: if the user has it open, leave it running afterwards.

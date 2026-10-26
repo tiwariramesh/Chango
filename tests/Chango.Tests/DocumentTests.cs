@@ -96,7 +96,7 @@ public class DocumentTests
     {
         using var t = new TempFolder();
         string src = t.File("deck.pptx");
-        await StaWorker.RunAsync(() =>
+        await StaWorker.RunAsync(() => Chango.Conversion.Documents.DocumentEngines.WithPowerPoint(() =>
         {
             dynamic pp = Activator.CreateInstance(Type.GetTypeFromProgID("PowerPoint.Application")!)!;
             dynamic deck = pp.Presentations.Add(0); // no window
@@ -104,7 +104,7 @@ public class DocumentTests
             deck.SaveAs(src, 24);
             deck.Close();
             if (pp.Presentations.Count == 0) pp.Quit();
-        });
+        }));
         var pdf = await Run("convert.document.pdf", src);
         Assert.Equal(OutcomeStatus.Succeeded, pdf.Status);
         Assert.Null(PdfProvider.ValidatePdf(pdf.Output!));

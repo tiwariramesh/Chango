@@ -33,7 +33,7 @@ public sealed class GuideStage : Canvas
     private readonly Settings.WheelEditor _editor = new() { Width = EditorSize, Height = EditorSize, IsHitTestVisible = false };
     private const double EditorSize = 196;
     private readonly Border _tileA, _tileB, _tileC, _ghost;
-    private readonly TextBlock _tileBName, _tileCName;
+    private readonly TextBlock _tileCName;
     private readonly Image _wheel = new() { Width = WheelSize, Height = WheelSize };
     private readonly ScaleTransform _wheelScale = new();
     private readonly RotateTransform _wheelSpin = new();
@@ -104,7 +104,7 @@ public sealed class GuideStage : Canvas
         _content.Children.Add(_settings);
 
         _tileA = Tile(SampleName("png"), out _);
-        _tileB = Tile(SampleName("jpg"), out _tileBName);
+        _tileB = Tile(SampleName("jpg"), out _);
         _tileC = Tile(SampleName("jpg", " (compressed)"), out _tileCName);
         Place(_tileA, 40, 58);
         Place(_tileB, 148, 58);

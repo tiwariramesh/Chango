@@ -158,7 +158,7 @@ internal static class FilmAssets
         public bool LaunchAtStartup { get; set; } = true;
         public bool AccentFallbackActive => false;
         public IEnumerable<(string Category, string Detail)> Capabilities => registry.Providers.SelectMany(p => p.DescribeCapabilities());
-        public string VersionText => "Version 0.1.0-alpha";
+        public string VersionText => $"Version {UpdateManager.Current}";
         public string SettingsPath => "";
         public string LogsPath => "";
         public string? LicensePath => null;

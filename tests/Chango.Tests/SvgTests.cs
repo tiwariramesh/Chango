@@ -107,9 +107,12 @@ public class SvgTests
         for (int i = 1; i <= 9; i++) dtd.Append($"<!ENTITY a{i} \"{string.Concat(Enumerable.Repeat($"&a{i - 1};", 10))}\">");
         dtd.Append("]>");
         File.WriteAllText(src, dtd + """<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><text>&a9;</text></svg>""");
+        // Time the reader itself: the whole conversion also waits its turn behind the Office and FFmpeg tests running
+        // alongside, which on a busy PC can take seconds. A bomb that got through would take minutes or never finish.
         var sw = Stopwatch.StartNew();
+        Assert.ThrowsAny<Exception>(() => SvgCodec.Load(src));
+        Assert.True(sw.Elapsed < TimeSpan.FromSeconds(5), $"took {sw.Elapsed}");
         var r = await Convert(src, "png");
-        Assert.True(sw.Elapsed < TimeSpan.FromSeconds(10), $"took {sw.Elapsed}");
         Assert.Equal(OutcomeStatus.Failed, r.Status);
     }
 

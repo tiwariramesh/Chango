@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using Chango.Windows.Interop;
 
 namespace Chango.Windows.Shell;
 

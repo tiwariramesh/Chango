@@ -29,7 +29,7 @@ public sealed class RadialWheel : Window
         public required SolidColorBrush Fill;
         public required TextBlock Label;
         public TextBlock? Glyph;
-        /// <summary>The "more options" dots under a group label.</summary>
+        /// <summary>The "more options" + under a group label.</summary>
         public TextBlock? Dots;
         public required TranslateTransform Lift;
         public required double Angle;
