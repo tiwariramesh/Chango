@@ -1,0 +1,515 @@
+<!doctype html>
+<!-- data-store: "soon" until the Microsoft Store listing is live, then "live" (Store badges start linking). -->
+<html lang="en" data-store="soon">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chango: drag-and-drop file converter for Windows</title>
+  <meta name="description" content="Drag a file, tap Shift, let go on the format you want. Chango converts, edits and manages files right where they are, on your PC. Free, open source, no uploads.">
+  <link rel="canonical" href="https://chango.rameshtiwari.com/">
+  <meta name="theme-color" content="#FAFBFC" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E1214" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Chango">
+  <meta property="og:title" content="Chango: Drag. Tap. Chango.">
+  <meta property="og:description" content="The free drag-and-drop file converter for Windows. Drag a file, tap Shift, let go on a format. Nothing is uploaded.">
+  <meta property="og:url" content="https://chango.rameshtiwari.com/">
+  <meta property="og:image" content="https://chango.rameshtiwari.com/assets/social.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <script>
+    // Apply a saved theme before first paint (no flash). Storage can be unavailable; then the system theme applies.
+    try { var t = localStorage.getItem('chango-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Chango",
+    "description": "Drag-and-drop file converter and manager for Windows.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Windows 10, Windows 11",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Ramesh Tiwari" },
+    "license": "https://opensource.org/licenses/MIT",
+    "url": "https://chango.rameshtiwari.com/",
+    "downloadUrl": "https://github.com/tiwariramesh/Chango/releases/latest",
+    "image": "https://chango.rameshtiwari.com/assets/social.jpg"
+  }
+  </script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-windows" viewBox="0 0 24 24" fill="currentColor"><path d="M2 2h9.6v9.6H2zM12.4 2H22v9.6h-9.6zM2 12.4h9.6V22H2zM12.4 12.4H22V22h-9.6z"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+    <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M3 9h18M12 9v11"/><path d="M12 9c-1.5-3-5-4-5.5-1.8C6 9 12 9 12 9Zm0 0c1.5-3 5-4 5.5-1.8C18 9 12 9 12 9Z"/></symbol>
+    <symbol id="i-cloud-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.2A6 6 0 0 1 17.6 10 4 4 0 0 1 20 17.2"/><path d="M16 18H7a4.5 4.5 0 0 1-1.4-8.8"/><path d="m3 3 18 18"/></symbol>
+    <symbol id="i-user-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.5 3.6-5.5 7-5.5 1.5 0 2.9.4 4 1.1"/><path d="m16.5 17.5 4 4m0-4-4 4"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15"/></symbol>
+    <symbol id="i-stack" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 12.5 9 5 9-5M3 16.5l9 5 9-5"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5 4 10l5 5"/><path d="M4 10h10a6 6 0 0 1 0 12h-2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3 5 6v5.5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10" stroke-linecap="round"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5 4 20Z"/><path d="m14 6.5 3 3"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V9M10 13h4"/></symbol>
+    <symbol id="i-offline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a10 10 0 0 1 3.5-2.2M2 9a14 14 0 0 1 4-2.6M19 12.5a10 10 0 0 0-5-2.4M22 9a14 14 0 0 0-11.5-3.4M8.5 16a5 5 0 0 1 5.3-1"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/><path d="m3 3 18 18"/></symbol>
+    <symbol id="i-contrast" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17a8.5 8.5 0 0 0 0-17Z" fill="currentColor"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7 9l5-5 5 5"/><path d="M7 18.5H6a4 4 0 0 1-.8-7.9M17 18.5h1a4 4 0 0 0 .8-7.9"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5-13-7.5Z"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header" id="top">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Chango home"><img src="favicon.svg" alt="" width="30" height="30">Chango</a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#try">Try it</a>
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#formats">Formats</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch between light and dark">
+        <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg>
+      </button>
+      <a class="icon-btn" href="https://github.com/tiwariramesh/Chango" aria-label="Chango on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .8.1-.7.4-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2.2Z"/></svg>
+      </a>
+      <a class="btn btn-windows btn-sm header-download" href="#download"><svg class="win-logo"><use href="#i-windows"/></svg>Download</a>
+      <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="nav" aria-expanded="false"><svg><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="wash"></div>
+    <div class="wrap">
+      <h1>Drag. <span class="tap">Tap.</span> Chango.</h1>
+      <p class="sub">The drag-and-drop file converter for Windows. Drag a file, tap <kbd>Shift</kbd>, let go on the format you want. It all happens on your PC.</p>
+      <div class="cta-row">
+        <a class="btn btn-windows" href="https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Setup.exe"><svg class="win-logo"><use href="#i-windows"/></svg>Download for Windows</a>
+        <span class="store-wrap">
+          <a class="store-badge store-link" href="https://apps.microsoft.com/detail/9NL33K6PBB4K"><img data-light="assets/store-badge-dark.svg" data-dark="assets/store-badge-light.svg" src="assets/store-badge-dark.svg" alt="Download from the Microsoft Store" width="161" height="44"></a>
+          <span class="soon-tag">Coming soon</span>
+        </span>
+      </div>
+      <p class="hero-meta">Free · Open source · Windows 10 &amp; 11</p>
+
+      <div class="preview" role="img" aria-label="Animation: photo.heic is dragged, Shift is tapped, the Chango wheel opens, and photo.png appears beside the original.">
+        <div class="pv-file pv-src"><span class="doc"><span class="badge">HEIC</span></span><span>photo.heic</span></div>
+        <div class="pv-file pv-out"><span class="doc"><span class="badge">PNG</span></span><span>photo.png</span></div>
+        <div class="pv-wheel">
+          <img data-light="assets/wheel-idle.webp" data-dark="assets/wheel-idle-dark.webp" src="assets/wheel-idle.webp" alt="" width="720" height="720">
+          <img class="lit" data-light="assets/wheel-convert.webp" data-dark="assets/wheel-convert-dark.webp" src="assets/wheel-convert.webp" alt="" width="720" height="720">
+        </div>
+        <div class="pv-ghost"><span class="doc"><span class="badge">HEIC</span></span></div>
+        <kbd class="pv-key">Shift</kbd>
+        <img class="pv-toast" data-light="assets/toast.webp" data-dark="assets/toast-dark.webp" src="assets/toast.webp" alt="" width="740" height="196">
+        <svg class="pv-cursor" viewBox="0 0 20 28" aria-hidden="true"><path d="M2 2v21l5.5-5.2 3.6 8.2 3.6-1.6-3.6-8H18L2 2Z" fill="#fff" stroke="#111" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Try it ===== -->
+  <section class="try" id="try">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Try it</span>
+        <h2>Go on, drag a file.</h2>
+        <p>Pick up any file below and keep holding. Tap <kbd>Shift</kbd> (or hold still), then let go on what you want.</p>
+      </div>
+    </div>
+    <div class="wrap-wide">
+      <div class="desk" id="desk">
+        <div class="desk-files" id="files">
+          <div class="desk-row">
+            <button class="file src" type="button" data-kind="image" data-base="photo" data-ext="PNG" aria-label="photo.png. Drag it, or press Enter to open the Chango wheel.">
+              <span class="doc" style="--c: var(--t-image)"><span class="badge">PNG</span></span><span class="name">photo.png</span>
+            </button>
+          </div>
+          <div class="desk-row">
+            <button class="file src" type="button" data-kind="word" data-base="report" data-ext="DOCX" aria-label="report.docx. Drag it, or press Enter to open the Chango wheel.">
+              <span class="doc" style="--c: var(--t-word)"><span class="badge">DOCX</span></span><span class="name">report.docx</span>
+            </button>
+          </div>
+          <div class="desk-row">
+            <button class="file src" type="button" data-kind="video" data-base="clip" data-ext="MOV" aria-label="clip.mov. Drag it, or press Enter to open the Chango wheel.">
+              <span class="doc" style="--c: var(--t-video)"><span class="badge">MOV</span></span><span class="name">clip.mov</span>
+            </button>
+          </div>
+        </div>
+        <div class="desk-hint" id="demo-hint" aria-live="polite"></div>
+        <div class="desk-keys"><kbd>Shift</kbd> next wheel <kbd>Esc</kbd> cancel</div>
+        <div class="wheel" id="wheel" aria-hidden="true"></div>
+        <div class="toast" id="toast" role="status" aria-live="polite">
+          <span class="tick"><svg><use href="#i-check"/></svg></span>
+          <div><b id="toast-title">Saved</b><span id="toast-sub">On the desktop</span></div>
+        </div>
+        <button class="desk-reset" id="demo-reset" type="button">Start over</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Proof ===== -->
+  <div class="proof">
+    <div class="wrap">
+      <ul>
+        <li class="glass"><span class="badge-icon" style="--c: var(--coral)"><svg><use href="#i-gift"/></svg></span><div><b>Free forever</b><span>No trial, no limits, no ads.</span></div></li>
+        <li class="glass"><span class="badge-icon" style="--c: var(--teal)"><svg><use href="#i-cloud-off"/></svg></span><div><b>Nothing uploaded</b><span>Every file stays on your PC.</span></div></li>
+        <li class="glass"><span class="badge-icon" style="--c: #3B82F6"><svg><use href="#i-user-off"/></svg></span><div><b>No account</b><span>Install it and go.</span></div></li>
+        <li class="glass"><span class="badge-icon" style="--c: var(--t-image)"><svg><use href="#i-code"/></svg></span><div><b>Open source</b><span>MIT licensed, on GitHub.</span></div></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== How it works ===== -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">How it works</span>
+        <h2>Three moves. No windows to open.</h2>
+        <p>Chango waits quietly in the notification area until you need it. Then it's one gesture, wherever your files are.</p>
+      </div>
+      <div class="steps">
+        <article class="step-card glass reveal">
+          <div class="clip" data-scene="drag"><img src="assets/demo/drag.webp" alt="" loading="lazy" width="1200" height="640"></div>
+          <h3>Drag, then tap Shift</h3>
+          <p>Start dragging files in File Explorer or on the desktop and keep holding. Tap <kbd>Shift</kbd> and the wheel opens around your pointer.</p>
+        </article>
+        <article class="step-card glass reveal">
+          <div class="clip" data-scene="release"><img src="assets/demo/release.webp" alt="" loading="lazy" width="1200" height="640"></div>
+          <h3>Let go on what you want</h3>
+          <p>Drop on a format and the new file appears next to the original. The original is never changed.</p>
+        </article>
+        <article class="step-card glass reveal">
+          <div class="clip" data-scene="modes"><img src="assets/demo/modes.webp" alt="" loading="lazy" width="1200" height="640"></div>
+          <h3>Tap Shift for more</h3>
+          <p>Each tap switches between Convert, Tools and Actions. Let go in the middle, or press <kbd>Esc</kbd>, to cancel.</p>
+        </article>
+      </div>
+      <p class="also reveal">
+        <span>Rather click? Select files and press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>.</span>
+        <span>Or right-click and choose <b>Chango</b>.</span>
+        <span>Changed your mind? <b>Undo</b> for a few seconds.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Three wheels ===== -->
+  <section id="features">
+    <div class="wash"></div>
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">One gesture, three wheels</span>
+        <h2>Convert it, fix it, or send it somewhere.</h2>
+      </div>
+      <div class="shift-cycle reveal" aria-label="Each tap of Shift switches wheels">
+        <span class="pill">Convert</span><span class="arrow">→</span><kbd>Shift</kbd><span class="arrow">→</span>
+        <span class="pill">Tools</span><span class="arrow">→</span><kbd>Shift</kbd><span class="arrow">→</span>
+        <span class="pill">Actions</span>
+      </div>
+      <div class="wheels">
+        <article class="wheel-card glass reveal">
+          <img data-light="assets/wheel-convert.webp" data-dark="assets/wheel-convert-dark.webp" src="assets/wheel-convert.webp" alt="The Convert wheel for a photo: PNG, WebP, BMP, TIFF, GIF, JFIF and PDF." loading="lazy" width="720" height="720">
+          <span class="tag">Convert</span>
+          <h3>Any file, the format you need</h3>
+          <p>Images, documents, PDFs, spreadsheets, slides, video, audio and subtitles, each into the formats that make sense for it.</p>
+          <ul><li>PDF → Word</li><li>Word → PDF</li><li>HEIC → JPG</li><li>PNG → WebP</li><li>MOV → MP4</li><li>Video → MP3</li><li>Excel → CSV</li><li>SRT ↔ VTT</li></ul>
+        </article>
+        <article class="wheel-card glass reveal">
+          <img data-light="assets/wheel-tools.webp" data-dark="assets/wheel-tools-dark.webp" src="assets/wheel-tools.webp" alt="The Tools wheel for a photo: Edit, Compress, Resize, Rotate and flip, Grayscale and Copy text." loading="lazy" width="720" height="720">
+          <span class="tag">Tools</span>
+          <h3>Quick fixes, no editor needed</h3>
+          <p>Shrink, crop, rotate or clean up a file in the same move, and get on with your day.</p>
+          <ul><li>Edit &amp; redact</li><li>Compress to a size</li><li>Resize</li><li>Copy text (OCR)</li><li>Merge PDFs</li><li>Trim video</li><li>Normalize audio</li><li>Remove GPS</li></ul>
+        </article>
+        <article class="wheel-card glass reveal">
+          <img data-light="assets/wheel-actions.webp" data-dark="assets/wheel-actions-dark.webp" src="assets/wheel-actions.webp" alt="The Actions wheel: Copy path, Show in folder, Copy to, Move to, Float, Share, Archive, Terminal and Wallpaper." loading="lazy" width="720" height="720">
+          <span class="tag">Actions</span>
+          <h3>Everyday chores in one move</h3>
+          <p>Copy, move, share or zip files without hunting through menus. Actions work on folders too.</p>
+          <ul><li>Copy path</li><li>Show in folder</li><li>Copy or move to</li><li>Share</li><li>Float on a shelf</li><li>ZIP or 7Z</li><li>Terminal here</li><li>Set as wallpaper</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Feature rows ===== -->
+  <section>
+    <div class="wrap rows">
+      <div class="row reveal">
+        <div class="media"><div class="clip" data-scene="groups"><img src="assets/demo/groups.webp" alt="" loading="lazy" width="1200" height="640"></div></div>
+        <div>
+          <span class="eyebrow">More inside</span>
+          <h3>More choices, one + away</h3>
+          <p>Slices marked <b>+</b> open into more options when you rest on them: compress to a size, resize to a width, or pick from more video formats. Big menus, still one gesture.</p>
+        </div>
+      </div>
+      <div class="row flip reveal">
+        <div class="media"><div class="clip" data-scene="keyboard"><img src="assets/demo/keyboard.webp" alt="" loading="lazy" width="1200" height="640"></div></div>
+        <div>
+          <span class="eyebrow">Without dragging</span>
+          <h3>No drag? No problem.</h3>
+          <p>Some days you'd rather click. Chango works the way you do.</p>
+          <ul>
+            <li><span>Select files and press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>, then click an option.</span></li>
+            <li><span>Right-click files or folders in File Explorer and choose <b>Chango</b>.</span></li>
+            <li><span>Drag from File Explorer, the desktop, or apps like VS Code.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row reveal">
+        <div class="media"><div class="clip" data-scene="customize"><img src="assets/demo/customize.webp" alt="" loading="lazy" width="1200" height="640"></div></div>
+        <div>
+          <span class="eyebrow">Make it yours</span>
+          <h3>Your wheel, your way</h3>
+          <p>Hide the slices you never use and put your favourites first. Settings → Wheel shows every wheel: click a slice to hide it, drag it to move it, then save.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== The little things ===== -->
+  <section>
+    <div class="wash"></div>
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Details</span>
+        <h2>The little things, done right.</h2>
+      </div>
+      <div class="grid">
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: #3B82F6"><svg><use href="#i-stack"/></svg></span><h3>Many files at once</h3><p>Drop a whole selection. Chango works through it and shows its progress.</p></div>
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: var(--coral)"><svg><use href="#i-undo"/></svg></span><h3>Undo</h3><p>Every result can be undone for a few seconds. It goes to the Recycle Bin.</p></div>
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: var(--good)"><svg><use href="#i-shield"/></svg></span><h3>Never overwrites</h3><p>Results get their own name beside the original, which stays exactly as it was.</p></div>
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: var(--t-image)"><svg><use href="#i-pencil"/></svg></span><h3>Photo editor built in</h3><p>Crop, adjust, mark up and redact before you share.</p></div>
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: var(--t-archive)"><svg><use href="#i-archive"/></svg></span><h3>Archives both ways</h3><p>Make ZIP, 7Z or TAR.GZ. Open ZIP, 7Z, RAR, TAR, ISO and more.</p></div>
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: var(--teal)"><svg><use href="#i-offline"/></svg></span><h3>Works offline</h3><p>No internet needed for any conversion, ever.</p></div>
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: var(--t-text)"><svg><use href="#i-contrast"/></svg></span><h3>Light and dark</h3><p>Follows your Windows theme, or pick the one you like.</p></div>
+        <div class="feature glass reveal"><span class="badge-icon" style="--c: var(--t-video)"><svg><use href="#i-spark"/></svg></span><h3>A one-minute tour</h3><p>The first time it starts, a hands-on guide lets you try the gesture on a sample file.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Privacy ===== -->
+  <section id="privacy">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Private by design</span>
+        <h2>Why upload a file just to change it?</h2>
+        <p>Online converters take your file, process it on their server and hand it back. Chango does the same work on your own PC.</p>
+      </div>
+      <div class="compare">
+        <div class="them reveal">
+          <h3><svg><use href="#i-globe"/></svg>Online converters</h3>
+          <ul>
+            <li><svg><use href="#i-upload"/></svg>Your file goes to someone else's server</li>
+            <li><svg><use href="#i-clock"/></svg>Queues, waiting and file size limits</li>
+            <li><svg><use href="#i-card"/></svg>Accounts, ads, or a paywall after a few files</li>
+            <li><svg><use href="#i-x"/></svg>Nothing works without the internet</li>
+          </ul>
+        </div>
+        <div class="us glass reveal">
+          <h3><img src="favicon.svg" alt="">Chango</h3>
+          <ul>
+            <li><svg><use href="#i-check"/></svg>Your files never leave your PC</li>
+            <li><svg><use href="#i-check"/></svg>As fast as your PC, with no size limits</li>
+            <li><svg><use href="#i-check"/></svg>Free forever: no account, no ads</li>
+            <li><svg><use href="#i-check"/></svg>Works offline</li>
+          </ul>
+        </div>
+      </div>
+      <p class="privacy-link reveal">Chango collects no personal data. <a href="privacy.html">Read the privacy policy</a>; it's short.</p>
+    </div>
+  </section>
+
+  <!-- ===== Formats ===== -->
+  <section id="formats">
+    <div class="wash"></div>
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">What it converts</span>
+        <h2>From the files you have to the files you need.</h2>
+      </div>
+      <div class="formats">
+        <div class="format glass reveal"><header><span class="ficon" data-t="IMG" style="--c: var(--t-image)"></span><h3>Images</h3><span class="needs none">Built in</span></header><dl><dt>From</dt><dd>PNG, JPG, WebP, JFIF, BMP, TIFF, GIF, SVG, HEIC, AVIF, JPEG XL, RAW</dd><dt>To</dt><dd>PNG, JPG, WebP, JFIF, BMP, TIFF, GIF, PDF</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="PDF" style="--c: var(--t-pdf)"></span><h3>PDF</h3><span class="needs">Word for DOCX</span></header><dl><dt>To</dt><dd>Word, PowerPoint (a slide per page), Excel (tables rebuilt as cells), TXT, Markdown, PNG, JPG</dd><dt>Tools</dt><dd>Merge, split, compress, rotate</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="DOC" style="--c: var(--t-word)"></span><h3>Word</h3><span class="needs">Office or LibreOffice</span></header><dl><dt>From</dt><dd>DOC, DOCX, RTF, ODT</dd><dt>To</dt><dd>PDF, DOCX, TXT, Markdown, HTML, RTF, ODT</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="XLS" style="--c: var(--t-excel)"></span><h3>Spreadsheets</h3><span class="needs">Office or LibreOffice</span></header><dl><dt>From</dt><dd>XLS, XLSX, ODS, CSV, TSV</dd><dt>To</dt><dd>PDF, XLSX, CSV, TSV, ODS</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="PPT" style="--c: var(--t-slides)"></span><h3>Slides</h3><span class="needs">Office or LibreOffice</span></header><dl><dt>From</dt><dd>PPT, PPTX, ODP</dd><dt>To</dt><dd>PDF, PPTX, or an image per slide (PNG, JPG)</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="MD" style="--c: var(--t-text)"></span><h3>Markdown &amp; text</h3><span class="needs">Office for PDF, DOCX</span></header><dl><dt>From</dt><dd>MD, TXT</dd><dt>To</dt><dd>PDF, DOCX, HTML, and Markdown → TXT</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="VID" style="--c: var(--t-video)"></span><h3>Video</h3><span class="needs">FFmpeg for More</span></header><dl><dt>From</dt><dd>MP4, MOV, MKV, WebM, AVI, WMV and more</dd><dt>To</dt><dd>MP4, WMV, GIF, or audio as MP3, M4A, WAV, WMA, FLAC</dd><dt>More</dt><dd>MKV, WebM, MOV, AVI, OGG, Opus, AIFF</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="AUD" style="--c: var(--t-audio)"></span><h3>Audio</h3><span class="needs">FFmpeg for some</span></header><dl><dt>From</dt><dd>MP3, M4A, WAV, WMA, FLAC; OGG, Opus, AIFF with FFmpeg</dd><dt>To</dt><dd>MP3, M4A, WAV, WMA, FLAC; OGG, Opus, AIFF with FFmpeg</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="SRT" style="--c: var(--t-subs)"></span><h3>Subtitles</h3><span class="needs none">Built in</span></header><dl><dt>From</dt><dd>SRT, VTT</dd><dt>To</dt><dd>SRT, VTT, or a plain-text transcript</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="CDR" style="--c: var(--t-corel)"></span><h3>CorelDRAW</h3><span class="needs none">Built in</span></header><dl><dt>From</dt><dd>CDR, CMX</dd><dt>To</dt><dd>PDF, SVG, PNG, JPG, WebP, TIFF, BMP</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="ZIP" style="--c: var(--t-archive)"></span><h3>Archives</h3><span class="needs none">Built in</span></header><dl><dt>Open</dt><dd>ZIP, 7Z, RAR, TAR, TAR.GZ, TAR.XZ, TAR.BZ2, GZ, CAB, ISO</dd><dt>Make</dt><dd>ZIP, 7Z, TAR.GZ</dd></dl></div>
+        <div class="format glass reveal"><header><span class="ficon" data-t="INFO" style="--c: var(--t-info)"></span><h3>File details</h3><span class="needs none">Built in</span></header><dl><dt>See</dt><dd>File info at a glance</dd><dt>Change</dt><dd>Edit details, remove metadata and GPS location</dd></dl></div>
+      </div>
+      <div class="format-notes">
+        <div class="glass reveal"><h3>No Office? Most things still work.</h3><p>Images, media, subtitles, archives, CorelDRAW and PDF to PowerPoint, Excel or text are all built in. For Word, Excel and PowerPoint files, Chango uses Microsoft Office, or free LibreOffice if you'd rather.</p></div>
+        <div class="glass reveal"><h3>Uses what Windows already has.</h3><p>HEIC, AVIF, JPEG XL and RAW photos open with the codecs Windows provides. Install free FFmpeg and the extra video and audio formats appear on their own.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== At home on Windows ===== -->
+  <section>
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Feels like Windows 11</span>
+        <h2>At home on your desktop.</h2>
+      </div>
+      <div class="home-shot reveal">
+        <img class="settings" data-light="assets/settings.webp" data-dark="assets/settings-dark.webp" src="assets/settings.webp" alt="Chango's Settings, showing Appearance: theme, accent colour, wheel size and reduce motion." loading="lazy" width="1400" height="986">
+        <img class="toast-shot" data-light="assets/toast.webp" data-dark="assets/toast-dark.webp" src="assets/toast.webp" alt="A Chango notification: Saved photo.png, in Pictures, with a Show button." loading="lazy" width="740" height="196">
+      </div>
+      <div class="home-points">
+        <div class="reveal"><h3>Lives in the tray</h3><p>It starts quietly and waits in the notification area. Settings and the tour are one click away.</p></div>
+        <div class="reveal"><h3>Notifications that help</h3><p>See where the new file went, open it in its folder, or undo it.</p></div>
+        <div class="reveal"><h3>Made for Windows 11</h3><p>Frosted glass, rounded corners and your light or dark theme, on Windows 10 too.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Download ===== -->
+  <section id="download">
+    <div class="wash"></div>
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">Download</span>
+        <h2>Get Chango. It's free.</h2>
+        <p>For Windows 10 (version 2004 or later) and Windows 11, on 64-bit PCs.</p>
+      </div>
+      <div class="downloads">
+        <div class="dl glass reveal">
+          <span class="ribbon">Easiest</span>
+          <h3>Microsoft Store</h3>
+          <p>One-click install, and the Store keeps Chango up to date for you.</p>
+          <ul>
+            <li><svg><use href="#i-check"/></svg>Updates automatically</li>
+            <li><svg><use href="#i-check"/></svg>Signed and checked by Microsoft</li>
+            <li><svg><use href="#i-check"/></svg>No network requests of its own</li>
+          </ul>
+          <div class="store-wrap">
+            <a class="store-badge store-link" href="https://apps.microsoft.com/detail/9NL33K6PBB4K"><img data-light="assets/store-badge-dark.svg" data-dark="assets/store-badge-light.svg" src="assets/store-badge-dark.svg" alt="Download from the Microsoft Store" width="161" height="44"></a>
+            <p class="fine store-soon-only"><span class="soon-tag">Coming soon</span> Until then, use the installer.</p>
+          </div>
+        </div>
+        <div class="dl glass reveal">
+          <div class="dl-head"><span class="app-icon" style="background: color-mix(in srgb, var(--windows) 12%, transparent); color: var(--windows)"><svg><use href="#i-windows"/></svg></span><h3>Installer</h3></div>
+          <p>The classic setup. Installs for your account only, so it doesn't need administrator rights.</p>
+          <ul>
+            <li><svg><use href="#i-check"/></svg>Adds Chango to the Start menu</li>
+            <li><svg><use href="#i-check"/></svg>Keeps itself up to date</li>
+            <li><svg><use href="#i-check"/></svg>Uninstall from Settings → Apps</li>
+          </ul>
+          <a class="btn btn-windows" href="https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Setup.exe"><svg class="win-logo"><use href="#i-windows"/></svg>Download installer</a>
+        </div>
+        <div class="dl glass reveal">
+          <div class="dl-head"><span class="ficon" data-t="ZIP" style="--c: var(--t-archive)"></span><h3>Portable</h3></div>
+          <p>No install. Unzip it anywhere, even a USB stick, and run <code>Chango.exe</code>.</p>
+          <ul>
+            <li><svg><use href="#i-check"/></svg>Leaves no installer behind</li>
+            <li><svg><use href="#i-check"/></svg>Tells you when there's a new version</li>
+            <li><svg><use href="#i-check"/></svg>Same app, same features</li>
+          </ul>
+          <a class="btn btn-ghost" href="https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Portable.zip"><svg><use href="#i-download"/></svg>Download ZIP</a>
+        </div>
+      </div>
+      <div class="requirements">
+        <div class="glass reveal">
+          <h3>Good to know</h3>
+          <ul>
+            <li>The GitHub downloads aren't code-signed yet, so Windows SmartScreen may warn the first time. Choose <b>More info → Run anyway</b>.</li>
+            <li>Every release lists SHA-256 checksums so you can check your download. <a href="https://github.com/tiwariramesh/Chango/releases/latest">See all release files</a>.</li>
+            <li>The first time Chango starts, a short tour shows you the gesture.</li>
+          </ul>
+        </div>
+        <div class="glass reveal">
+          <h3>Optional helpers</h3>
+          <p>Chango finds these on its own, even if you install them while it's running.</p>
+          <div class="cmd"><code>winget install Gyan.FFmpeg</code><button type="button" data-copy="winget install Gyan.FFmpeg">Copy</button></div>
+          <p style="margin-top:6px">For extra video and audio formats.</p>
+          <div class="cmd"><code>winget install TheDocumentFoundation.LibreOffice</code><button type="button" data-copy="winget install TheDocumentFoundation.LibreOffice">Copy</button></div>
+          <p style="margin-top:6px">For Word, Excel and PowerPoint files if you don't have Microsoft Office.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head center reveal">
+        <span class="eyebrow">FAQ</span>
+        <h2>Questions, answered.</h2>
+      </div>
+      <div class="faq">
+        <details class="glass"><summary>Is Chango really free?</summary><div class="answer"><p>Yes. There's no trial, no limit on files, no ads and no paid tier. Chango is open source under the MIT licence, so anyone can read the code on GitHub.</p></div></details>
+        <details class="glass"><summary>Are my files uploaded anywhere?</summary><div class="answer"><p>No. Every conversion, edit and action runs on your PC. Chango doesn't send your files, their names or anything about you anywhere.</p><p>The only network request is an update check in the version from GitHub, which asks GitHub whether a newer version exists. You can turn it off in Settings → About. The Microsoft Store version makes no requests of its own. Details are in the <a href="privacy.html">privacy policy</a>.</p></div></details>
+        <details class="glass"><summary>Which versions of Windows does it work on?</summary><div class="answer"><p>Windows 10 version 2004 (build 19041) or later, and Windows 11, on 64-bit (x64) PCs.</p></div></details>
+        <details class="glass"><summary>Do I need Microsoft Office?</summary><div class="answer"><p>Only for Word, Excel and PowerPoint files, and free LibreOffice works instead. Converting a PDF to Word needs Microsoft Word; PDF to PowerPoint, Excel, text or Markdown is built in. Images, video, audio, subtitles, archives and CorelDRAW files need nothing extra.</p></div></details>
+        <details class="glass"><summary>What is FFmpeg for?</summary><div class="answer"><p>FFmpeg is a free media tool. With it installed, Chango adds more formats: MKV, WebM, MOV, AVI, OGG, Opus and AIFF. Install it with <code>winget install Gyan.FFmpeg</code>; Chango notices it automatically.</p></div></details>
+        <details class="glass"><summary>What if I don't want to drag files?</summary><div class="answer"><p>Select files and press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Space</kbd>, then click an option. Or right-click files or folders in File Explorer and choose <b>Chango</b>.</p></div></details>
+        <details class="glass"><summary>Can I undo a conversion?</summary><div class="answer"><p>Yes. Every result can be undone for a few seconds after it's made, and undone files go to the Recycle Bin. Your original file is never changed in the first place.</p></div></details>
+        <details class="glass"><summary>Why does Windows SmartScreen warn me?</summary><div class="answer"><p>The downloads on GitHub aren't code-signed yet, so Windows doesn't recognise them at first. Choose <b>More info → Run anyway</b>. The Microsoft Store version is signed by Microsoft and doesn't show this warning.</p></div></details>
+        <details class="glass"><summary>Does it need administrator rights?</summary><div class="answer"><p>No. The installer installs Chango for your account only, and the portable version runs from any folder.</p></div></details>
+        <details class="glass"><summary>How do I uninstall it?</summary><div class="answer"><p>Go to Settings → Apps → Installed apps and uninstall Chango. To remove its settings and logs too, delete <code>%APPDATA%\Chango</code> and <code>%LOCALAPPDATA%\Chango</code>.</p></div></details>
+        <details class="glass"><summary>Is there a Mac version?</summary><div class="answer"><p>A native Mac app with the same drag, tap and let-go wheel is in development.</p></div></details>
+        <details class="glass"><summary>Who makes Chango?</summary><div class="answer"><p>Chango is made by Ramesh Tiwari. Its radial wheel is based on <a href="https://github.com/i3sam/OrbitDrop">OrbitDrop</a> by Mohammed Essam, shared under the MIT licence. Ideas and bug reports are welcome on <a href="https://github.com/tiwariramesh/Chango/issues">GitHub</a> or by <a href="mailto:ramestiwarii@gmail.com">email</a>.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Final CTA ===== -->
+  <section class="final">
+    <div class="wrap">
+      <div class="panel glass reveal">
+        <div class="wash"></div>
+        <div style="position:relative">
+          <img class="mark" src="favicon.svg" alt="">
+          <h2>Stop uploading files just to convert them.</h2>
+          <p>Drag. Tap. Chango. Free, private, and right where your files already are.</p>
+          <div class="cta-row">
+            <a class="btn btn-windows" href="https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Setup.exe"><svg class="win-logo"><use href="#i-windows"/></svg>Download for Windows</a>
+            <span class="store-wrap">
+              <a class="store-badge store-link" href="https://apps.microsoft.com/detail/9NL33K6PBB4K"><img data-light="assets/store-badge-dark.svg" data-dark="assets/store-badge-light.svg" src="assets/store-badge-dark.svg" alt="Download from the Microsoft Store" width="161" height="44"></a>
+              <span class="soon-tag">Coming soon</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Ramesh Tiwari</span>
+    <span>Code under the <a href="https://github.com/tiwariramesh/Chango/blob/main/LICENSE">MIT licence</a> · <a href="privacy.html">Privacy</a></span>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>
