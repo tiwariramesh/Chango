@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy policy · Chango</title>
+  <meta name="description" content="Chango does all its work on your PC. Your files never leave it, and Chango collects no personal data.">
+  <link rel="canonical" href="https://chango.rameshtiwari.com/privacy.html">
+  <meta name="theme-color" content="#F3F6F8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E1214" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <script>
+    try { var t = localStorage.getItem('chango-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- Keep in step with docs/PRIVACY.md (the same policy, as a web page). -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
+  </defs>
+</svg>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Chango home"><img src="favicon.svg" alt="" width="30" height="30">Chango</a>
+    <div class="header-actions">
+      <button class="icon-btn theme-toggle" type="button" aria-label="Switch between light and dark">
+        <svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg>
+      </button>
+      <a class="btn btn-windows btn-sm header-download" href="./#download"><svg class="win-logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M2 2h9.6v9.6H2zM12.4 2H22v9.6h-9.6zM2 12.4h9.6V22H2zM12.4 12.4H22V22h-9.6z"/></svg>Download</a>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="doc-page">
+  <div class="wash"></div>
+  <div class="wrap">
+    <article class="glass">
+      <h1>Privacy policy</h1>
+      <p class="updated">Last updated: 26 October 2026</p>
+      <p class="summary">Chango is a file utility for Windows that does all its work on your PC. In short: <strong>your files never leave your PC, and Chango collects no personal data.</strong> Its only network request is an update check, which you can turn off (see <a href="#network-access">Network access</a>).</p>
+
+      <h2 id="files">What Chango does with your files</h2>
+      <ul>
+        <li>Everything Chango does (converting, compressing, resizing, editing, reading text from images, zipping and so on) runs <strong>on your PC</strong>. Your files are never uploaded anywhere.</li>
+        <li>Chango only touches the files you choose with the wheel. Results are saved as <strong>new files next to the original</strong>; the original is never changed.</li>
+        <li>"Share" opens the Windows share window, and "Copy to" and "Move to" use folders you pick. Where your files go after that is your choice.</li>
+      </ul>
+
+      <h2 id="watches">What Chango watches</h2>
+      <p>To notice the gesture (dragging a file, then tapping Shift), Chango watches the mouse buttons and the Shift key while it runs, and listens for its keyboard shortcut, Ctrl + Alt + Space (you can turn the shortcut off in Settings → Shortcuts). It doesn't record, store or send keystrokes, mouse movements or anything you type.</p>
+      <p>When you use the shortcut, Chango asks File Explorer which files are selected, so it knows what to work on.</p>
+
+      <h2 id="stores">What Chango stores</h2>
+      <ul>
+        <li><strong>Settings</strong> in <code>%APPDATA%\Chango\settings.json</code>: your preferences, such as theme, shortcut and wheel layout.</li>
+        <li><strong>Logs</strong> in <code>%LOCALAPPDATA%\Chango\logs</code>: technical notes such as errors, used for troubleshooting. File names are included only if you turn that on in Settings → Advanced. Logs stay on your PC and are never sent anywhere; you can open their folder from Settings → Advanced.</li>
+      </ul>
+      <p>Uninstalling Chango removes the app. You can delete the folders above to remove its settings and logs too.</p>
+
+      <h2 id="network-access">Network access</h2>
+      <p>Chango never sends your files, their names or anything about you anywhere. The only network request it makes is the update check, and only in the version downloaded from GitHub:</p>
+      <ul>
+        <li><strong>What:</strong> at most once every 6 hours while Chango is running, an anonymous request to GitHub's public list of Chango releases (<code>api.github.com/repos/tiwariramesh/Chango/releases</code>, or the public <code>releases.atom</code> feed if GitHub is busy) to see whether a newer version exists. The request says it comes from "Chango" and which version, and nothing else. Like any website, GitHub sees your IP address; <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a> covers what it does with it.</li>
+        <li><strong>Updates:</strong> a new version is downloaded from that release on GitHub and checked against its published SHA-256 checksum before it's installed. If you installed Chango with its installer, it installs the update when you're not using Chango; otherwise it asks first.</li>
+        <li><strong>Turning it off:</strong> Settings → About → <strong>Check for updates automatically</strong> stops the checks, and <strong>Install updates automatically</strong> makes Chango ask before installing. "Check now" checks only when you press it.</li>
+      </ul>
+      <p>The Microsoft Store version makes no requests of its own: the Microsoft Store keeps it up to date.</p>
+      <p>Buttons such as <strong>Website</strong>, <strong>Star on GitHub</strong> and <strong>Email</strong> open your browser or mail app only when you click them.</p>
+      <p>Chango has no accounts, ads, analytics, tracking or telemetry, and it doesn't sell or share any data.</p>
+
+      <h2 id="other-apps">Other apps Chango can use</h2>
+      <p>Some conversions use apps already installed on your PC: Microsoft Word, Excel and PowerPoint, LibreOffice, or FFmpeg. Chango runs them on your PC, on the file you chose; nothing is sent anywhere. Windows' own built-in tools (for example its PDF reader and tar) are used the same way.</p>
+
+      <h2 id="website">This website</h2>
+      <p>This website uses no cookies, analytics or trackers, and loads nothing from other sites. It remembers your light or dark choice in your browser only. It's hosted on GitHub Pages, which, like any web host, sees your IP address when you visit.</p>
+
+      <h2 id="children">Children</h2>
+      <p>Chango collects no personal information from anyone, including children.</p>
+
+      <h2 id="changes">Changes</h2>
+      <p>If this policy changes, the new version will be published here with a new date.</p>
+
+      <h2 id="contact">Contact</h2>
+      <p>Questions? Email Ramesh Tiwari at <a href="mailto:ramestiwarii@gmail.com">ramestiwarii@gmail.com</a>.</p>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Ramesh Tiwari</span>
+    <span>Code under the <a href="https://github.com/tiwariramesh/Chango/blob/main/LICENSE">MIT licence</a> · <a href="./">Home</a></span>
+  </div>
+</footer>
+<script src="main.js" defer></script>
+</body>
+</html>
