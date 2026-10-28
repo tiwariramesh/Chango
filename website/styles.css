@@ -181,12 +181,6 @@ section > .wrap, header > .wrap, footer > .wrap { position: relative; z-index: 1
 .btn-ghost { background: var(--surface-solid); color: var(--ink); border-color: var(--line-strong); }
 .btn-ghost:hover { border-color: var(--ink); }
 .btn-sm { min-height: 40px; padding: 8px 16px; font-size: 15px; border-radius: 10px; }
-.soon-tag { display: none; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; background: var(--coral-tint); color: var(--coral-text); white-space: nowrap; }
-/* Until the Store listing is live (data-store="soon" on <html>), Store links don't navigate and say so. */
-[data-store="soon"] .store-link { pointer-events: none; }
-[data-store="soon"] .store-link img { opacity: .55; }
-[data-store="soon"] .soon-tag { display: inline-block; }
-[data-store="live"] .store-soon-only { display: none; }
 .store-wrap { display: inline-flex; align-items: center; gap: 10px; }
 
 /* ---------- Header ---------- */
