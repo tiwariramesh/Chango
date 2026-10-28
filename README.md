@@ -16,15 +16,17 @@
 </p>
 
 <p align="center">
-  <!-- When chango.rameshtiwari.com is live, point this button at its download page. -->
-  <a href="https://github.com/tiwariramesh/Chango/releases/latest"><img src="https://img.shields.io/github/v/release/tiwariramesh/Chango?style=for-the-badge&label=Download%20for%20Windows&color=0097B2" alt="Download the latest Chango for Windows" height="34"></a>
-  <!-- Store listing pending: when Partner Center gives the product ID, swap this for Microsoft's official badge:
-       <a href="https://apps.microsoft.com/detail/<STORE_ID>"><img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft" height="34"></a> -->
-  <img src="https://img.shields.io/badge/Microsoft%20Store-coming%20soon-3A3F47?style=for-the-badge" alt="Microsoft Store: coming soon" height="34">
-  <img src="https://img.shields.io/badge/macOS-coming%20soon-3A3F47?style=for-the-badge" alt="macOS: coming soon" height="34">
+  <a href="https://apps.microsoft.com/detail/9NL33K6PBB4K"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://get.microsoft.com/images/en-us%20light.svg">
+    <img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft" height="40">
+  </picture></a>
+  <a href="https://github.com/tiwariramesh/Chango/releases/latest"><img src="https://img.shields.io/github/v/release/tiwariramesh/Chango?style=for-the-badge&label=Download%20for%20Windows&color=0097B2" alt="Download the latest Chango for Windows" height="40"></a>
+  <img src="https://img.shields.io/badge/macOS-coming%20soon-3A3F47?style=for-the-badge" alt="macOS: coming soon" height="40">
 </p>
 
 <p align="center">
+  <a href="https://chango.rameshtiwari.com">Website</a> ·
+  <a href="https://apps.microsoft.com/detail/9NL33K6PBB4K">Microsoft Store</a> ·
   <a href="https://github.com/tiwariramesh/Chango/releases/latest">Latest release</a> ·
   <a href="#install">Install</a> ·
   <a href="#what-it-converts">What it converts</a> ·
@@ -39,7 +41,7 @@ Chango is a drag-and-drop file converter for your desktop. Drag files, tap **Shi
 
 Converting a file is basic computer work, so it shouldn't mean uploading it to someone else's server, waiting in a queue or paying past a limit. Chango does it on your own computer: **free forever, no uploads, no limits, no account.**
 
-**Chango is available for Windows 10 (19041+) and 11. A native macOS version is in development.**
+**Chango is available for Windows 10 (19041+) and 11, from the [Microsoft Store](https://apps.microsoft.com/detail/9NL33K6PBB4K) or right here on GitHub. A native macOS version is in development.**
 
 ## How it works
 
@@ -74,9 +76,9 @@ Converting a file is basic computer work, so it shouldn't mean uploading it to s
 
 | Platform | How to get it | Status |
 |---|---|---|
+| **Windows 10 (19041+) and 11**, Microsoft Store | **[Get Chango from the Microsoft Store](https://apps.microsoft.com/detail/9NL33K6PBB4K)**: a one-click install, signed by Microsoft and kept up to date by the Store | Available |
 | **Windows 10 (19041+) and 11**, x64 | [`Chango-Setup.exe`](https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Setup.exe) (installer) or [`Chango-Portable.zip`](https://github.com/tiwariramesh/Chango/releases/latest/download/Chango-Portable.zip) (no install), from the [latest release](https://github.com/tiwariramesh/Chango/releases/latest) | Available |
-| **Windows**, Microsoft Store | Automatic updates and a one-click install | Coming soon |
-| **Website** | [chango.rameshtiwari.com](https://chango.rameshtiwari.com), with downloads and a guide | Coming soon |
+| **Website** | [chango.rameshtiwari.com](https://chango.rameshtiwari.com): downloads, a guide and the FAQ | Available |
 | **macOS** | A native Mac app with the same drag, tap and let-go wheel | In development |
 
 - **Installer:** run `Chango-Setup.exe`. It installs for your account only, so it doesn't need administrator rights, and adds Chango to the Start menu. It keeps itself up to date (see [Privacy](#privacy)). Uninstall it from Settings → Apps.
@@ -84,7 +86,7 @@ Converting a file is basic computer work, so it shouldn't mean uploading it to s
 
 The first time Chango starts, a short tour shows you the gesture and lets you try it on a sample file. After that Chango waits quietly in the notification area; the tour is in its menu whenever you want it again.
 
-Each release includes `SHA256SUMS.txt`, so you can check the download is intact (`Get-FileHash Chango-Setup.exe` in PowerShell). Releases aren't code-signed yet, so Windows SmartScreen may warn the first time you run Chango. Choose **More info → Run anyway**.
+Each release includes `SHA256SUMS.txt`, so you can check the download is intact (`Get-FileHash Chango-Setup.exe` in PowerShell). The GitHub downloads aren't code-signed yet, so Windows SmartScreen may warn the first time you run them. Choose **More info → Run anyway**, or use the [Microsoft Store version](https://apps.microsoft.com/detail/9NL33K6PBB4K), which doesn't show the warning.
 
 ### Optional helpers (Windows)
 
@@ -97,8 +99,7 @@ Everything runs locally. There are no uploads, no account and no telemetry. The 
 
 ## Roadmap
 
-- **Microsoft Store** listing, with automatic updates.
-- **Code-signed** Windows releases, so SmartScreen stops warning.
+- **Code-signed** GitHub downloads, so SmartScreen stops warning.
 - **Chango for macOS**: the same wheel, converters and tools, built for the Mac.
 
 Ideas and requests are welcome: [open an issue](https://github.com/tiwariramesh/Chango/issues) or email ramestiwarii@gmail.com.

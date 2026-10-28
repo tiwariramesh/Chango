@@ -45,8 +45,8 @@ public static class AppPackage
         }
     }
 
-    /// <summary>Chango's Microsoft Store product ID; empty until Chango has a Store listing.</summary>
-    public const string StoreId = "";
+    /// <summary>Chango's Microsoft Store product ID (apps.microsoft.com/detail/9NL33K6PBB4K).</summary>
+    public const string StoreId = "9NL33K6PBB4K";
 
     /// <summary>
     /// The Store's own "rate and review" dialog (Store version only). False if it couldn't be shown, so the caller can

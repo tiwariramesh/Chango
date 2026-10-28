@@ -20,11 +20,7 @@ public static class Brand
     public const string SupportEmail = "ramestiwarii@gmail.com";
     public const string SourceUrl = "https://github.com/tiwariramesh/Chango";
 
-    /// <summary>
-    /// Where About → Website goes. The GitHub page until chango.rameshtiwari.com is live; then set this to the
-    /// website.
-    /// </summary>
-    public const string WebsiteUrl = SourceUrl;
+    public const string WebsiteUrl = "https://chango.rameshtiwari.com";
 
     /// <summary>
     /// GitHub "owner/repo" that publishes Chango releases: the GitHub version's updater checks it (see docs/PRIVACY.md,
