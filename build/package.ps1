@@ -32,6 +32,8 @@ New-Item -ItemType Directory -Force $artifacts | Out-Null
 Write-Host "> Right-click menu and CorelDRAW reader (C++)"
 & (Join-Path $root "build\shell\build-shell.ps1") | Out-Null
 & (Join-Path $root "build\cdr\build-cdr.ps1") | Out-Null
+Write-Host "> FFmpeg and ExifTool (pinned releases, checksums verified)"
+& (Join-Path $root "build\tools\get-tools.ps1") | Out-Null
 
 if (-not $SkipTests) {
     Write-Host "> Tests"
@@ -53,6 +55,8 @@ Copy-Item (Join-Path $root "artifacts\shell\ChangoShell.dll") (Join-Path $publis
 Copy-Item (Join-Path $root "artifacts\cdr\ChangoCdr.exe") $publish
 Copy-Item (Join-Path $root "licenses") (Join-Path $publish "licenses") -Recurse            # third-party licence texts
 Copy-Item (Join-Path $root "artifacts\cdr\licenses\*") (Join-Path $publish "licenses") -Recurse -Force # and the CorelDRAW reader's
+# FFmpeg and ExifTool, each in its own folder (Chango looks for ffmpeg\ffmpeg.exe and exiftool\exiftool.exe first)
+Copy-Item (Join-Path $root "artifacts\tools\*") $publish -Recurse
 
 Write-Host "> Portable zip"
 $zip = Join-Path $artifacts "Chango-$Version-$Runtime-portable.zip"

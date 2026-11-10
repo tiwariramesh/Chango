@@ -89,7 +89,7 @@ public class ImageToolTests
         long before = new FileInfo(src).Length;
         var o = Run("tool.image.compress.half", src);
         Assert.Equal(OutcomeStatus.Succeeded, o.Status);
-        Assert.Equal(t.File("photo (compressed).jpg"), o.Output);
+        Assert.Equal(t.File("photo_1.jpg"), o.Output);
         Assert.InRange(new FileInfo(o.Output!).Length, 1, before / 2);
     }
 

@@ -58,6 +58,8 @@ public sealed class AppSettings
     public OutputLocation OutputLocation { get; set; } = OutputLocation.BesideOriginal;
     public string? OutputFolder { get; set; }
     public int JpegQuality { get; set; } = 92;
+    /// <summary>Results keep the original's created and modified dates instead of today's.</summary>
+    public bool KeepOriginalDates { get; set; } = true;
 
     // Advanced
     public bool ExtendedDragDetection { get; set; }

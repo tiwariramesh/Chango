@@ -147,7 +147,7 @@ public class ImageOperationTests
         using var t = new TempFolder();
         string src = t.Image("a.png", 120, 80);
         var r = await Run(new ImageToolsProvider(), "tool.image.rotate-right", new FileSet([src]));
-        Assert.Equal(t.File("a (rotated).png"), r[0].Output);
+        Assert.Equal(t.File("a_1.png"), r[0].Output);
         Assert.Equal((80, 120), Dims(r[0].Output!));
     }
 

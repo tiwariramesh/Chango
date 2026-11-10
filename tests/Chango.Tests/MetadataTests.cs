@@ -127,7 +127,7 @@ public class MetadataEditTests
 
         var o = await Run(MetadataProvider.InfoId, src, edit);
         Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message);
-        Assert.Equal(t.File("photo (edited).jpg"), o.Output);
+        Assert.Equal(t.File("photo_1.jpg"), o.Output);
         Assert.Equal(hash, SafeOutput.Sha256(src));
         Assert.Empty(SafeOutput.LeftoverTemps(t.Path));
 

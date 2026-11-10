@@ -107,7 +107,11 @@ public class Version04Tests
         Dictionary<string, long> formats = [];
         await StaWorker.RunAsync(() => formats = SizeEstimate.Formats(png, 92));
         Assert.DoesNotContain("PNG", formats.Keys);         // not its own format
-        Assert.True(formats["JPG"] < size, $"JPG {formats["JPG"]} vs PNG {size}");
+        // Within a factor of two of what a real conversion writes (a smooth gradient is one of the rare pictures whose
+        // JPG is bigger than its PNG, so the estimate is checked against the real thing, not against the PNG).
+        long realJpg = 0;
+        await StaWorker.RunAsync(() => { using var v = VipsCodec.Load(png); realJpg = VipsCodec.Encode(v, WicImageCodec.Jpg, 92).Length; });
+        Assert.InRange(formats["JPG"], realJpg / 2, realJpg * 2);
         Assert.True(formats["BMP"] > formats["JPG"]);
 
         string jpg = t.Image("photo.jpg", 800, 600);

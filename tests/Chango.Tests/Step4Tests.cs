@@ -39,7 +39,7 @@ public class PdfTests
         // Windows' own PDF engine must be able to open what we wrote.
         var png = Assert.Single(await Runner.Run(new PdfProvider(), "convert.pdf.png", o.Output!));
         Assert.True(png.Status == OutcomeStatus.Succeeded, png.Message);
-        Assert.Equal(t.File("poster (2).png"), png.Output); // "poster.png" is the original image: never overwritten
+        Assert.Equal(t.File("poster_1.png"), png.Output); // "poster.png" is the original image: never overwritten
         Assert.EndsWith(".png", png.Output);
     }
 
@@ -51,7 +51,7 @@ public class PdfTests
         var outcomes = await Runner.Run(new PdfProvider(), "tool.image.pdf-combine", a, b, c);
         Assert.All(outcomes, o => Assert.Equal(OutcomeStatus.Succeeded, o.Status));
         string pdf = Assert.Single(outcomes, o => o.Output is not null).Output!;
-        Assert.Equal(t.File("a (combined).pdf"), pdf);
+        Assert.Equal(t.File("a_1.pdf"), pdf);
         Assert.Equal(3, Pages(pdf));
 
         var jpgs = Assert.Single(await Runner.Run(new PdfProvider(), "convert.pdf.jpg", pdf));
@@ -147,7 +147,7 @@ public class VideoEditingTests
         string clip = Clip(t, "clip.mp4");
         var o = Assert.Single(await Runner.Run(new MediaEditingProvider(), "tool.video.snapshot", clip));
         Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message);
-        Assert.StartsWith(t.File("clip (frame "), o.Output);
+        Assert.Equal(t.File("clip_1.png"), o.Output);
         Assert.EndsWith(".png", o.Output);
     }
 
@@ -159,7 +159,7 @@ public class VideoEditingTests
         var outcomes = await Runner.Run(new MediaEditingProvider(), "tool.video.join", a, b);
         Assert.All(outcomes, o => Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message));
         string joined = Assert.Single(outcomes, o => o.Output is not null).Output!;
-        Assert.Equal(t.File("a (joined).mp4"), joined);
+        Assert.Equal(t.File("a_1.mp4"), joined);
         Assert.Null(MediaFoundationProvider.ValidateContainer(joined, ".mp4"));
         Assert.True(new FileInfo(joined).Length > new FileInfo(a).Length / 2);
     }

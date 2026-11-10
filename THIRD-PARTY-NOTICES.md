@@ -18,6 +18,19 @@ Chango is MIT-licensed (see `LICENSE`). This file lists everything a **release b
 | PdfPig | 0.1.16 | Apache-2.0, © UglyToad (Eliot Jones) and contributors | Reading a PDF's text layer: PDF to TXT, Markdown and Excel. Source: https://github.com/UglyToad/PdfPig |
 | DocumentFormat.OpenXml (Open XML SDK) | 3.5.1 | MIT, © Microsoft Corporation | Word to Markdown; writing PowerPoint and Excel files from PDFs. Source: https://github.com/dotnet/Open-XML-SDK |
 | Markdig | 1.4.2 | BSD-2-Clause, © Alexandre Mutel | Markdown to HTML, DOCX, PDF and text. Source: https://github.com/xoofx/markdig |
+| NetVips | 3.2.0 | MIT, © Kleis Auke Wolthuizen | The .NET binding for libvips. Source: https://github.com/kleisauke/net-vips |
+| libvips (NetVips.Native.win-x64, NetVips.Native.win-arm64) | 8.18.7 | LGPL-2.1-or-later, © John Cupitt and libvips contributors | Photos: converting, compressing, resizing and rotating while keeping their metadata (camera, date taken, location, colour profile). One unmodified, replaceable DLL (`libvips-42.dll`), loaded dynamically. It contains mozjpeg (IJG, BSD-3-Clause and zlib licences), libwebp (BSD-3-Clause), libpng (libpng licence), libimagequant 2.4.1 (BSD-2-Clause), libheif and libaom (LGPL-3.0 / BSD-2-Clause), Little CMS (MIT), libexif (LGPL), GLib (LGPL) and the other libraries listed, with their licences, in `licenses/libvips-THIRD-PARTY-NOTICES.md`. Libraries under LGPL-3.0 are used through the "any later version" clause of the LGPL-2.1. Source: https://github.com/libvips/libvips, build: https://github.com/kleisauke/libvips-packaging |
+
+### Programs shipped next to Chango.exe
+
+Separate programs in their own folders, unmodified, which Chango starts with command-line arguments (they aren't
+linked into Chango). `build/tools/get-tools.ps1` downloads the exact releases below and checks each against the
+publisher's SHA-256.
+
+| Component | Version | Licence | Why | Source |
+|---|---|---|---|---|
+| FFmpeg (`ffmpeg\ffmpeg.exe`, Gyan Doshi's "essentials" build) | 9.0.2 | GPL-3.0 (the build includes x264 and x265, which are GPL), © the FFmpeg developers. Licence: `ffmpeg\LICENSE.txt` and `licenses\GPL-3.0.txt` | Video and audio: compressing (on the graphics chip when it can), MP4, MKV, WebM, MOV, AVI, OGG, Opus, AIFF, GIFs from video, keeping recording dates, locations and tags | https://github.com/FFmpeg/FFmpeg (the exact commit is in `ffmpeg\README.txt`); build: https://www.gyan.dev/ffmpeg/builds/, archive: https://github.com/GyanD/codexffmpeg/releases/tag/9.0.2 |
+| ExifTool (`exiftool\exiftool.exe` and `exiftool\exiftool_files`) | 13.61 | The same terms as Perl (Artistic License or GPL-1.0-or-later), © Phil Harvey. Contains a Strawberry Perl runtime (its licences: `exiftool\exiftool_files\Licenses_Strawberry_Perl.zip`) | Copying camera details, dates, locations and tags into results whose engine couldn't carry them (HEIC and RAW photos, TIFF, video and audio made by Windows) | https://exiftool.org (the Perl source is in `exiftool_files`); archive: https://sourceforge.net/projects/exiftool/files/exiftool-13.61_64.zip |
 
 ### In ChangoCdr.exe (the built-in CorelDRAW reader)
 
@@ -35,15 +48,15 @@ The MPL 2.0 covered files are used as published; their source code is available 
 
 ## Used from Windows, not redistributed
 
-- **Windows Imaging Component (WIC):** image decoding and encoding.
-- **Windows Media Foundation:** video and audio transcoding (H.264/AAC, WMV/WMA, MP3, WAV). Codecs come from Windows; HEVC, VP9 and similar depend on the Microsoft Store video extensions the user has installed.
+- **Windows Imaging Component (WIC):** image decoding (HEIC, camera RAW, BMP, ICO, JPEG XR) and encoding (BMP), and the photo editor.
+- **Windows Media Foundation:** WMV and WMA, Trim, Normalize, Join, and all video and audio work when FFmpeg is missing. Codecs come from Windows; HEVC, VP9 and similar depend on the Microsoft Store video extensions the user has installed.
 - **Segoe UI Variable, Segoe Fluent Icons and Segoe MDL2 Assets fonts:** referenced by name and installed with Windows. Chango doesn't ship these fonts.
 - **OLE drag-and-drop, Shell and DWM APIs:** documented Windows APIs.
 - **tar.exe (bsdtar / libarchive, BSD-2-Clause):** ships with Windows 10 1803 and later. Used to extract 7Z, RAR, TAR.XZ, TAR.BZ2, CAB and ISO, and to make 7Z and TAR.GZ archives.
 
 ## Used when the user has installed them, not redistributed
 
-- **FFmpeg** (LGPL/GPL, depending on the build the user installs): MKV, WebM, MOV, AVI, OGG, Opus and AIFF, run as a separate program. Chango doesn't bundle or link it.
+- **FFmpeg and ExifTool** installed by the user (winget, Scoop, PATH): used only when Chango's own copies are missing, such as in a build from source.
 - **Microsoft Office** (Word, Excel, PowerPoint) or **LibreOffice** (MPL 2.0): document layout and conversion, driven through COM or the command line.
 
 ## Development only (not shipped)

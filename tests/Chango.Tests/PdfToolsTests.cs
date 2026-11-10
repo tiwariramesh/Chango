@@ -48,7 +48,7 @@ public class PdfToolsTests
         var outcomes = await Runner.Run(new PdfToolsProvider(), "tool.pdf.merge", a, b);
         Assert.All(outcomes, o => Assert.Equal(OutcomeStatus.Succeeded, o.Status));
         string merged = Assert.Single(outcomes, o => o.Output is not null).Output!;
-        Assert.Equal(t.File("a (merged).pdf"), merged);
+        Assert.Equal(t.File("a_1.pdf"), merged);
         Assert.Equal(5, PageCount(merged));
         Assert.Equal(2, PageCount(a)); // originals untouched
         await AssertRenders(merged);
@@ -83,7 +83,7 @@ public class PdfToolsTests
         string pdf = await MakePdf(t, "scan", 2);
         var o = Assert.Single(await Runner.Run(new PdfToolsProvider(), "tool.pdf.rotate.left", pdf));
         Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message);
-        Assert.Equal(t.File("scan (rotated).pdf"), o.Output);
+        Assert.Equal(t.File("scan_1.pdf"), o.Output);
         using (var d = PdfReader.Open(o.Output!, PdfDocumentOpenMode.Import))
             Assert.All(d.Pages.Cast<PdfPage>(), p => Assert.Equal(270, p.Rotate));
         await AssertRenders(o.Output!);
@@ -97,7 +97,7 @@ public class PdfToolsTests
         long before = new FileInfo(pdf).Length;
         var o = Assert.Single(await Runner.Run(new PdfToolsProvider(), "tool.pdf.compress", pdf));
         Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message);
-        Assert.Equal(t.File("photos (compressed).pdf"), o.Output);
+        Assert.Equal(t.File("photos_1.pdf"), o.Output);
         Assert.True(new FileInfo(o.Output!).Length < before, $"{new FileInfo(o.Output!).Length} >= {before}");
         Assert.Equal(2, PageCount(o.Output!));
         await AssertRenders(o.Output!);

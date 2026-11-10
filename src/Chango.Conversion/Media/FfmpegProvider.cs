@@ -6,16 +6,17 @@ namespace Chango.Conversion.Media;
 
 /// <summary>
 /// The formats Windows can't make by itself (MKV, WebM, MOV, AVI, OGG, Opus, AIFF), and anything from files Windows
-/// can't read (FLV, MPEG, OGG, Opus, AIFF …), through <b>FFmpeg</b> when it's installed (winget install Gyan.FFmpeg).
-/// FFmpeg isn't bundled: without it these options simply don't appear. Never duplicates what
-/// <see cref="MediaFoundationProvider"/> already offers for a file.
+/// can't read (FLV, MPEG, OGG, Opus, AIFF …), through <b>FFmpeg</b>. Release builds ship FFmpeg in a folder next to
+/// Chango.exe; an installed copy (winget install Gyan.FFmpeg) is used otherwise, and without either these options
+/// simply don't appear. Never duplicates what <see cref="MediaFoundationProvider"/> already offers for a file (which
+/// itself hands its work to FFmpeg when it's here: see <see cref="FfmpegMedia"/>).
 /// </summary>
 public sealed partial class FfmpegProvider : IOperationProvider
 {
     public const string ProviderId = "media.ffmpeg";
     public string Id => ProviderId;
 
-    private static readonly AppFinder Ffmpeg = new(() => ExternalTools.Find("ffmpeg.exe", @"ffmpeg\bin\ffmpeg.exe", @"scoop\shims\ffmpeg.exe",
+    private static readonly AppFinder Ffmpeg = new(() => ExternalTools.Bundled(@"ffmpeg\ffmpeg.exe") ?? ExternalTools.Find("ffmpeg.exe", @"ffmpeg\bin\ffmpeg.exe", @"scoop\shims\ffmpeg.exe",
         WingetPackage(), @"C:\ProgramData\chocolatey\bin\ffmpeg.exe", @"C:\ffmpeg\bin\ffmpeg.exe"));
 
     /// <summary>The ffmpeg.exe in use, or null when FFmpeg isn't installed.</summary>
@@ -30,9 +31,11 @@ public sealed partial class FfmpegProvider : IOperationProvider
 
     private sealed record Target(string Label, string Extension, bool IsVideo, string[] Codec);
 
-    // Encoders chosen for the widest playback support at good quality.
-    private static readonly string[] H264 = ["-c:v", "libx264", "-crf", "20", "-preset", "medium", "-pix_fmt", "yuv420p",
-        "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart"];
+    /// <summary>Marks the targets whose video is encoded as H.264 by <see cref="VideoEncoder"/> (on the graphics chip when it can).</summary>
+    private static readonly string[] H264 = ["h264"];
+
+    /// <summary>Conversions keep the look: a higher quality than compression uses.</summary>
+    public const int ConvertQuality = 20;
 
     private static readonly Target Mkv = new("MKV", ".mkv", true, ["-map", "0:v?", "-map", "0:a?", "-map", "0:s?", "-c", "copy"]),
         Webm = new("WEBM", ".webm", true, ["-c:v", "libvpx-vp9", "-crf", "32", "-b:v", "0", "-row-mt", "1", "-deadline", "good", "-cpu-used", "4", "-c:a", "libopus", "-b:a", "128k"]),
@@ -48,7 +51,20 @@ public sealed partial class FfmpegProvider : IOperationProvider
         Flac = new("FLAC", ".flac", false, ["-c:a", "flac"]);
 
     /// <summary>Re-encoding fallback for MKV when the streams can't simply be copied into it.</summary>
-    private static readonly string[] MkvReencode = ["-map", "0:v?", "-map", "0:a?", "-c:v", "libx264", "-crf", "20", "-preset", "medium", "-c:a", "aac", "-b:a", "192k"];
+    private static readonly string[] MkvReencode = ["-map", "0:v?", "-map", "0:a?", .. H264];
+
+    /// <summary>
+    /// The codec arguments for <paramref name="codec"/>, with H.264 spelled out for this PC's best encoder. Every
+    /// result keeps the source's metadata (dates, location, camera, tags) where the container can hold it.
+    /// </summary>
+    private static string[] Expand(string ffmpeg, string[] codec, string extension, bool hardware)
+    {
+        string[] mp4Tags = extension is ".mp4" or ".mov" or ".m4a" ? ["-movflags", "+faststart+use_metadata_tags"] : [];
+        if (codec.Length == 0 || codec[^1] != "h264") return [.. codec, .. mp4Tags];
+        string? gpu = hardware ? VideoEncoder.Hardware(ffmpeg, VideoCodec.H264) : null;
+        return [.. codec[..^1], .. VideoEncoder.Arguments(gpu, VideoCodec.H264, new VideoTarget.Quality(ConvertQuality), tenBit: false),
+            "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", "-c:a", "aac", "-b:a", "192k", .. mp4Tags];
+    }
 
     private static readonly Target[] Extra = [Mkv, Webm, Mov, Avi, Ogg, Opus, Aiff];   // what only FFmpeg makes
     private static readonly Target[] Standard = [Mp4, Mp3, M4a, Wav, Flac];            // for files only FFmpeg reads
@@ -93,12 +109,12 @@ public sealed partial class FfmpegProvider : IOperationProvider
             try
             {
                 if (!File.Exists(file)) throw new FileNotFoundException(null, file);
-                string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, target.Extension, null, temp =>
+                string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, target.Extension, false, temp =>
                 {
-                    try { Run(ffmpeg, file, temp, target.Codec, target.IsVideo, context.ReportFileFraction, ct); }
+                    try { RunWithFallback(ffmpeg, file, temp, target.Codec, target.Extension, target.IsVideo, context.ReportFileFraction, ct); }
                     catch (IOException) when (target == Mkv && !ct.IsCancellationRequested)
                     {
-                        Run(ffmpeg, file, temp, MkvReencode, true, context.ReportFileFraction, ct);
+                        RunWithFallback(ffmpeg, file, temp, MkvReencode, target.Extension, true, context.ReportFileFraction, ct);
                     }
                 }, _ => null, ct, hideWhileWriting: false, tempKeepsExtension: true), ct); // FFmpeg can't replace a hidden file
                 progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, output));
@@ -108,13 +124,28 @@ public sealed partial class FfmpegProvider : IOperationProvider
         }
     }
 
-    /// <summary>One FFmpeg run, reporting progress from its "-progress" stream against the duration it prints.</summary>
-    private static void Run(string ffmpeg, string input, string output, string[] codec, bool video, Action<double>? fraction, CancellationToken ct)
+    /// <summary>On this PC's graphics chip where it helps, and once more on the processor if the chip refuses the file.</summary>
+    private static void RunWithFallback(string ffmpeg, string input, string output, string[] codec, string extension, bool video,
+        Action<double>? fraction, CancellationToken ct)
+    {
+        try { Run(ffmpeg, input, output, Expand(ffmpeg, codec, extension, hardware: true), video, fraction, ct, ["-hwaccel", "auto"]); }
+        catch (IOException) when (!ct.IsCancellationRequested && codec.Length > 0 && codec[^1] == "h264")
+        {
+            Run(ffmpeg, input, output, Expand(ffmpeg, codec, extension, hardware: false), video, fraction, ct);
+        }
+    }
+
+    /// <summary>
+    /// One FFmpeg run, reporting progress from its "-progress" stream against the duration it prints. The source's
+    /// metadata is always carried over (<c>-map_metadata 0</c>); <paramref name="inputOptions"/> go before the input.
+    /// </summary>
+    public static void Run(string ffmpeg, string input, string output, string[] codec, bool video, Action<double>? fraction,
+        CancellationToken ct, string[]? inputOptions = null)
     {
         TimeSpan? duration = null;
         var errors = new List<string>();
-        string[] args = ["-hide_banner", "-nostdin", "-y", "-i", input, .. (video ? [] : new[] { "-vn" }), "-map_metadata", "0", .. codec,
-            "-progress", "pipe:1", "-nostats", output];
+        string[] args = ["-hide_banner", "-nostdin", "-y", .. inputOptions ?? [], "-i", input, .. (video ? [] : new[] { "-vn" }),
+            "-map_metadata", "0", .. codec, "-progress", "pipe:1", "-nostats", output];
         try
         {
             ExternalTools.RunAsync(ffmpeg, args, TimeSpan.FromHours(6), ct,

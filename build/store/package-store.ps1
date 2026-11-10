@@ -37,9 +37,12 @@ Get-ChildItem $layout -Filter *.pdb | Remove-Item
 Write-Host '> Right-click menu and CorelDRAW reader'
 & (Join-Path $root 'build\shell\build-shell.ps1') | Out-Null
 & (Join-Path $root 'build\cdr\build-cdr.ps1') | Out-Null
+& (Join-Path $root 'build\tools\get-tools.ps1') | Out-Null
 Copy-Item (Join-Path $root 'artifacts\shell\ChangoShell.dll') $layout
 Copy-Item (Join-Path $root 'artifacts\cdr\ChangoCdr.exe') $layout
-Copy-Item (Join-Path $root 'artifacts\cdr\licenses') (Join-Path $layout 'licenses') -Recurse
+Copy-Item (Join-Path $root 'licenses') (Join-Path $layout 'licenses') -Recurse                         # third-party licence texts
+Copy-Item (Join-Path $root 'artifacts\cdr\licenses\*') (Join-Path $layout 'licenses') -Recurse -Force # and the CorelDRAW reader's
+Copy-Item (Join-Path $root 'artifacts\tools\*') $layout -Recurse                                       # FFmpeg and ExifTool
 Copy-Item (Join-Path $root 'THIRD-PARTY-NOTICES.md') (Join-Path $layout 'THIRD-PARTY-NOTICES.md')
 Copy-Item (Join-Path $root 'LICENSE') (Join-Path $layout 'LICENSE.txt')
 

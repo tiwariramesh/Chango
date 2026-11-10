@@ -65,7 +65,7 @@ public sealed class PdfContentProvider : IOperationProvider
             default:
             {
                 string text = await Task.Run(() => extension == ".md" ? PdfText.ToMarkdown(file, fraction, ct) : PdfText.ToPlainText(file, fraction, ct), ct);
-                return SafeOutput.Write(file, context.Output, extension, null, s =>
+                return SafeOutput.Write(file, context.Output, extension, false, s =>
                 {
                     using var w = new StreamWriter(s, new UTF8Encoding(false), leaveOpen: true);
                     w.Write(text);
@@ -74,13 +74,30 @@ public sealed class PdfContentProvider : IOperationProvider
         }
     }
 
-    /// <summary>Office files are packages the Open XML SDK reads back while writing, so the temp opens read-write.</summary>
+    /// <summary>
+    /// Office files are packages the Open XML SDK reads back while writing, so the temp opens read-write. The PDF's
+    /// title, author, subject, keywords and creation date become the file's properties.
+    /// </summary>
     private static string WriteOffice(string file, string extension, Action<Stream> write, OperationContext context, CancellationToken ct) =>
-        SafeOutput.WriteToPath(file, context.Output, extension, null, temp =>
+        SafeOutput.WriteToPath(file, context.Output, extension, false, temp =>
         {
-            using var stream = new FileStream(temp, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            write(stream);
+            using (var stream = new FileStream(temp, FileMode.Open, FileAccess.ReadWrite, FileShare.None)) write(stream);
+            ApplyDocInfo(temp, extension, DocInfo.FromPdf(file));
         }, ValidateZip, ct);
+
+    /// <summary>Sets <paramref name="info"/> as the properties of the Word, Excel or PowerPoint file at <paramref name="path"/>.</summary>
+    public static void ApplyDocInfo(string path, string extension, DocInfo info)
+    {
+        if (info.IsEmpty) return;
+        using DocumentFormat.OpenXml.Packaging.OpenXmlPackage? package = extension switch
+        {
+            ".docx" => DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(path, true),
+            ".xlsx" => DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(path, true),
+            ".pptx" => DocumentFormat.OpenXml.Packaging.PresentationDocument.Open(path, true),
+            _ => null,
+        };
+        if (package is not null) info.ApplyTo(package);
+    }
 
     private static string? ValidateZip(string path)
     {

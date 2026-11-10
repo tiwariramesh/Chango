@@ -40,7 +40,7 @@ public sealed partial class SubtitleProvider : IOperationProvider
                 var cues = Parse(File.ReadAllText(file));
                 if (cues.Count == 0) throw new InvalidDataException("No captions were found in this file.");
                 string text = ext switch { ".srt" => ToSrt(cues), ".vtt" => ToVtt(cues), _ => ToTranscript(cues) };
-                string output = SafeOutput.Write(file, context.Output, ext, null, s =>
+                string output = SafeOutput.Write(file, context.Output, ext, false, s =>
                 {
                     using var w = new StreamWriter(s, new UTF8Encoding(false), leaveOpen: true);
                     w.Write(text);

@@ -519,7 +519,7 @@ public sealed class InteractionController : IDropSink, IDisposable
                         foreach (var estimator in estimators)
                         {
                             var found = new List<(string, long)>();
-                            await Chango.Conversion.StaWorker.RunAsync(() => found.AddRange(estimator.EstimateSizes(file, context)), "Chango estimate");
+                            await Chango.Conversion.StaWorker.RunAsync(() => found.AddRange(estimator.EstimateSizes(file, context)), "Chango estimate", ThreadPriority.BelowNormal);
                             foreach (var (id, bytes) in found) perFile[id] = bytes;
                         }
                         lock (EstimateCache) { if (EstimateCache.Count > 32) EstimateCache.Clear(); EstimateCache[key] = perFile; }

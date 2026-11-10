@@ -14,5 +14,9 @@ Full licence texts for the third-party components Chango ships with. `build/pack
 | `Svg.Skia-MIT.txt` | Svg.Skia, Svg.Model, Svg.SceneGraph, Svg.Animation, ShimSkiaSharp | MIT |
 | `SVG.NET-MS-PL.txt` | Svg.Custom (SVG.NET) | Microsoft Public License |
 | `ExCSS-MIT.txt` | ExCSS | MIT |
+| `NetVips-MIT.txt` | NetVips | MIT |
+| `libvips-LGPL-2.1.txt` | libvips | LGPL-2.1-or-later |
+| `LGPL-3.0.txt`, `GPL-3.0.txt` | GLib, libheif, libexif and the other LGPL-3.0 libraries inside libvips (the LGPL-3.0 builds on the GPL-3.0's text) | LGPL-3.0 |
+| `libvips-THIRD-PARTY-NOTICES.md` | Every library inside `libvips-42.dll`, with its licence | various (all permissive or LGPL) |
 
 Chango's own licence, which includes OrbitDrop's MIT notice, is `LICENSE` at the repository root.

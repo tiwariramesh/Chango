@@ -47,7 +47,8 @@ public sealed record FileOutcome(string Source, OutcomeStatus Status, string? Ou
 
 public enum OutputLocation { BesideOriginal, Folder }
 
-public sealed record OutputOptions(OutputLocation Location = OutputLocation.BesideOriginal, string? Folder = null)
+/// <param name="KeepSourceDates">Results keep the original's created and modified dates instead of today's.</param>
+public sealed record OutputOptions(OutputLocation Location = OutputLocation.BesideOriginal, string? Folder = null, bool KeepSourceDates = true)
 {
     public string DirectoryFor(string source) =>
         Location == OutputLocation.Folder && !string.IsNullOrWhiteSpace(Folder)

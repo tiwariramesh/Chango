@@ -113,6 +113,7 @@ public sealed class SettingsViewModel : ObservableObject
     // ---- Conversions
     public bool OutputBeside { get => S.OutputLocation == OutputLocation.BesideOriginal; set { if (value) Set(s => s.OutputLocation = OutputLocation.BesideOriginal, nameof(OutputBeside), nameof(OutputToFolder)); } }
     public bool OutputToFolder { get => S.OutputLocation == OutputLocation.Folder; set { if (value && S.OutputFolder is not null) Set(s => s.OutputLocation = OutputLocation.Folder, nameof(OutputBeside), nameof(OutputToFolder)); } }
+    public bool KeepOriginalDates { get => S.KeepOriginalDates; set => Set(s => s.KeepOriginalDates = value, nameof(KeepOriginalDates)); }
     public string OutputFolderText => S.OutputFolder ?? "No folder chosen";
     public bool HasOutputFolder => S.OutputFolder is not null;
 

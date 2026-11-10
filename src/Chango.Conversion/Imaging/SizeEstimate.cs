@@ -20,10 +20,21 @@ public static class SizeEstimate
         var source = WicImageCodec.FormatOf(path);
         if (source is null) return result;
         long size = new FileInfo(path).Length;
-        var image = WicImageCodec.Load(path);
-        var sample = WicImageCodec.FitLongSide(image.PixelWidth, image.PixelHeight, SampleSide) is { } fit
-            ? WicImageCodec.Resize(image, fit.W, fit.H) : image;
-        double pixelScale = Math.Pow((double)image.PixelWidth * image.PixelHeight / ((double)sample.PixelWidth * sample.PixelHeight), PixelExponent);
+        BitmapSource sample;
+        int width, height;
+        if (VipsCodec.CanRead(path))
+        {
+            // Decoded at reduced size (a JPEG straight at ½, ¼ or ⅛): no full-size decode while the wheel is open.
+            (width, height) = Dimensions(path);
+            sample = VipsCodec.Thumbnail(path, SampleSide);
+        }
+        else
+        {
+            var image = WicImageCodec.Load(path);
+            (width, height) = (image.PixelWidth, image.PixelHeight);
+            sample = WicImageCodec.FitLongSide(width, height, SampleSide) is { } fit ? WicImageCodec.Resize(image, fit.W, fit.H) : image;
+        }
+        double pixelScale = Math.Pow((double)width * height / ((double)sample.PixelWidth * sample.PixelHeight), PixelExponent);
 
         long Encoded(ImageFormat f) => WicImageCodec.EncodeToBytes(sample, f, jpegQuality).LongLength;
         bool sourceEncodable = WicImageCodec.OutputFormats.Contains(source);

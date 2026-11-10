@@ -32,7 +32,8 @@ public class MediaRegistryTests
     public void Video_and_audio_get_their_own_grouped_tools()
     {
         Assert.Equal(["Trim", "Compress", "Remove audio"], Wheel(Files("a.mov"), OperationMode.Tools));
-        Assert.Equal(["Trim", "720p", "1080p", "480p", "Half size", "Remove audio"], Labels(Files("a.mov"), OperationMode.Tools));
+        string[] hevc = FfmpegProvider.Available ? ["Smallest (HEVC)"] : []; // offered only with FFmpeg
+        Assert.Equal(["Trim", "720p", "1080p", "480p", "Half size", .. hevc, "Remove audio"], Labels(Files("a.mov"), OperationMode.Tools));
         Assert.Equal(["Trim", "Compress", "Normalize", "Channels"], Wheel(Files("a.mp3"), OperationMode.Tools));
         Assert.Equal(["Trim", "128 kbps", "96 kbps", "64 kbps", "Normalize", "Mono", "Stereo"], Labels(Files("a.mp3"), OperationMode.Tools));
         Assert.DoesNotContain("Trim", Labels(Files("a.mp3", "b.mp3"), OperationMode.Tools)); // one file at a time
@@ -111,17 +112,19 @@ public class MediaTranscodeTests
     }
 
     [MediaFact]
-    public async Task Remove_audio_and_compress_produce_valid_mp4s_with_suffixes()
+    public async Task Remove_audio_and_compress_produce_valid_numbered_mp4s()
     {
         using var t = new TempFolder();
         string src = Copy(t, "testpattern.mp4");
         var (muted, _) = await Run("tool.video.mute", src);
         var (small, _) = await Run("tool.video.compress.720", src);
         var (half, _) = await Run("tool.video.compress.half", src);
-        Assert.True(half.Status == OutcomeStatus.Succeeded, $"Half: {half.Message}");
-        Assert.Null(MediaFoundationProvider.ValidateContainer(half.Output!, ".mp4"));
-        Assert.Equal(t.File("testpattern (no audio).mp4"), muted.Output);
-        Assert.Equal(t.File("testpattern (compressed).mp4"), small.Output);
+        // A result that came out no smaller isn't kept: the tiny test clip may already be as small as it gets.
+        Assert.True(half.Status == OutcomeStatus.Succeeded || half is { Status: OutcomeStatus.Skipped, Message: "This video is already as small as it can get" },
+            $"Half: {half.Status} {half.Message}");
+        if (half.Status == OutcomeStatus.Succeeded) Assert.Null(MediaFoundationProvider.ValidateContainer(half.Output!, ".mp4"));
+        Assert.Equal(t.File("testpattern_1.mp4"), muted.Output);
+        Assert.Equal(t.File("testpattern_2.mp4"), small.Output);
         Assert.Null(MediaFoundationProvider.ValidateContainer(muted.Output!, ".mp4"));
         Assert.Null(MediaFoundationProvider.ValidateContainer(small.Output!, ".mp4"));
     }
@@ -175,8 +178,8 @@ public class AudioToolTests
         Assert.True(small.Status == OutcomeStatus.Succeeded, $"compress: {small.Message}");
         Assert.True(flac.Status == OutcomeStatus.Succeeded, $"flac: {flac.Message}");
         Assert.True(mono.Status == OutcomeStatus.Succeeded, $"mono: {mono.Message}");
-        Assert.Equal(t.File("testpattern (compressed).m4a"), small.Output);
-        Assert.Equal(t.File("testpattern (mono).m4a"), mono.Output);
+        Assert.Equal(t.File("testpattern_1.m4a"), small.Output);
+        Assert.Equal(t.File("testpattern_2.m4a"), mono.Output);
         Assert.Null(MediaFoundationProvider.ValidateContainer(flac.Output!, ".flac"));
     }
 }
@@ -219,7 +222,7 @@ public class NormalizeTests
         await provider.ExecuteAsync(op, new FileSet([quiet]), Ctx.Default(), c, CancellationToken.None);
         var o = Assert.Single(c.Outcomes);
         Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message);
-        Assert.Equal(t.File("quiet (normalized).wav"), o.Output);
+        Assert.Equal(t.File("quiet_1.wav"), o.Output);
         Assert.InRange(WavPcm.NormalizeGain(File.ReadAllBytes(o.Output!), MediaFoundationProvider.NormalizePeak), 0.97, 1.03);
 
         string loud = t.File("loud.wav");
@@ -249,7 +252,7 @@ public class TrimTests
         await provider.ExecuteAsync(op, new FileSet([clip]), Ctx.Default() with { Input = range }, c, CancellationToken.None);
         var o = Assert.Single(c.Outcomes);
         Assert.True(o.Status == OutcomeStatus.Succeeded, o.Message);
-        Assert.Equal(t.File("clip (trimmed).mp4"), o.Output);
+        Assert.Equal(t.File("clip_1.mp4"), o.Output);
         var trimmed = await MediaFoundationProvider.DurationAsync(o.Output!);
         Assert.InRange(trimmed.TotalSeconds, 0.8, 1.25);
     }

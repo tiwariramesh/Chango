@@ -24,11 +24,14 @@ public static class Undo
             if (o.Status != OutcomeStatus.Succeeded || o.Output is not { Length: > 0 } output) continue;
             string path = Normalize(output);
             if (originals.Contains(path)) continue;
-            DateTime created;
-            if (File.Exists(path)) created = File.GetCreationTimeUtc(path);
-            else if (Directory.Exists(path)) created = Directory.GetCreationTimeUtc(path);
-            else continue; // already gone
-            if (created < jobCreatedUtc - Slack) continue; // older than the job: not ours to remove
+            if (!File.Exists(path) && !Directory.Exists(path)) continue; // already gone
+            // Results keep the original's dates, so they're recognised by identity; anything SafeOutput didn't
+            // publish (a folder copy) must at least be newer than the job.
+            if (!OutputLedger.IsPublished(path))
+            {
+                DateTime created = File.Exists(path) ? File.GetCreationTimeUtc(path) : Directory.GetCreationTimeUtc(path);
+                if (created < jobCreatedUtc - Slack) continue; // older than the job: not ours to remove
+            }
             if (!result.Contains(path, StringComparer.OrdinalIgnoreCase)) result.Add(path);
         }
         return result;

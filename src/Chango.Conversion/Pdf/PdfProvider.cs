@@ -55,8 +55,8 @@ public sealed class PdfProvider : IOperationProvider
                         Report(progress, file, () =>
                         {
                             var page = ToPdfImage(file, context.JpegQuality);
-                            return SafeOutput.Write(file, context.Output, ".pdf", null,
-                                s => PdfImageWriter.Write(s, [page], Path.GetFileNameWithoutExtension(file)), ValidatePdf, ct);
+                            return SafeOutput.Write(file, context.Output, ".pdf", false,
+                                s => PdfImageWriter.Write(s, [page], Path.GetFileNameWithoutExtension(file), DocInfo.FromPhoto(file)), ValidatePdf, ct);
                         });
                     }
                 }, "Chango PDF");
@@ -72,8 +72,8 @@ public sealed class PdfProvider : IOperationProvider
                         pages.Add(ToPdfImage(file, context.JpegQuality));
                         context.ReportFileFraction?.Invoke((double)pages.Count / files.Count);
                     }
-                    string output = SafeOutput.Write(files[0], context.Output, ".pdf", "combined",
-                        s => PdfImageWriter.Write(s, pages, Path.GetFileNameWithoutExtension(files[0])), ValidatePdf, ct);
+                    string output = SafeOutput.Write(files[0], context.Output, ".pdf", true,
+                        s => PdfImageWriter.Write(s, pages, Path.GetFileNameWithoutExtension(files[0]), DocInfo.FromPhoto(files[0])), ValidatePdf, ct);
                     // One PDF for the whole selection: the first file carries the output, the rest are part of it.
                     for (int i = 0; i < files.Count; i++)
                         progress.Report(new FileOutcome(files[i], OutcomeStatus.Succeeded, i == 0 ? output : null));
@@ -137,7 +137,7 @@ public sealed class PdfProvider : IOperationProvider
         byte[] Encode(byte[] pngBytes) => png ? pngBytes : Reencode(pngBytes, format, context.JpegQuality);
 
         if (count == 1)
-            return SafeOutput.Write(file, context.Output, ext, null, s => s.Write(Encode(pages[0])), _ => null, ct);
+            return SafeOutput.Write(file, context.Output, ext, false, s => s.Write(Encode(pages[0])), _ => null, ct);
 
         string name = $"{Path.GetFileNameWithoutExtension(file)} ({ext.TrimStart('.').ToUpperInvariant()})";
         int digits = count.ToString().Length;
@@ -145,7 +145,7 @@ public sealed class PdfProvider : IOperationProvider
         {
             for (int i = 0; i < pages.Count; i++)
                 File.WriteAllBytes(Path.Combine(folder, $"Page {(i + 1).ToString().PadLeft(digits, '0')}{ext}"), Encode(pages[i]));
-        }, ct);
+        }, ct, dateContents: true);
     }
 
     /// <summary>Every page as a PNG, with its size in points (1/72 inch), rendered by Windows' PDF engine.</summary>

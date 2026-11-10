@@ -13,10 +13,10 @@ public static class FileTransfer
     public static string CopyInto(string source, string folder, CancellationToken ct)
     {
         if (File.Exists(source))
-            return SafeOutput.WriteToPath(source, new OutputOptions(OutputLocation.Folder, folder), null, null,
+            return SafeOutput.WriteToPath(source, new OutputOptions(OutputLocation.Folder, folder), null, false,
                 writeToTemp: temp => File.Copy(source, temp, overwrite: true), // CopyFile can't replace a hidden file: hide afterwards
                 validate: temp => new FileInfo(temp).Length == new FileInfo(source).Length ? null : "the copy is incomplete", ct,
-                hideWhileWriting: false);
+                hideWhileWriting: false, copyNames: true);
 
         if (!Directory.Exists(source)) throw new FileNotFoundException("The item no longer exists.", source);
         string temp = Path.Combine(folder, $"{SafeOutput.TempPrefix}{Guid.NewGuid():N}");

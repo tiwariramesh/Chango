@@ -47,6 +47,7 @@ Converting a file is basic computer work, so it shouldn't mean uploading it to s
 
 1. **Drag a file, then tap Shift.** Start dragging one or more files in File Explorer or on the desktop and keep holding. Tap Shift once and the wheel opens around the pointer.
 2. **Let go on what you want.** The result appears **next to the original**. Let go on the centre or press **Esc** to cancel.
+   A conversion keeps the name (`photo.jpg` → `photo.png`); a tool's result is numbered (`photo.jpg` → `photo_1.jpg`, and compressing `photo_1.jpg` again gives `photo_2.jpg`). Results keep the original's created and modified dates, and its details: camera, date taken, location, author, title, tags.
 3. **Tap Shift again for more.** Each tap switches between **Convert**, **Tools** and **Actions**. Slices marked **+** (like **More** or **Compress**) open into more choices when you rest on them.
 
 **No dragging?** Select files, press **Ctrl + Alt + Space** and click an option. **Or right-click** files or folders in File Explorer and choose **Chango**. Every result can be **undone** for a few seconds (it goes to the Recycle Bin).
@@ -64,11 +65,11 @@ Converting a file is basic computer work, so it shouldn't mean uploading it to s
 | **Spreadsheets** (XLS, XLSX, ODS, CSV, TSV) | PDF, XLSX, CSV, TSV, ODS | Office or LibreOffice |
 | **Slides** (PPT, PPTX, ODP) | PDF, PPTX, PNG, JPG (an image per slide) | Office or LibreOffice |
 | **Subtitles** (SRT, VTT) | SRT, VTT, TXT transcript | — |
-| **Video** (MP4, MOV, MKV, WebM, AVI, WMV …) | MP4, WMV, GIF; extract MP3, M4A, WAV, WMA, FLAC · **More:** MKV, WebM, MOV, AVI, OGG, Opus, AIFF | FFmpeg for **More** |
-| **Audio** (MP3, M4A, WAV, WMA, FLAC; OGG, Opus, AIFF …) | MP3, M4A, WAV, WMA, FLAC, OGG, Opus, AIFF | FFmpeg for OGG, Opus, AIFF and their inputs |
+| **Video** (MP4, MOV, MKV, WebM, AVI, WMV …) | MP4, WMV, GIF; extract MP3, M4A, WAV, WMA, FLAC · **More:** MKV, WebM, MOV, AVI, OGG, Opus, AIFF | — (FFmpeg is included) |
+| **Audio** (MP3, M4A, WAV, WMA, FLAC; OGG, Opus, AIFF …) | MP3, M4A, WAV, WMA, FLAC, OGG, Opus, AIFF | — (FFmpeg is included) |
 | **CorelDRAW** (CDR, CMX) | PDF, SVG, PNG, JPG, WebP, TIFF, BMP | — |
 
-**Tools:** image edit (crop, adjust, markup, redact), compress, resize, rotate, grayscale, OCR · PDF merge, split, compress, rotate · video trim, compress, remove audio, snapshot, join · audio trim, compress, normalize, mono/stereo · extract ZIP, 7Z, RAR, TAR, TAR.GZ, TAR.XZ, TAR.BZ2, GZ, CAB, ISO · file info, edit details, remove metadata.
+**Tools:** image edit (crop, adjust, markup, redact), compress (Optimize: smaller with the same look; or to 75/50/25% or under 1 MB/500 KB/200 KB), resize, rotate, grayscale, OCR · PDF merge, split, compress, rotate · video trim, compress (720p, 1080p, 480p, half size, smallest with HEVC; on the graphics chip when it can), remove audio, snapshot, join · audio trim, compress, normalize, mono/stereo · extract ZIP, 7Z, RAR, TAR, TAR.GZ, TAR.XZ, TAR.BZ2, GZ, CAB, ISO · file info, edit details, remove metadata.
 
 **Actions:** copy path or name, show in folder, copy/move to, float shelf, share, **archive as ZIP, 7Z or TAR.GZ**, terminal, set as wallpaper. These work on folders too.
 
@@ -90,7 +91,7 @@ Each release includes `SHA256SUMS.txt`, so you can check the download is intact 
 
 ### Optional helpers (Windows)
 
-- **FFmpeg** unlocks the extra media formats: `winget install Gyan.FFmpeg`. Chango finds it automatically, even if you install it while Chango is running.
+- **FFmpeg** (video and audio) and **ExifTool** (carrying photo and video details into results) come with Chango. A build from source uses installed copies instead: `winget install Gyan.FFmpeg` and `winget install OliverBetz.ExifTool`; Chango finds them automatically, even if you install them while it's running.
 - **LibreOffice** is used for documents when Microsoft Office isn't installed: `winget install TheDocumentFoundation.LibreOffice`.
 
 ## Privacy
@@ -116,7 +117,7 @@ dotnet run --project src/Chango.App          # runs from source (lives in the no
 dotnet run --project tools/IconGen          # regenerates the icons and launch animation from the logo
 ```
 
-Tests that need Word, Excel, PowerPoint or FFmpeg skip themselves when those aren't installed.
+Tests that need Word, Excel, PowerPoint, FFmpeg or ExifTool skip themselves when those aren't installed. `build/package.ps1` downloads the FFmpeg and ExifTool releases a build ships (`build/tools/get-tools.ps1`, checksums pinned).
 
 ## Brand
 

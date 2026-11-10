@@ -85,7 +85,7 @@ public sealed class MediaEditingProvider : IOperationProvider
             using var ms = new MemoryStream(data);
             var frame = BitmapDecoder.Create(ms, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad).Frames[0];
             BitmapSource image = new FormatConvertedBitmap(frame, PixelFormats.Bgra32, null, 0);
-            output = WicImageCodec.WriteOutput(image, file, WicImageCodec.Png, $"frame {Stamp(at)}", context, ct);
+            output = WicImageCodec.WriteOutput(image, file, WicImageCodec.Png, numbered: true, context, ct);
         }, "Chango snapshot");
         return output;
     }
@@ -93,6 +93,8 @@ public sealed class MediaEditingProvider : IOperationProvider
     /// <summary>Samples frames with the composition's thumbnail engine and writes a looping animated GIF.</summary>
     private static async Task<string> GifAsync(string file, OperationContext context, CancellationToken ct)
     {
+        if (FfmpegProvider.ExecutablePath is { } ffmpeg)
+            return await Task.Run(() => GifWithFfmpeg(ffmpeg, file, context, ct), ct);
         var storage = await StorageFile.GetFileFromPathAsync(file);
         var props = await storage.Properties.GetVideoPropertiesAsync();
         var composition = new MediaComposition();
@@ -141,11 +143,23 @@ public sealed class MediaEditingProvider : IOperationProvider
             gif = GifLoop.AddTimingAndLoop(output.ToArray(), 100 / GifFps);
         }, "Chango GIF");
 
-        return SafeOutput.Write(file, context.Output, ".gif", null, s => s.Write(gif),
+        return SafeOutput.Write(file, context.Output, ".gif", false, s => s.Write(gif),
             temp => File.ReadAllBytes(temp) is var b && b.Length > 6 && b[0] == 'G' && b[1] == 'I' && b[2] == 'F' ? null : "the GIF is invalid", ct);
     }
 
-    private static string Stamp(TimeSpan t) => t.TotalHours >= 1 ? t.ToString(@"h\.mm\.ss") : t.ToString(@"m\.ss");
+    /// <summary>
+    /// One pass with FFmpeg: a palette chosen for the whole clip (no flicker between frames), ordered dithering, and
+    /// only the changed part of each frame stored. Faster, sharper and smaller than sampling frames one by one.
+    /// </summary>
+    private static string GifWithFfmpeg(string ffmpeg, string file, OperationContext context, CancellationToken ct)
+    {
+        string filters = $"fps={GifFps},scale=w='min(iw,{GifSide})':h='min(ih,{GifSide})':force_original_aspect_ratio=decrease:flags=lanczos," +
+            "split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle";
+        return SafeOutput.WriteToPath(file, context.Output, ".gif", false,
+            temp => FfmpegProvider.Run(ffmpeg, file, temp, ["-t", GifSeconds.ToString(), "-an", "-vf", filters, "-loop", "0"], true, context.ReportFileFraction, ct),
+            temp => File.ReadAllBytes(temp) is var b && b.Length > 6 && b[0] == 'G' && b[1] == 'I' && b[2] == 'F' ? null : "the GIF is invalid",
+            ct, hideWhileWriting: false, tempKeepsExtension: true);
+    }
 
     private static async Task<string> JoinAsync(FileSet files, OperationContext context, CancellationToken ct)
     {
@@ -173,13 +187,14 @@ public sealed class MediaEditingProvider : IOperationProvider
             profile.Video.Bitrate = (uint)Math.Clamp(width * height * 4.0, 1_000_000, 16_000_000);
         }
 
-        return await Task.Run(() => SafeOutput.WriteToPath(files[0], context.Output, ".mp4", "joined",
+        return await Task.Run(() => SafeOutput.WriteToPath(files[0], context.Output, ".mp4", true,
             writeToTemp: temp =>
             {
                 var destination = StorageFile.GetFileFromPathAsync(temp).AsTask().GetAwaiter().GetResult();
                 var progress = new Progress<double>(p => context.ReportFileFraction?.Invoke(p / 100.0));
                 var result = composition.RenderToFileAsync(destination, MediaTrimmingPreference.Precise, profile).AsTask(ct, progress).GetAwaiter().GetResult();
                 if (result != TranscodeFailureReason.None) throw new InvalidDataException("Windows couldn't join these videos.");
+                MetadataCarrier.CopyAll(files[0], temp); // the first clip's date and location
             },
             validate: temp => MediaFoundationProvider.ValidateContainer(temp, ".mp4"),
             ct, hideWhileWriting: false, tempKeepsExtension: true), ct);

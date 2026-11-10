@@ -11,6 +11,8 @@ namespace Chango.Conversion.Media;
 /// Nothing is bundled or downloaded. Decoding uses whatever codecs Windows has installed; if one is missing, the file
 /// fails with a clear message rather than producing a broken output.
 /// Outputs: MP4 (H.264/AAC), WMV, M4A (AAC), MP3, WAV, WMA. Tools: compress to 720p, remove audio.
+/// When FFmpeg is here (it ships with Chango), the options it does better (compress, remove audio, MP4, MP3, M4A,
+/// WAV, FLAC, audio tools) are handed to <see cref="FfmpegMedia"/>: faster, smaller, and the metadata is kept.
 /// </summary>
 public sealed class MediaFoundationProvider : IOperationProvider
 {
@@ -41,6 +43,7 @@ public sealed class MediaFoundationProvider : IOperationProvider
         new("1080", "1080p", "Compress to 1080p", 1920, 1080),
         new("480", "480p", "Compress to 480p", 854, 480),
         new("half", "Half size", "Same resolution, about half the size", 0, 0),
+        new("hevc", "Smallest (HEVC)", "Same resolution, HEVC: the smallest file. Plays on phones and Macs; on Windows with the HEVC extension", 0, 0),
     ];
 
     private static readonly uint[] AudioBitrates = [128, 96, 64];
@@ -77,7 +80,7 @@ public sealed class MediaFoundationProvider : IOperationProvider
         if (mode == OperationMode.Tools && allVideo)
         {
             int o = 120;
-            foreach (var p in VideoPresets)
+            foreach (var p in VideoPresets.Where(p => p.Key != "hevc" || FfmpegProvider.Available)) // HEVC needs FFmpeg
                 yield return new($"tool.video.compress.{p.Key}", ProviderId, OperationMode.Tools, p.Label, null,
                     p.Hint, "", "Compressing video", o++, Group: VideoCompress);
             yield return new("tool.video.mute", ProviderId, OperationMode.Tools, "Remove audio", "î",
@@ -113,16 +116,25 @@ public sealed class MediaFoundationProvider : IOperationProvider
                     progress.Report(await NormalizeAsync(file, context, ct));
                     continue;
                 }
-                var (profile, extension, suffix) = await ProfileForAsync(operation, file);
-                if (extension == Path.GetExtension(file).ToLowerInvariant() && suffix is null)
+                if (FfmpegProvider.ExecutablePath is { } ffmpeg && FfmpegMedia.Handles(operation.Id))
+                {
+                    progress.Report(await Task.Run(() => FfmpegMedia.Run(ffmpeg, operation.Id, file, context, ct), ct));
+                    continue;
+                }
+                var (profile, extension, numbered) = await ProfileForAsync(operation, file);
+                if (extension == Path.GetExtension(file).ToLowerInvariant() && !numbered)
                 {
                     progress.Report(new FileOutcome(file, OutcomeStatus.Skipped, Message: $"Already {operation.Label}"));
                     continue;
                 }
-                string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, extension, suffix,
-                    writeToTemp: temp => TranscodeAsync(file, temp, profile, context.ReportFileFraction, ct).GetAwaiter().GetResult(),
+                string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, extension, numbered,
+                    writeToTemp: temp =>
+                    {
+                        TranscodeAsync(file, temp, profile, context.ReportFileFraction, ct).GetAwaiter().GetResult();
+                        MetadataCarrier.CopyAll(file, temp); // Windows' transcoder drops dates, location and tags
+                    },
                     validate: temp => ValidateContainer(temp, extension),
-                    ct, hideWhileWriting: false), ct);
+                    ct, hideWhileWriting: false, tempKeepsExtension: true), ct);
                 progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, output));
             }
             catch (OperationCanceledException) { throw; }
@@ -133,23 +145,23 @@ public sealed class MediaFoundationProvider : IOperationProvider
         }
     }
 
-    private static async Task<(MediaEncodingProfile Profile, string Extension, string? Suffix)> ProfileForAsync(OperationDescriptor op, string file)
+    private static async Task<(MediaEncodingProfile Profile, string Extension, bool Numbered)> ProfileForAsync(OperationDescriptor op, string file)
     {
         switch (op.Id)
         {
-            case "convert.media.mp4": return (MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Auto), ".mp4", null);
-            case "convert.media.wmv": return (MediaEncodingProfile.CreateWmv(VideoEncodingQuality.Auto), ".wmv", null);
-            case "convert.media.mp3": return (MediaEncodingProfile.CreateMp3(AudioEncodingQuality.High), ".mp3", null);
-            case "convert.media.m4a": return (MediaEncodingProfile.CreateM4a(AudioEncodingQuality.High), ".m4a", null);
-            case "convert.media.wav": return (MediaEncodingProfile.CreateWav(AudioEncodingQuality.High), ".wav", null);
-            case "convert.media.wma": return (MediaEncodingProfile.CreateWma(AudioEncodingQuality.High), ".wma", null);
+            case "convert.media.mp4": return (MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Auto), ".mp4", false);
+            case "convert.media.wmv": return (MediaEncodingProfile.CreateWmv(VideoEncodingQuality.Auto), ".wmv", false);
+            case "convert.media.mp3": return (MediaEncodingProfile.CreateMp3(AudioEncodingQuality.High), ".mp3", false);
+            case "convert.media.m4a": return (MediaEncodingProfile.CreateM4a(AudioEncodingQuality.High), ".m4a", false);
+            case "convert.media.wav": return (MediaEncodingProfile.CreateWav(AudioEncodingQuality.High), ".wav", false);
+            case "convert.media.wma": return (MediaEncodingProfile.CreateWma(AudioEncodingQuality.High), ".wma", false);
             case "tool.video.mute":
             {
                 var p = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Auto);
                 p.Audio = null;
-                return (p, ".mp4", "no audio");
+                return (p, ".mp4", true);
             }
-            case "convert.media.flac": return (MediaEncodingProfile.CreateFlac(AudioEncodingQuality.High), ".flac", null);
+            case "convert.media.flac": return (MediaEncodingProfile.CreateFlac(AudioEncodingQuality.High), ".flac", false);
             case var id when id.StartsWith("tool.video.compress."):
             {
                 var preset = VideoPresets.Single(v => id == $"tool.video.compress.{v.Key}");
@@ -177,20 +189,20 @@ public sealed class MediaFoundationProvider : IOperationProvider
                     }
                 }
                 if (p.Audio is not null) p.Audio.Bitrate = 128_000;
-                return (p, ".mp4", "compressed");
+                return (p, ".mp4", true);
             }
             case var id when id.StartsWith("tool.audio.compress."):
             {
                 uint kbps = uint.Parse(id["tool.audio.compress.".Length..]);
                 var (p, ext) = SameKindAudio(file, lossyOnly: true);
                 p.Audio.Bitrate = kbps * 1000;
-                return (p, ext, "compressed");
+                return (p, ext, true);
             }
             case "tool.audio.mono" or "tool.audio.stereo":
             {
                 var (p, ext) = SameKindAudio(file, lossyOnly: false);
                 p.Audio.ChannelCount = op.Id == "tool.audio.mono" ? 1u : 2u;
-                return (p, ext, op.Id == "tool.audio.mono" ? "mono" : "stereo");
+                return (p, ext, true);
             }
             default: throw new NotSupportedException(op.Id);
         }
@@ -227,10 +239,14 @@ public sealed class MediaFoundationProvider : IOperationProvider
             extension = ".mp4";
         }
         else (profile, extension) = SameKindAudio(file, lossyOnly: false);
-        string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, extension, "trimmed",
-            writeToTemp: temp => TrimWithFallback(file, temp, profile, context.ReportFileFraction, ct, range, duration),
+        string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, extension, true,
+            writeToTemp: temp =>
+            {
+                TrimWithFallback(file, temp, profile, context.ReportFileFraction, ct, range, duration);
+                MetadataCarrier.CopyAll(file, temp);
+            },
             validate: temp => ValidateContainer(temp, extension),
-            ct, hideWhileWriting: false), ct);
+            ct, hideWhileWriting: false, tempKeepsExtension: true), ct);
         return new FileOutcome(file, OutcomeStatus.Succeeded, output);
     }
 
@@ -284,10 +300,14 @@ public sealed class MediaFoundationProvider : IOperationProvider
 
             var (profile, extension) = SameKindAudio(file, lossyOnly: false);
             if (extension == ".wav") profile.Audio = AudioEncodingProperties.CreatePcm(rate, channels, 16);
-            string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, extension, "normalized",
-                writeToTemp: temp => TranscodeAsync(louder, temp, profile, f => context.ReportFileFraction?.Invoke(0.4 + f * 0.6), ct).GetAwaiter().GetResult(),
+            string output = await Task.Run(() => SafeOutput.WriteToPath(file, context.Output, extension, true,
+                writeToTemp: temp =>
+                {
+                    TranscodeAsync(louder, temp, profile, f => context.ReportFileFraction?.Invoke(0.4 + f * 0.6), ct).GetAwaiter().GetResult();
+                    MetadataCarrier.CopyAll(file, temp); // the tags of the original, not of the scratch WAV
+                },
                 validate: temp => ValidateContainer(temp, extension),
-                ct, hideWhileWriting: false), ct);
+                ct, hideWhileWriting: false, tempKeepsExtension: true), ct);
             return new FileOutcome(file, OutcomeStatus.Succeeded, output);
         }
         finally

@@ -35,6 +35,13 @@ internal sealed class AppFinder(Func<string?> find)
 /// </summary>
 internal static class ExternalTools
 {
+    /// <summary>A tool shipped with Chango, in a folder next to Chango.exe ("ffmpeg\ffmpeg.exe"), or null when absent.</summary>
+    public static string? Bundled(string relativePath)
+    {
+        string path = Path.Combine(AppContext.BaseDirectory, relativePath);
+        return File.Exists(path) ? path : null;
+    }
+
     /// <summary>
     /// App Paths, Program Files, per-user installs, the user-profile path (scoop …), the Microsoft Store and winget
     /// aliases, any <paramref name="extra"/> candidates and PATH. Prefers the console launcher (.com), which waits for the result.

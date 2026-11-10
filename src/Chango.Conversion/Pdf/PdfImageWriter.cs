@@ -14,7 +14,9 @@ public static class PdfImageWriter
 {
     public const double LongSide = 842;
 
-    public static void Write(Stream output, IReadOnlyList<PdfImage> images, string? title = null)
+    /// <param name="info">Document details (the photographer and date taken of the first picture …); its title
+    /// falls back to <paramref name="title"/>.</param>
+    public static void Write(Stream output, IReadOnlyList<PdfImage> images, string? title = null, DocInfo? info = null)
     {
         if (images.Count == 0) throw new ArgumentException("A PDF needs at least one image.", nameof(images));
         var offsets = new List<long>();
@@ -30,7 +32,8 @@ public static class PdfImageWriter
         Begin(2);
         Raw($"<< /Type /Pages /Count {images.Count} /Kids [{string.Join(" ", images.Select((_, k) => $"{PageId(k)} 0 R"))}] >>\nendobj\n");
         Begin(3);
-        Raw($"<< /Producer (Chango){(title is null ? "" : $" /Title ({Escape(title)})")} >>\nendobj\n");
+        var details = (info ?? DocInfo.Empty) with { Title = info?.Title ?? title };
+        Raw($"<< /Producer (Chango){details.PdfInfoEntries()} >>\nendobj\n");
 
         for (int k = 0; k < images.Count; k++)
         {
@@ -60,19 +63,6 @@ public static class PdfImageWriter
     }
 
     private static string N(double v) => Math.Round(v, 2).ToString("0.##", CultureInfo.InvariantCulture);
-
-    private static string Escape(string s)
-    {
-        // PDF literal strings: escape \ ( ) and keep it to printable ASCII (titles are file names).
-        var sb = new StringBuilder();
-        foreach (char c in s)
-        {
-            if (c is '\\' or '(' or ')') sb.Append('\\').Append(c);
-            else if (c >= 32 && c < 127) sb.Append(c);
-            else sb.Append('?');
-        }
-        return sb.ToString();
-    }
 
     /// <summary>Tracks the byte position for the cross-reference table (output streams may not support Position).</summary>
     private sealed class Counter(Stream inner)

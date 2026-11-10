@@ -39,10 +39,10 @@ public sealed class MetadataProvider : IOperationProvider
             {
                 string output = operation.Id switch
                 {
-                    "tool.meta.strip" => await Task.Run(() => SafeOutput.Write(file, context.Output, null, "no metadata",
+                    "tool.meta.strip" => await Task.Run(() => SafeOutput.Write(file, context.Output, null, true,
                         s => MetadataStripper.Strip(file, s), _ => null, ct), ct),
-                    "tool.meta.location" => await EditCopyAsync(file, new MetadataEdit(new Dictionary<string, string?>(), true), "no location", context, ct),
-                    InfoId when context.Input is MetadataEdit edit => await EditCopyAsync(file, edit, "edited", context, ct),
+                    "tool.meta.location" => await EditCopyAsync(file, new MetadataEdit(new Dictionary<string, string?>(), true), context, ct),
+                    InfoId when context.Input is MetadataEdit edit => await EditCopyAsync(file, edit, context, ct),
                     _ => throw new NotSupportedException(operation.Id),
                 };
                 progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, output));
@@ -56,8 +56,8 @@ public sealed class MetadataProvider : IOperationProvider
     }
 
     /// <summary>Copies the file and applies the edit to the copy, with SafeOutput's guarantees.</summary>
-    private static Task<string> EditCopyAsync(string file, MetadataEdit edit, string suffix, OperationContext context, CancellationToken ct) =>
-        Task.Run(() => SafeOutput.WriteToPath(file, context.Output, null, suffix,
+    private static Task<string> EditCopyAsync(string file, MetadataEdit edit, OperationContext context, CancellationToken ct) =>
+        Task.Run(() => SafeOutput.WriteToPath(file, context.Output, null, numbered: true,
             writeToTemp: temp =>
             {
                 if (edit.RemoveLocation) File.WriteAllBytes(temp, MetadataStripper.JpegWithoutLocation(File.ReadAllBytes(file)));

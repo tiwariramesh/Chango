@@ -205,7 +205,7 @@ public partial class App : Application, ISettingsHost, ITrayCommands
 
     private OperationContext CreateContext() => new()
     {
-        Output = new OutputOptions(_settings.OutputLocation, _settings.OutputFolder),
+        Output = new OutputOptions(_settings.OutputLocation, _settings.OutputFolder, _settings.KeepOriginalDates),
         JpegQuality = _settings.JpegQuality,
         Shell = _shell,
     };

@@ -79,6 +79,10 @@ public sealed class DocumentProvider : IOperationProvider
     {
         var target = All.Single(t => operation.Id.EndsWith("." + t.Name.ToLowerInvariant(), StringComparison.Ordinal));
         using var engines = new DocumentEngines();
+        // Without Office, LibreOffice converts the plain conversions of the whole selection in one start.
+        var direct = files.Where(f => DocumentEngines.KindOf(f) is { } k && k != DocumentKind.Drawing && target != Md
+            && !(k == DocumentKind.Markup && (target == Html || target == Txt)) && !(k == DocumentKind.Slides && (target == Png || target == Jpg))).ToList();
+        if (direct.Count > 1) await engines.PrepareAsync(direct, target.Extension, ct);
         foreach (var file in files)
         {
             ct.ThrowIfCancellationRequested();
@@ -89,9 +93,9 @@ public sealed class DocumentProvider : IOperationProvider
                 {
                     DocumentKind.Drawing => await ConvertDrawingAsync(file, target, engines.NewWorkFolder(), context, ct),
                     DocumentKind.Markup when target == Html =>
-                        SafeOutput.Write(file, context.Output, ".html", null, s => WriteText(s, Markup.ToHtmlFile(file)), _ => null, ct),
+                        SafeOutput.Write(file, context.Output, ".html", false, s => WriteText(s, Markup.ToHtmlFile(file)), _ => null, ct),
                     DocumentKind.Markup when target == Txt =>
-                        SafeOutput.Write(file, context.Output, ".txt", null, s => WriteText(s, Markup.ToPlainText(File.ReadAllText(file))), _ => null, ct),
+                        SafeOutput.Write(file, context.Output, ".txt", false, s => WriteText(s, Markup.ToPlainText(File.ReadAllText(file))), _ => null, ct),
                     _ when target == Md => await ConvertToMarkdownAsync(engines, file, context, ct),
                     DocumentKind.Slides when target == Png || target == Jpg =>
                         await PdfProvider.RenderPagesAsync(await engines.ConvertToTempAsync(file, ".pdf", ct), file,
@@ -111,7 +115,10 @@ public sealed class DocumentProvider : IOperationProvider
     private static async Task<string> ConvertDocumentAsync(DocumentEngines engines, string file, Target target, OperationContext context, CancellationToken ct)
     {
         string temp = await engines.ConvertToTempAsync(file, target.Extension, ct);
-        return SafeOutput.Write(file, context.Output, target.Extension, null,
+        // Office and LibreOffice keep a document's properties; a PDF's (rebuilt into Word) are set here.
+        if (Path.GetExtension(file).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+            PdfContentProvider.ApplyDocInfo(temp, target.Extension, DocInfo.FromPdf(file));
+        return SafeOutput.Write(file, context.Output, target.Extension, false,
             s => { using var src = File.OpenRead(temp); src.CopyTo(s); },
             check => target == Pdf ? PdfProvider.ValidatePdf(check) : null, ct);
     }
@@ -121,7 +128,7 @@ public sealed class DocumentProvider : IOperationProvider
     {
         string docx = Path.GetExtension(file).Equals(".docx", StringComparison.OrdinalIgnoreCase) ? file : await engines.ConvertToTempAsync(file, ".docx", ct);
         string markdown = DocxToMarkdown.Convert(docx);
-        return SafeOutput.Write(file, context.Output, ".md", null, s => WriteText(s, markdown), _ => null, ct);
+        return SafeOutput.Write(file, context.Output, ".md", false, s => WriteText(s, markdown), _ => null, ct);
     }
 
     private static void WriteText(Stream s, string text)
@@ -160,7 +167,7 @@ public sealed class DocumentProvider : IOperationProvider
         }, "Chango CorelDRAW");
 
         if (target == Pdf)
-            return SafeOutput.Write(file, context.Output, ".pdf", null,
+            return SafeOutput.Write(file, context.Output, ".pdf", false,
                 s => PdfImageWriter.Write(s, pdfPages, Path.GetFileNameWithoutExtension(file)), PdfProvider.ValidatePdf, ct);
         return Save(file, images.Select(b => (Func<byte[]>)(() => b)).ToList(), target.Extension, label, context, ct);
     }
@@ -168,13 +175,13 @@ public sealed class DocumentProvider : IOperationProvider
     private static string Save(string file, IReadOnlyList<Func<byte[]>> pages, string extension, string label, OperationContext context, CancellationToken ct)
     {
         if (pages.Count == 1)
-            return SafeOutput.Write(file, context.Output, extension, null, s => s.Write(pages[0]()), _ => null, ct);
+            return SafeOutput.Write(file, context.Output, extension, false, s => s.Write(pages[0]()), _ => null, ct);
         int digits = pages.Count.ToString().Length;
         return SafeOutput.WriteFolder(file, context.Output, $"{Path.GetFileNameWithoutExtension(file)} ({label})", folder =>
         {
             for (int i = 0; i < pages.Count; i++)
                 File.WriteAllBytes(Path.Combine(folder, $"Page {(i + 1).ToString().PadLeft(digits, '0')}{extension}"), pages[i]());
-        }, ct);
+        }, ct, dateContents: true);
     }
 
     public IEnumerable<(string Category, string Detail)> DescribeCapabilities()

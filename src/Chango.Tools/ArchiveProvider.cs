@@ -86,7 +86,7 @@ public sealed class ArchiveProvider : IOperationProvider
         string baseName = items.Count == 1 ? Path.GetFileName(first) : "Archive";
         // SafeOutput names the result from a source path; give it one whose name (minus extension) is what we want.
         string nominal = Path.Combine(Path.GetDirectoryName(first)!, baseName + ".zip");
-        return SafeOutput.Write(nominal, context.Output, ".zip", null, stream =>
+        return SafeOutput.Write(nominal, context.Output, ".zip", false, stream =>
         {
             using var zip = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true);
             foreach (var item in items)
@@ -107,7 +107,7 @@ public sealed class ArchiveProvider : IOperationProvider
         string baseName = items.Count == 1 ? Path.GetFileName(first) : "Archive";
         string nominal = Path.Combine(Path.GetDirectoryName(first)!, baseName + ".x");
         var args = new List<string> { "-c", extension == ".7z" ? "--format=7zip" : "-z", "-f" };
-        return SafeOutput.WriteToPath(nominal, context.Output, extension, null, temp =>
+        return SafeOutput.WriteToPath(nominal, context.Output, extension, false, temp =>
         {
             args.Add(temp);
             foreach (var item in items)
@@ -180,7 +180,7 @@ public sealed class ArchiveProvider : IOperationProvider
         {
             // A single compressed file: "data.csv.gz" → "data.csv".
             string nominal = Path.Combine(Path.GetDirectoryName(archive)!, stem);
-            return SafeOutput.Write(nominal, context.Output, Path.GetExtension(stem), null, output =>
+            return SafeOutput.Write(nominal, context.Output, Path.GetExtension(stem), false, output =>
             {
                 using var input = new GZipStream(File.OpenRead(archive), CompressionMode.Decompress);
                 input.CopyTo(output);

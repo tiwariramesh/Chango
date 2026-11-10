@@ -11,8 +11,8 @@ public sealed record ImageFormat(string Name, string Extension, bool SupportsAlp
 /// Image engine on the Windows Imaging Component (via WPF imaging), built into Windows. WebP, which Windows can't
 /// write (and reads only with a Store extension), goes through <see cref="WebpCodec"/>.
 /// Must be used from an STA thread (see <see cref="StaWorker"/>).
-/// Limitations (documented in the capability matrix): EXIF orientation is not applied, animated GIF/multi-page TIFF
-/// use the first frame, colour profiles are not carried over.
+/// Animated GIF and multi-page TIFF use the first frame. Results are written through <see cref="VipsCodec"/> where
+/// it can, which keeps the source's metadata and colour profile; this class decodes what libvips can't read.
 /// </summary>
 public static class WicImageCodec
 {
@@ -193,13 +193,21 @@ public static class WicImageCodec
         encoder.Save(stream);
     }
 
-    /// <summary>Writes <paramref name="image"/> next to <paramref name="source"/> with full SafeOutput guarantees.</summary>
-    public static string WriteOutput(BitmapSource image, string source, ImageFormat format, string? suffix,
+    /// <summary>
+    /// Writes <paramref name="image"/> next to <paramref name="source"/> with full SafeOutput guarantees. Where libvips
+    /// can write the format, it does, carrying the source's metadata (camera, date taken, location, colour profile).
+    /// </summary>
+    public static string WriteOutput(BitmapSource image, string source, ImageFormat format, bool numbered,
         OperationContext context, CancellationToken ct)
     {
         int w = image.PixelWidth, h = image.PixelHeight;
-        return SafeOutput.Write(source, context.Output, format.Extension, suffix,
-            write: s => Encode(image, format, s, context.JpegQuality),
+        if (VipsCodec.CanWrite(format))
+        {
+            byte[] data;
+            using (var vips = VipsCodec.FromBitmap(image, source)) data = VipsCodec.Encode(vips, format, context.JpegQuality);
+            return Publish(source, context, format, numbered, data, temp => VipsCodec.Validate(temp, w, h), ct);
+        }
+        return Publish(source, context, format, numbered, EncodeToBytes(image, format, context.JpegQuality),
             validate: temp =>
             {
                 var check = Load(temp);
@@ -208,6 +216,23 @@ public static class WicImageCodec
                     : $"decoded as {check.PixelWidth}×{check.PixelHeight}, expected {w}×{h}";
             },
             ct);
+    }
+
+    /// <summary>
+    /// Publishes an encoded picture made from <paramref name="source"/>. When the encoder couldn't carry the source's
+    /// metadata (a source only Windows reads, such as HEIC or camera RAW, or a TIFF result), ExifTool copies it in
+    /// before the result appears.
+    /// </summary>
+    public static string Publish(string source, OperationContext context, ImageFormat format, bool numbered, byte[] data,
+        Func<string, string?> validate, CancellationToken ct)
+    {
+        bool carry = format != Bmp && format != Gif && (format == Tiff || !VipsCodec.CanRead(source)) && MetadataCarrier.Available;
+        if (!carry) return SafeOutput.Write(source, context.Output, format.Extension, numbered, s => s.Write(data), validate, ct);
+        return SafeOutput.WriteToPath(source, context.Output, format.Extension, numbered, temp =>
+        {
+            File.WriteAllBytes(temp, data);
+            MetadataCarrier.CopyAll(source, temp);
+        }, validate, ct, hideWhileWriting: false, tempKeepsExtension: true);
     }
 
     public static BitmapSource FlattenOnWhite(BitmapSource source)

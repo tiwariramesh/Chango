@@ -38,42 +38,51 @@ public sealed class ImageConversionProvider : IOperationProvider, IEstimatesSize
         IProgress<FileOutcome> progress, CancellationToken ct)
     {
         var target = WicImageCodec.OutputFormats.Single(f => operation.Id == $"convert.image.{f.Name.ToLowerInvariant()}");
-        return StaWorker.RunAsync(() =>
+        return StaWorker.ForEachAsync(files, file =>
         {
-            foreach (var file in files)
+            if (WicImageCodec.FormatOf(file)?.Name == target.Name && ClipboardCaptures.IsCapture(file))
             {
-                ct.ThrowIfCancellationRequested();
-                if (WicImageCodec.FormatOf(file)?.Name == target.Name && ClipboardCaptures.IsCapture(file))
-                {
-                    progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, Rename(file, target, context, ct)));
-                    continue;
-                }
-                if (WicImageCodec.FormatOf(file)?.Name == target.Name)
-                {
-                    progress.Report(new FileOutcome(file, OutcomeStatus.Skipped, Message: $"Already {target.Name}"));
-                    continue;
-                }
-                try
-                {
-                    string output = IsJpeg(WicImageCodec.FormatOf(file)) && IsJpeg(target)
-                        ? Rename(file, target, context, ct)
-                        : WicImageCodec.WriteOutput(WicImageCodec.Load(file), file, target, suffix: null, context, ct);
-                    progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, output));
-                }
-                catch (OperationCanceledException) { throw; }
-                catch (Exception ex)
-                {
-                    progress.Report(new FileOutcome(file, OutcomeStatus.Failed, Message: Friendly(ex)));
-                }
+                progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, Rename(file, target, context, ct)));
+                return;
             }
-        }, "Chango image conversion");
+            if (WicImageCodec.FormatOf(file)?.Name == target.Name)
+            {
+                progress.Report(new FileOutcome(file, OutcomeStatus.Skipped, Message: $"Already {target.Name}"));
+                return;
+            }
+            try
+            {
+                string output = IsJpeg(WicImageCodec.FormatOf(file)) && IsJpeg(target) ? Rename(file, target, context, ct)
+                    : VipsCodec.CanRead(file) && VipsCodec.CanWrite(target) ? ConvertWithVips(file, target, context, ct)
+                    : WicImageCodec.WriteOutput(WicImageCodec.Load(file), file, target, numbered: false, context, ct);
+                progress.Report(new FileOutcome(file, OutcomeStatus.Succeeded, output));
+            }
+            catch (OperationCanceledException) { throw; }
+            catch (Exception ex)
+            {
+                progress.Report(new FileOutcome(file, OutcomeStatus.Failed, Message: Friendly(ex)));
+            }
+        }, ct, "Chango image conversion");
+    }
+
+    /// <summary>Decode, turn upright and encode in one libvips pipeline, keeping all metadata the target can hold.</summary>
+    private static string ConvertWithVips(string file, ImageFormat target, OperationContext context, CancellationToken ct)
+    {
+        byte[] data;
+        int w, h;
+        using (var image = VipsCodec.Load(file))
+        {
+            (w, h) = (image.Width, image.Height);
+            data = VipsCodec.Encode(image, target, context.JpegQuality);
+        }
+        return WicImageCodec.Publish(file, context, target, false, data, temp => VipsCodec.Validate(temp, w, h), ct);
     }
 
     private static bool IsJpeg(ImageFormat? f) => f == WicImageCodec.Jpg || f == WicImageCodec.Jfif;
 
     /// <summary>JPG ↔ JFIF is the same file under another name: copy it byte for byte, so nothing is re-compressed.</summary>
     private static string Rename(string file, ImageFormat target, OperationContext context, CancellationToken ct) =>
-        SafeOutput.Write(file, context.Output, target.Extension, suffix: null,
+        SafeOutput.Write(file, context.Output, target.Extension, numbered: false,
             write: s => { using var src = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete); src.CopyTo(s); },
             validate: temp => new FileInfo(temp).Length == new FileInfo(file).Length ? null : "the copy is incomplete",
             ct);
@@ -93,7 +102,7 @@ public sealed class ImageConversionProvider : IOperationProvider, IEstimatesSize
     {
         FileNotFoundException => "The file no longer exists.",
         UnauthorizedAccessException => "Windows denied access (read-only folder or file in use).",
-        NotSupportedException or FileFormatException or InvalidDataException => "The file isn't a readable image.",
+        NotSupportedException or FileFormatException or InvalidDataException or NetVips.VipsException => "The file isn't a readable image.",
         IOException io when io.HResult == unchecked((int)0x80070070) => "There isn't enough disk space.",
         _ => ex.Message,
     };
